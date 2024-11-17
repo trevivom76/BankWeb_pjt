@@ -1,7 +1,9 @@
 <template>
   <div>
     <CommonHeader />
-    <RouterView />
+    <div class="RouterView-div">
+      <RouterView />
+    </div>
   </div>
 </template>
 
@@ -14,5 +16,8 @@ import CommonHeader from './components/CommonHeader.vue';
 </script>
 
 <style scoped>
+.RouterView-div{
 
+  background: #eeeeeee7;
+}
 </style>

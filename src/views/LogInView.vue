@@ -61,7 +61,7 @@
 
       </v-card>
     </div>
-  </template>
+</template>
 
 <script setup>
 import { useAccountStore } from '@/stores/account';
