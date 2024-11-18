@@ -1,8 +1,13 @@
 <template>
   <div>
-    <CommonHeader />
+    <v-container fluid style="padding-left: 300px; padding-right: 300px;">
+      <CommonHeader />
+    </v-container>
+
     <div class="RouterView-div">
-      <RouterView />
+      <v-container fluid style="padding-left: 300px; padding-right: 300px;">
+        <RouterView />
+      </v-container>
     </div>
   </div>
 </template>
