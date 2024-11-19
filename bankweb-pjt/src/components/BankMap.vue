@@ -114,7 +114,6 @@ onMounted(() => {
             for (let i = 0; i < data.length; i++) {
               displayMarker(data[i], map); // 마커 표시
               bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x)); // 좌표 추가
-              console.log(data[i]);
 
               // 검색 결과 정보를 넣어줌
               searchResultsInfos.value.push({
@@ -124,8 +123,6 @@ onMounted(() => {
                 road_address_name: data[i].road_address_name,
                 place_url: data[i].place_url,
               });
-
-              console.log(searchResultsInfos.value);
             }
             // 지도 범위를 검색된 장소를 포함하도록 설정
             map.setBounds(bounds);
