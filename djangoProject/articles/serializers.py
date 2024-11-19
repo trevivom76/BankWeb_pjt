@@ -29,7 +29,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 
 # 댓글 목록
-class CommentListSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = Comment
