@@ -4,10 +4,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+# from django.views.decorators.csrf import csrf_exempt
 from .serializers import *
 
 
 # 사용자 정보
+# @csrf_exempt
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 def user_info(request, username):

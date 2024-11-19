@@ -58,9 +58,9 @@ SITE_ID = 1
 
 # Authentication관련 기본 인증 방식 정의
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [  # 오타 수정
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
