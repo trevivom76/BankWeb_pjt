@@ -40,12 +40,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'dj_rest_auth.registration',
     'corsheaders',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'dj_rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,14 +58,27 @@ SITE_ID = 1
 
 # Authentication관련 기본 인증 방식 정의
 REST_FRAMEWORK = {
-    'DEFAULT_AUTENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': [  # 오타 수정
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES':[
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
 }
+
+# custom user 모델
+AUTH_USER_MODEL = 'accounts.User'
+
+# 회원가입 custom serializer 설정
+REST_AUTH = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # 기본 Django 인증 백엔드
+    'allauth.account.auth_backends.AuthenticationBackend',  # allauth 인증 백엔드
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
