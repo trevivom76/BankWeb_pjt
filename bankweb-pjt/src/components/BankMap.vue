@@ -2,7 +2,7 @@
   <div class="d-flex">
     <!-- 지도를 표시할 div -->
     
-    <div class="redbox red" :class="{ shrink: isClicked }" id="map" style="height: 500px"></div>
+    <div class="redbox red" :class="{ shrink: isClicked }" id="map" style="height: 480px"></div>
     
     <!-- 검색결과 정보리스트 -->
     <div class="blue" :class="{ expand: isClicked }">
@@ -210,12 +210,12 @@ const paginatedSearchResultsInfos = computed(() => {
 }
 
 .red {
-  transition: 1.4s ease-in-out;
+  transition: 1.3s ease-in-out;
   width: 870px;
 }
 
 .blue {
-  transition: 1.5s ease-in-out;
+  transition: 1.55s ease-in-out;
   position: absolute; /* 절대 위치로 설정 */
   right: 0; /* 오른쪽에 고정 */
   width: 0; /* 초기 너비 */
@@ -223,7 +223,7 @@ const paginatedSearchResultsInfos = computed(() => {
 }
 
 .shrink {
-  width: 580px; /* 빨간 박스가 줄어드는 너비 */
+  width: 570px; /* 빨간 박스가 줄어드는 너비 */
 }
 
 .expand {

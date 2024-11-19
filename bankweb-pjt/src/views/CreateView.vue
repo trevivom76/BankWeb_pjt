@@ -17,13 +17,13 @@
                 <v-select
                     placeholder="카테고리 선택"
                     :items="['질문/답변', '팁/정보 공유', '자유']"
-                    width="148px"
+                    width="160px"
                     v-model="category"
                 ></v-select>
 
                 <v-text-field
                      placeholder="제목을 작성해주세요."
-                     width="698px"
+                     width="686px"
                      v-model.trim="title"
                 ></v-text-field>
             </div>
