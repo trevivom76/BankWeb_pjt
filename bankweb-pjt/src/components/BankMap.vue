@@ -1,14 +1,11 @@
 <template>
-  <div class="d-flex justify-center align-center" :style="{ height: '525.526px' }">
+  <div class="d-flex">
     <!-- 지도를 표시할 div -->
-
-    <div id="map" style="width: 60%; height: 400px"></div>
-
-    <div v-if="searchResultsInfos.length == 0">
-      <img src="@/images/BBK_Logo.png" alt="img..." :style="{ width: '321.562px', height: '525.594px' }" />
-    </div>
-
-    <div v-else>
+    
+    <div class="redbox red" :class="{ shrink: isClicked }" id="map" style="height: 500px"></div>
+    
+    <!-- 검색결과 정보리스트 -->
+    <div class="blue" :class="{ expand: isClicked }">
       <div class="d-flex flex-column justify-center align-center ga-3">
         <div v-for="(searchResultsInfo, index) in paginatedSearchResultsInfos" :key="index">
           <v-card width="250" height="111" class="pa-3" color="#F6F6F6">
@@ -17,16 +14,17 @@
                 {{ searchResultsInfo.place_name }}
               </a>
             </p>
-
-            <p :style="{ fontSize: '13px' }">{{ searchResultsInfo.road_address_name }}</p>
+  
+            <p :style="{ fontSize: '11px' }">{{ searchResultsInfo.road_address_name }}</p>
             <p :style="{ fontSize: '11px' }">(지번) {{ searchResultsInfo.address_name }}</p>
-            <p :style="{ fontSize: '16px', color: '#0B5BCB' }">{{ searchResultsInfo.phone }}</p>
+            <p :style="{ fontSize: '15px', color: '#0B5BCB' }">{{ searchResultsInfo.phone }}</p>
           </v-card>
         </div>
+  
         <div>
           <!-- 페이지네이션 -->
           <v-row justify="center">
-            <v-pagination v-model="currentPage" :length="pageCount" :total-visible="5"></v-pagination>
+            <v-pagination v-model="currentPage" :length="pageCount" :total-visible="5" ></v-pagination>
           </v-row>
         </div>
       </div>
@@ -36,6 +34,8 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
+
+const isClicked = ref(false);
 
 // selectedRegion 정보를 props를 통해 받아옴
 const props = defineProps({
@@ -90,6 +90,9 @@ onMounted(() => {
           if (newRegion && newRegion.city && newRegion.district && newRegion.bank) {
             const searchQuery = `${newRegion.city} ${newRegion.district} ${newRegion.bank}`; // 도시, 구, 은행 이름을 조합하여 검색 쿼리 생성
             searchAndPlaceMarker(searchQuery, map); // 검색 수행
+
+            // 카카오맵, 결과검색 리스트 css 수행
+            isClicked.value=true
           }
         },
         { immediate: true } // props.selectedRegion 값이 초기값이라도 즉시 실행
@@ -195,8 +198,35 @@ const paginatedSearchResultsInfos = computed(() => {
   const end = start + searchResultsInfosPerPage;
   return searchResultsInfos.value.slice(start, end);
 });
+
 </script>
 
 <style scoped>
 /* 스타일이 필요하면 추가 가능합니다 */
+
+.redbox {
+  height: 500px;
+  border-radius: 5%;
+}
+
+.red {
+  transition: 1.4s ease-in-out;
+  width: 870px;
+}
+
+.blue {
+  transition: 1.5s ease-in-out;
+  position: absolute; /* 절대 위치로 설정 */
+  right: 0; /* 오른쪽에 고정 */
+  width: 0; /* 초기 너비 */
+  overflow: hidden; /* 확장 중 내용이 튀어나오지 않도록 설정 */
+}
+
+.shrink {
+  width: 580px; /* 빨간 박스가 줄어드는 너비 */
+}
+
+.expand {
+  width: 360px; /* 파란 박스가 확장되는 너비 */
+}
 </style>

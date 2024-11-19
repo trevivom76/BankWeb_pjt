@@ -1,6 +1,8 @@
 import AroundBankView from "@/views/AroundBankView.vue";
 import CommunityView from "@/views/CommunityView.vue";
+import CreateView from "@/views/CreateView.vue";
 import CurrencyCalculatorView from "@/views/CurrencyCalculatorView.vue";
+import DetailView from "@/views/DetailView.vue";
 import HomeView from "@/views/HomeView.vue";
 import InterestRateView from "@/views/InterestRateView.vue";
 import LogInView from "@/views/LogInView.vue";
@@ -39,6 +41,18 @@ const router = createRouter({
       path: "/community",
       name: "community",
       component: CommunityView,
+    },
+    {
+      // 게시글 Detail 페이지
+      path: "/articles/:id",
+      name: "detail",
+      component: DetailView,
+    },
+    {
+      // 게시글 Create 페이지
+      path: "/create",
+      name: "create",
+      component: CreateView,
     },
     {
       // 로그인 페이지

@@ -2,10 +2,10 @@
   <div>
     <div class="d-flex justify-start align-start ga-7">
       <!-- 시/도 선택 -->
-      <v-select class="custom-select" v-model="selectedCity" clearable label="시/도" :items="Object.keys(cities)" variant="outlined" width="275px" @update:model-value="handleCityChange"></v-select>
+      <v-select class="custom-select" v-model="selectedCity" clearable label="시/도" :items="Object.keys(cities)" variant="outlined" width="200px" @update:model-value="handleCityChange"></v-select>
 
       <!-- 시/군/구 선택 -->
-      <v-select v-model="selectedDistrict" clearable label="시/군/구" :items="districts" variant="outlined" width="275px" :disabled="!selectedCity"></v-select>
+      <v-select v-model="selectedDistrict" clearable label="시/군/구" :items="districts" variant="outlined" width="200px" :disabled="!selectedCity"></v-select>
 
       <!-- 은행 선택 -->
       <v-select v-model="selectedBank" clearable label="은행" :items="banks" variant="outlined" width="310px"></v-select>

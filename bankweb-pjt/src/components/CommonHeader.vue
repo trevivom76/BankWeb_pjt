@@ -270,7 +270,7 @@ watch(dialog, (val) => {
   left: 0;
   bottom: -6px; /* 밑줄 위치 */
   width: 0;
-  height: 4px; /* 밑줄 두께 */
+  height: 2px; /* 밑줄 두께 */
   background-color: rgb(59, 59, 216);
   transition: width 0.3s ease;
   border-radius: 2px; /* 둥근 모서리 적용 */

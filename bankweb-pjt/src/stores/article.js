@@ -2,39 +2,209 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { useAccountStore } from "./account";
 
 // 로그인, 로그아웃, 회원가입 기능
 export const useArticleStore = defineStore(
   "article",
   () => {
+    
+    let id = 1
     const articles = ref([
-      {
-        name: "African Elephant1",
-        species: "Loxodonta africana",
-        diet: "Herbivore",
-        habitat: "Savanna, Forests",
+      { 
+        id: id++,
+        title: "African Elephant1",
+        category: "Loxodonta africana1",
+        author: "Herbivore1",
+
       },
       {
-        name: "African Elephant2",
-        species: "Loxodonta africana",
-        diet: "Herbivore",
-        habitat: "Savanna, Forests",
+        id: id++,
+        title: "African Elephant2",
+        category: "Loxodonta africana2",
+        author: "Herbivore2",
+
       },
       {
-        name: "African Elephant3",
-        species: "Loxodonta africana",
-        diet: "Herbivore",
-        habitat: "Savanna, Forests",
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
+      },
+      {
+        id: id++,
+        title: "African Elephant3",
+        category: "Loxodonta africana3",
+        author: "Herbivore3",
       },
     ]);
 
     const API_URL = "http://127.0.0.1:8000";
 
-    // 게시글 조회
+    const router = useRouter()
+    const accountStore = useAccountStore()
+
+    // accountStore에서 가져와야함
+    const token = accountStore.token
+
+    // 전체 게시글 조회 함수
     const getArticles = function () {
       axios({
         method: "get",
         url: `${API_URL}/api/v1/articles/`,
+        headers: {
+          Authorization: `Token ${token.value}`
+        }
       })
         .then((response) => {
           articles.value = response.data;
@@ -44,7 +214,29 @@ export const useArticleStore = defineStore(
         });
     };
 
-    return { articles, getArticles };
+    // 게시글 생성 함수
+    const createArticle = function (payload) {
+      const { title, content, category } = payload
+
+      axios({
+        method: "post",
+        url: `${API_URL}/api/v1/articles/`,
+        data:{
+          title, content, category
+        },
+        headers: {
+          Authorization: `Token ${token.value}`
+        }
+      })
+      .then((response) => {
+        router.push({name: 'community'})
+      })
+      .catch((error) => {
+        console.log("createArticle error =", error);
+      });
+    }
+
+    return { articles, API_URL, getArticles, createArticle };
   },
   { persist: true }
 );
