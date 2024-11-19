@@ -70,14 +70,32 @@
 
         <!-- 이메일 입력 text-field -->
         <v-text-field
-            class="my-2"
             v-model="email"
             color="primary"
             label="이메일"
             variant="outlined"
             placeholder="(선택사항)"
         >
-        </v-text-field>         
+        </v-text-field> 
+        
+        <!-- 이용약관 체크박스1 -->
+        <v-checkbox
+            density="compact"
+            v-model="checkbox1"
+            :rules="[v1 => !!v1 || '서비스 이용 약관에 동의해주세요.']"
+            label="(필수) 서비스 이용 약관 동의"
+            required
+        ></v-checkbox>
+
+        <!-- 이용약관 체크박스2 -->
+        <v-checkbox
+            density="compact"
+            v-model="checkbox2"
+            :rules="[v2 => !!v2 || '개인정보 처리에 동의해주세요.']"
+            label="(필수) 개인정보 처리 동의"
+            required
+        ></v-checkbox>
+
 
         <!-- 아이디를 입력하지 않았을때 -->
         <v-alert
@@ -110,6 +128,14 @@
             text="비밀번호와 비밀번호 확인이 같지 않습니다."
             type="error"
         ></v-alert>
+
+        <!-- 이용약관(체크박스)에 체크하지 않은 경우 -->
+        <v-alert
+            v-if="!checkboxsIsOk"
+            class="my-2"
+            text="이용약관에 동의해주세요."
+            type="error"
+        ></v-alert>
         
         <v-hover
             v-slot="{ isHovering, props }"
@@ -118,7 +144,7 @@
                 :class="{ 'on-hover': isHovering }"
                 :elevation="isHovering ? 10 : 2"
                 v-bind="props"
-                class="mb-8"
+                class="mt-3 ,mb-8"
                 color="blue-darken-1"
                 size="large"
                 block
@@ -144,14 +170,19 @@ const password1 = ref("")
 const password2 = ref("")
 const email = ref("")
 
+// 비밀번호 공개/비공개상태 변수
+const show1 = ref(false)
+const show2 = ref(false)
+
+// 이용약관1, 2 체크박스상태 변수
+const checkbox1 = ref(false)
+const checkbox2 = ref(false)
+
 const userIdIsOk = ref(true)
 const password1IsOk = ref(true)
 const password2IsOk = ref(true)
 const passwordsIsOk = ref(true)
-
-// 비밀번호 공개/비공개상태 변수
-const show1 = ref(false)
-const show2 = ref(false)
+const checkboxsIsOk = ref(true)
 
 // udseId 규칙
 const userId_rules= {
@@ -198,6 +229,13 @@ const signUp = function() {
         passwordsIsOk.value = false;
     } else {
         passwordsIsOk.value = true;
+    }
+
+    // 이용약관1, 2 체크 여부
+    if (!checkbox1.value || !checkbox2.value) {
+        checkboxsIsOk.value = false;
+    } else {
+        checkboxsIsOk.value = true;
     }
     
     
