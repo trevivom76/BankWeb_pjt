@@ -3,20 +3,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import get_object_or_404, get_list_or_404
-from django.contrib.auth import get_user_model
 from articles.models import *
 from articles.serializers import *
 
-
-# urlpatterns = [
-#     path('', views.article_list),  # 전체 게시글 목록 조회 -> GET
-#     path('create/', views.create_article),  # 게시글 작성 -> POST
-#     path('<int:article_pk>', views.article_detail), # 단일 게시글 조회 및 수정, 삭제 -> GET, PUT, DELETE
-#     path('<int:article_pk>/create_comment/', views.create_comment),  # 댓글 작성 -> POST
-#     path('<int:article_pk>/commnet_list/', views.commnet_list),  # 댓글 목록 조회 -> GET
-#     path('<int:article_pk>/comment/<int:comment_pk>', views.comment_detail),  # 댓글 삭제, 수정
-#     path('<int:article_pk>/likes/', views.likes),
-# ]
 
 # 전체 게시글 목록 조회
 @api_view(['GET'])
@@ -41,7 +30,7 @@ def create_article(request):
 # 단일 게시글 조회, 수정, 삭제
 @api_view(['GET','PUT','DELETE'])
 def article_detail(request, article_pk):
-    article = get_object_or_404(Article, pk=article_pk)
+    article = get_object_or_404(Article, id=article_pk)
     if request.method == 'GET':
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
@@ -57,7 +46,7 @@ def article_detail(request, article_pk):
         if request.user.is_authenticated:
             if request.user == article.user:
                 article.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({ "detail": f'{article_pk}번의 게시글이 삭제되었습니다.' }, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({ "detail": "Authentication credentials were not provided." }, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -97,7 +86,7 @@ def comment_detail(request, article_pk, comment_pk):
                 return Response(serializer.data, status=status.HTTP_200_OK)
         elif request.method == 'DELETE':
             comment.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({ "detail": f'{article_pk}번 게시글의 {comment_pk}번의 댓글이 삭제되었습니다.' }, status=status.HTTP_204_NO_CONTENT)
     else:
         return Response({ "detail": "Authentication credentials were not provided." }, status=status.HTTP_401_UNAUTHORIZED)
         
