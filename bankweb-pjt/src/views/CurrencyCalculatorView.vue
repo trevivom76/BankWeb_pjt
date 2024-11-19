@@ -1,13 +1,15 @@
 <template>
-    <div>
-        <h1>CurrencyCalculatorView</h1>
-    </div>    
+  <div>
+    <CurrencyCalculator />
+    <!-- <CurrencyCalculatorSelect /> -->
+    <CurrencyCalculatorGraph />
+  </div>
 </template>
 
 <script setup>
-
+import CurrencyCalculator from "@/components/CurrencyCalculator.vue";
+// import CurrencyCalculatorSelect from "@/components/CurrencyCalculatorSelect.vue";
+import CurrencyCalculatorGraph from "@/components/CurrencyCalculatorGraph.vue";
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
