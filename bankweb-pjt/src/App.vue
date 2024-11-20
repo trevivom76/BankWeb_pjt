@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-container class="py-0" fluid style="padding-left: 600px; padding-right: 600px">
+    <v-container class="py-0" fluid style="padding-left: 400px; padding-right: 400px">
       <CommonHeader />
     </v-container>
 
     <div class="RouterView-div">
-      <v-container fluid style="padding-left: 600px; padding-right: 600px">
+      <v-container fluid style="padding-left: 400px; padding-right: 400px">
         <RouterView />
       </v-container>
     </div>
