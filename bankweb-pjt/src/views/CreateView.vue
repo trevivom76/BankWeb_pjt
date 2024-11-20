@@ -41,11 +41,11 @@
 </template>
 
 <script setup>
-// pictogrammers mdi icon
 import { useArticleStore } from '@/stores/article';
+import { ref } from 'vue';
+// pictogrammers mdi icon
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiArrowLeft } from '@mdi/js';
-import { ref } from 'vue';
 
 const articleStore = useArticleStore()
 
