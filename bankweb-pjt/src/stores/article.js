@@ -8,23 +8,15 @@ import { useAccountStore } from "./account";
 export const useArticleStore = defineStore(
   "article",
   () => {
-    // let id = 1
-    // { 
-      //   id: id++,
-      //   title: "African Elephant1",
-      //   category: "Loxodonta africana1",
-      //   author: "Herbivore1",
-      // }
-    
-      
     const articles = ref([]);
+    const articledetail = ref(null);
     const API_URL = "http://127.0.0.1:8000";
 
-    const router = useRouter()
-    const accountStore = useAccountStore()
+    const router = useRouter();
+    const accountStore = useAccountStore();
 
     // accountStore에서 가져와야함
-    const token = accountStore.token
+    const token = accountStore.token;
 
     // 전체 게시글 조회 함수
     const getArticles = function () {
@@ -32,10 +24,11 @@ export const useArticleStore = defineStore(
         method: "get",
         url: `${API_URL}/api/v1/articles/`,
         headers: {
-          Authorization: `Token ${token.value}`
-        }
+          Authorization: `Token ${token}`,
+        },
       })
         .then((response) => {
+          console.log("게시글 작성 조회");
           articles.value = response.data;
         })
         .catch((error) => {
@@ -45,27 +38,47 @@ export const useArticleStore = defineStore(
 
     // 게시글 생성 함수
     const createArticle = function (payload) {
-      const { title, content, category } = payload
+      const { title, content, category } = payload;
 
       axios({
         method: "post",
-        url: `${API_URL}/api/v1/articles/`,
-        data:{
-          title, content, category
+        url: `${API_URL}/api/v1/articles/create/`,
+        data: {
+          title,
+          content,
+          category,
         },
         headers: {
-          Authorization: `Token ${token.value}`
-        }
+          Authorization: `Token ${token}`,
+        },
       })
-      .then((response) => {
-        router.push({name: 'community'})
-      })
-      .catch((error) => {
-        console.log("createArticle error =", error);
-      });
-    }
+        .then((response) => {
+          console.log("게시글 작성 성공");
+          router.push({ name: "community" });
+        })
+        .catch((error) => {
+          console.log("createArticle error =", error);
+        });
+    };
 
-    return { articles, API_URL, getArticles, createArticle };
+    // 게시글 detail 조회 함수
+    const getArticleDetail = function (payload) {
+      const { articleid } = payload;
+
+      axios({
+        method: "get",
+        url: `${API_URL}/api/v1/articles/${articleid}/`,
+      })
+        .then((response) => {
+          console.log(response);
+          articledetail.value = response.data;
+        })
+        .catch((error) => {
+          console.log("getArticleDetail error =", error);
+        });
+    };
+
+    return { articles, articledetail, token, API_URL, getArticles, createArticle, getArticleDetail };
   },
   { persist: true }
 );

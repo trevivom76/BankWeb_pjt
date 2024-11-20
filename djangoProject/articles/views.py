@@ -12,7 +12,7 @@ from articles.serializers import *
 def article_list(request):
     if request.method == 'GET':
         articles = get_list_or_404(Article)
-        serializer = ArticleListSerializer(articles, many=True)
+        serializer = ArticleListSerializer(articles, many=True, context={'request': request})  # context 전달
         return Response(serializer.data)
 
 
@@ -21,7 +21,7 @@ def article_list(request):
 @permission_classes([IsAuthenticated])
 def create_article(request):
     if request.method == 'POST':
-        serializer = ArticleSerializer(data=request.data)
+        serializer = ArticleSerializer(data=request.data, context={'request': request})  # context 전달
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -32,11 +32,11 @@ def create_article(request):
 def article_detail(request, article_pk):
     article = get_object_or_404(Article, id=article_pk)
     if request.method == 'GET':
-        serializer = ArticleSerializer(article)
+        serializer = ArticleSerializer(article, context={'request': request})  # context 전달
         return Response(serializer.data)
     elif request.method == 'PUT':
         if request.user.is_authenticated:
-            serializer = ArticleSerializer(article, data=request.data, partial=True)
+            serializer = ArticleSerializer(article, data=request.data, partial=True, context={'request': request})  # context 전달
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)

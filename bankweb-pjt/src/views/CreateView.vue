@@ -65,9 +65,7 @@ const createArticle = function () {
         content: content.value,
         category: category.value
     }
-    
-    // 나중에 주석풀기
-    // articleStore.createArticle(payload)
+    articleStore.createArticle(payload)
 }
 
 </script>

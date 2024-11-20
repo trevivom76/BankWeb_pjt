@@ -3,53 +3,145 @@
     <!-- 버튼 -->
     <div class="d-flex justify-space-between align-center">
       <div class="d-flex ga-5">
-        <v-btn variant="flat" rounded="lg" color="#D6EFFF" width="100px" height="31px">전체</v-btn>
-        <v-btn variant="tonal" rounded="lg" width="100px" height="31px">질문/답변</v-btn>
-        <v-btn variant="tonal" rounded="lg" width="100px" height="31px">팁/정보 공유</v-btn>
-        <v-btn variant="tonal" rounded="lg" width="100px" height="31px">자유</v-btn>
+        <v-btn variant="flat" rounded="lg" color="#D6EFFF" width="100px" height="31px" @click="selectedCategory = '전체'">전체</v-btn>
+        <v-btn variant="tonal" rounded="lg" width="100px" height="31px" @click="selectedCategory = '질문/답변'">질문/답변</v-btn>
+        <v-btn variant="tonal" rounded="lg" width="100px" height="31px" @click="selectedCategory = '팁/정보 공유'">팁/정보 공유</v-btn>
+        <v-btn variant="tonal" rounded="lg" width="100px" height="31px" @click="selectedCategory = '자유'">자유</v-btn>
       </div>
       <div>
         <v-btn variant="flat" rounded="lg" color="#0B5BCB" width="92px" height="36px">
-          <RouterLink :to="{name: 'create'}" class="delete-a-underline-color"> 글쓰기 </RouterLink>
+          <RouterLink :to="{ name: 'create' }" class="delete-a-underline-color">글쓰기</RouterLink>
         </v-btn>
       </div>
     </div>
 
-    <!-- 게시판글 -->
-    <v-data-table :items="articleStore.articles" :headers="headers">
+    <!-- (전체)게시판글 -->
+    <v-data-table :items="filteredArticles" :headers="headers">
+      <!-- 글 제목을 클릭 시 다른 페이지로 이동 -->
       <template v-slot:item.title="{ item }">
-        <!-- 글 제목을 클릭 시 다른 페이지로 이동 -->
-        <RouterLink :to="{ name: 'detail', params: {id: item.id}}" class="delete-a-underline-color">
+        <RouterLink :to="{ name: 'detail', params: { id: item.id } }" class="delete-a-underline-color">
           {{ item.title }}
         </RouterLink>
-
       </template>
 
+      <template v-slot:item.category="{ item }">
+        <!-- 카테고리별 CSS적용 -->
+        <div v-if="item.category == '질문/답변'" class="question-answer">
+          <p class="category-PTag">
+            {{ item.category }}
+          </p>
+        </div>
+        <div v-else-if="item.category == '팁/정보 공유'" class="tip-info">
+          <p class="category-PTag">
+            {{ item.category }}
+          </p>
+        </div>
+        <div v-else-if="item.category == '자유'" class="free">
+          <p class="category-PTag">
+            {{ item.category }}
+          </p>
+        </div>
+      </template>
+
+      <template v-slot:item.user.nickname="{ item }">
+        <!-- 프로필이미지, 작성자 출력 -->
+        <div class="d-flex justify-center align-center">
+          <img :src="item.user.profile_img" alt="프로필 이미지" class="profile-img" />
+          <RouterLink to="#" class="delete-a-underline-color ms-2">
+            {{ item.user.nickname }}
+          </RouterLink>
+        </div>
+      </template>
     </v-data-table>
   </div>
 </template>
 
 <script setup>
 import { useArticleStore } from "@/stores/article";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const articleStore = useArticleStore();
 
-// onMounted(() => {
-//   articleStore.getArticles();
-// });
+// 어떤 버튼이 선택되어있는지 default는 "전체"
+const selectedCategory = ref("전체");
+
+// 모든 게시물 가져오기
+onMounted(() => {
+  articleStore.getArticles();
+});
 
 // Data Table의 헤더 위치와 이름 설정
 const headers = ref([
   { title: "글 제목", align: "start", key: "title" },
   { title: "카테고리", align: "center", key: "category" },
-  { title: "작성자", align: "center", key: "author" },
+  { title: "작성자", align: "center", key: "user.nickname" },
 ]);
+
+// 선택된 카테고리에 맞춰 필터링된 게시물 리스트
+const filteredArticles = computed(() => {
+  if (selectedCategory.value === "전체") {
+    return articleStore.articles.filter((article) => ["질문/답변", "팁/정보 공유", "자유"].includes(article.category));
+  } else {
+    return articleStore.articles.filter((article) => article.category === selectedCategory.value);
+  }
+});
 </script>
 
 <style scoped>
 .delete-a-underline-color {
   text-decoration: none;
   color: inherit;
+}
+
+.profile-img {
+  width: 25px;
+}
+
+.question-answer {
+  background: #ffeeee;
+  border-color: #ffc1c1;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 1ch;
+  margin-left: 30%;
+  width: 90px;
+  height: 25px;
+  font: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tip-info {
+  background: #eefff5;
+  border-color: #bdebc5;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 1ch;
+  margin-left: 26%;
+  width: 110px;
+  height: 25px;
+  font: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.free {
+  background: #eefcff;
+  border-color: #c1ecff;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 1ch;
+  margin-left: 35%;
+  width: 66px;
+  height: 25px;
+  font: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-PTag {
 }
 </style>
