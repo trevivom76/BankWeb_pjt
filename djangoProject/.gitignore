@@ -284,4 +284,5 @@ pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/django,python,visualstudiocode
 
-설명
+# APIKEY 숨기기
+secrets.json
