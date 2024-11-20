@@ -21,46 +21,47 @@ export const useAccountStore = defineStore(
 
     // 회원가입 요청
     const signUp = function (payload) {
-      const { userId, password1, password2 } = payload;
-
+      const { username, password1, password2, nickname, name } = payload;
       axios({
         method: "post",
         url: `${API_URL}/accounts/signup/`,
         data: {
-          userId,
+          username,
           password1,
           password2,
+          nickname,
+          name,
         },
       })
         .then((response) => {
           const password = password1;
-          logIn({ userId, password });
-          // console.log('회원가입 성공')
+          console.log("회원가입 성공");
+          logIn({ username, password });
         })
         .catch((error) => {
-          console.log("error = ", error);
+          console.log("signUp error = ", error);
         });
     };
 
     // 로그인 요청
     const logIn = function (payload) {
-      const { userId, password1 } = payload;
+      const { username, password } = payload;
 
       axios({
         method: "post",
         url: `${API_URL}/accounts/login/`,
         data: {
-          userId,
-          password1,
+          username,
+          password,
         },
       })
         .then((response) => {
           token.value = response.data.key;
+          console.log("로그인 성공");
           router.push({ name: "home" });
-          // console.log('로그인 성공');
         })
         .catch((error) => {
-          console.log("error = ", error);
+          console.log("logIn error = ", error);
         });
     };
 
@@ -75,7 +76,7 @@ export const useAccountStore = defineStore(
           router.push({ name: "home" });
         })
         .catch((error) => {
-          console.log(error);
+          console.log("logOut error = ", error);
         });
     };
 
