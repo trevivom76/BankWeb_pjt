@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('username', 'name', 'profile_img')
+        fields = ('username', 'name', 'profile_img', 'nickname')
 
 
 # 게시글 목록
@@ -15,7 +15,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = Article
-        fields = ('id', 'title', 'user', )
+        fields = ('id', 'title', 'user', 'category')
 
 
 # 게시글 세부 정보

@@ -9,7 +9,7 @@ class Article(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    category = models.IntegerField()
+    category = models.TextField()
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_articles')
 
 

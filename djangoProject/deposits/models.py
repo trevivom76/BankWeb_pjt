@@ -2,10 +2,10 @@ from django.db import models
 from django.conf import settings
 
 class Deposit(models.Model):
-    fin_prdt_cd = models.CharField(max_length=100) # fin_prdt_cd 
+    fin_prdt_cd = models.CharField(max_length=100)
     fin_co_no = models.CharField(max_length=100)
     kor_co_nm = models.CharField(max_length=100)
-    fin_prdt_nm = models.CharField(max_length=100) # fin_prdt_nm
+    fin_prdt_nm = models.CharField(max_length=100)
     dcls_month = models.CharField(max_length=20)
     join_way = models.CharField(max_length=100)
     mtrt_int = models.TextField(blank=True, null=True)
@@ -18,10 +18,10 @@ class Deposit(models.Model):
 
 
 class Saving(models.Model):
-    saving_code = models.CharField(max_length=100) # fin_prdt_cd 
+    fin_prdt_cd = models.CharField(max_length=100)
     fin_co_no = models.CharField(max_length=100)
     kor_co_nm = models.CharField(max_length=100)
-    name = models.CharField(max_length=100) # fin_prdt_nm
+    fin_prdt_nm = models.CharField(max_length=100)
     dcls_month = models.CharField(max_length=20)
     join_way = models.CharField(max_length=100)
     mtrt_int = models.TextField(blank=True, null=True)

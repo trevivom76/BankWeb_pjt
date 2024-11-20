@@ -39,6 +39,7 @@ def get_secret(setting, secrets=secrets):
 
 SECRET_KEY = get_secret("SECRET_KEY")
 EXCHANGE_API_KEY = get_secret("EXCHANGE_API_KEY")
+FINLIFE_API_KEY = get_secret("FINLIFE_API_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -78,8 +79,8 @@ SITE_ID = 1
 # Authentication관련 기본 인증 방식 정의
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
