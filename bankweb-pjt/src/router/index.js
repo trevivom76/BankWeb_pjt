@@ -1,3 +1,5 @@
+import DepositList from "@/components/DepositList.vue";
+import SavingList from "@/components/SavingList.vue";
 import AroundBankView from "@/views/AroundBankView.vue";
 import CommunityView from "@/views/CommunityView.vue";
 import CreateView from "@/views/CreateView.vue";
@@ -23,6 +25,18 @@ const router = createRouter({
       path: "/interestrate",
       name: "interestrate",
       component: InterestRateView,
+      children: [
+        {
+          path: 'deposit',
+          name: 'depositList',
+          component: DepositList,
+        },
+        {
+          path: 'saving',
+          name: 'savingList',
+          component: SavingList,
+        },
+      ]
     },
     {
       //환율계산기 페이지
