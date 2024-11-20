@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex">
     <!-- 지도를 표시할 div -->
-    
+
     <div class="redbox red" :class="{ shrink: isClicked }" id="map" style="height: 480px"></div>
-    
+
     <!-- 검색결과 정보리스트 -->
     <div class="blue" :class="{ expand: isClicked }">
       <div class="d-flex flex-column justify-center align-center ga-3">
@@ -14,17 +14,17 @@
                 {{ searchResultsInfo.place_name }}
               </a>
             </p>
-  
+
             <p :style="{ fontSize: '11px' }">{{ searchResultsInfo.road_address_name }}</p>
             <p :style="{ fontSize: '11px' }">(지번) {{ searchResultsInfo.address_name }}</p>
             <p :style="{ fontSize: '15px', color: '#0B5BCB' }">{{ searchResultsInfo.phone }}</p>
           </v-card>
         </div>
-  
+
         <div>
           <!-- 페이지네이션 -->
           <v-row justify="center">
-            <v-pagination v-model="currentPage" :length="pageCount" :total-visible="5" ></v-pagination>
+            <v-pagination v-model="currentPage" :length="pageCount" :total-visible="5"></v-pagination>
           </v-row>
         </div>
       </div>
@@ -92,7 +92,7 @@ onMounted(() => {
             searchAndPlaceMarker(searchQuery, map); // 검색 수행
 
             // 카카오맵, 결과검색 리스트 css 수행
-            isClicked.value=true
+            isClicked.value = true;
           }
         },
         { immediate: true } // props.selectedRegion 값이 초기값이라도 즉시 실행
@@ -198,7 +198,6 @@ const paginatedSearchResultsInfos = computed(() => {
   const end = start + searchResultsInfosPerPage;
   return searchResultsInfos.value.slice(start, end);
 });
-
 </script>
 
 <style scoped>
