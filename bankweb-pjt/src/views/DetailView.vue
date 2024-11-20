@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>BankMapProducts</h1>
+        <h1>DetailView</h1>
     </div>
 </template>
 

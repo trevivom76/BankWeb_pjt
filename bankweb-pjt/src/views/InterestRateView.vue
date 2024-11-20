@@ -1,13 +1,9 @@
 <template>
-    <div>
-        <h1>InterestRateView</h1>
-    </div>
+  <div>
+
+  </div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>
