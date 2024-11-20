@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 로그인/로그아웃/회원가입 버튼 위치 -->
-    <div class="d-flex justify-end" :style="{paddingRight: '80px', paddingTop: '10px'}" >
+    <div class="d-flex justify-end">
       <!-- 로그인/회원가입 버튼 -->
       <!-- 로그인 되어있다면 -->
       <div v-if="isLogin()">
@@ -30,7 +30,7 @@
     </div>
 
     <!-- 네비게이션 바 -->
-    <nav class="d-flex justify-space-between align-center" :style="{paddingLeft: '80px'}">
+    <nav class="d-flex justify-space-between align-center">
       <!-- 인행 로고 네비게이션 주요 컴포넌트 묶음 (아이디 프로필 제외) -->
       <div class="d-flex justify-start align-center ga-10">
 
@@ -47,7 +47,7 @@
         <div v-if="isLogin()">
           <div class="text-center">
             <!-- 금리비교 태그 -->
-            <RouterLink :to="{ name: 'interestrate' }">
+            <RouterLink :to="{ name: 'depositList' }">
               <span
                 class="text"
                 :class="{ hovered: isHovered1 }"

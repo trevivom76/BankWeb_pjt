@@ -185,3 +185,10 @@ def saving_detail(request, saving_id):
         saving = get_object_or_404(Saving, id=saving_id)
         serializer = SavingSerializer(saving)
         return Response(serializer.data)
+
+
+# 은행 리스트 추출
+@api_view(['GET'])
+def bank_list(request):
+    banks = Deposit.objects.values_list('kor_co_nm', flat=True).distinct()
+    return Response({'banks': banks})
