@@ -1,10 +1,8 @@
 <template>
   <div>
-    <!-- <v-container class="py-0" fluid style="padding-left: 400px; padding-right: 400px"> -->
     <header>
       <CommonHeader />
     </header>
-    <!-- </v-container> -->
 
     <div class="RouterView-div">
       <RouterView />
