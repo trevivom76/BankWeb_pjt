@@ -1,13 +1,21 @@
-from dataclasses import fields
 from .models import *
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
 # 사용자 정보
 class UserSerializer(serializers.ModelSerializer):
+    profile_img = serializers.SerializerMethodField()
+
     class Meta:
         model = get_user_model()
-        fields = ('username', 'name', 'profile_img', 'nickname')
+        fields = ('username', 'nickname', 'profile_img')
+
+    def get_profile_img(self, obj):
+        request = self.context.get('request')
+        if obj.profile_img:
+            # 절대 URL 생성
+            return request.build_absolute_uri(obj.profile_img.url)
+        return None
 
 
 # 게시글 목록
