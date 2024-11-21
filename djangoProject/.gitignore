@@ -286,3 +286,5 @@ pyrightconfig.json
 
 # APIKEY 숨기기
 secrets.json
+
+.DS_Store
