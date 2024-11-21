@@ -1,9 +1,15 @@
 <template>
   <div>
-    <h1>HomeView</h1>
+    {{ store.userinfo }}
   </div>
 </template>
 
-<style scoped>
+<script setup>
+import { useAccountStore } from "@/stores/account";
 
-</style>
+const store = useAccountStore();
+</script>
+
+<stylescoped>
+
+</stylescoped>

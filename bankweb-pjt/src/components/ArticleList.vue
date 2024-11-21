@@ -27,17 +27,17 @@
       <template v-slot:item.category="{ item }">
         <!-- 카테고리별 CSS적용 -->
         <div v-if="item.category == '질문/답변'" class="question-answer">
-          <p class="category-PTag">
+          <p>
             {{ item.category }}
           </p>
         </div>
         <div v-else-if="item.category == '팁/정보 공유'" class="tip-info">
-          <p class="category-PTag">
+          <p>
             {{ item.category }}
           </p>
         </div>
         <div v-else-if="item.category == '자유'" class="free">
-          <p class="category-PTag">
+          <p>
             {{ item.category }}
           </p>
         </div>
@@ -72,9 +72,9 @@ onMounted(() => {
 
 // Data Table의 헤더 위치와 이름 설정
 const headers = ref([
-  { title: "글 제목", align: "start", key: "title" },
-  { title: "카테고리", align: "center", key: "category" },
-  { title: "작성자", align: "center", key: "user.nickname" },
+  { title: "글 제목", align: "start", key: "title", width: "50%" },
+  { title: "카테고리", align: "center", key: "category", width: "35%" },
+  { title: "작성자", align: "center", key: "user.nickname", width: "50%" },
 ]);
 
 // 선택된 카테고리에 맞춰 필터링된 게시물 리스트
@@ -140,8 +140,5 @@ const filteredArticles = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.category-PTag {
 }
 </style>

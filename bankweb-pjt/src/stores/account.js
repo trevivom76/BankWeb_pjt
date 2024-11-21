@@ -1,13 +1,12 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import axios from "@/apis";
 
 // 로그인, 로그아웃, 회원가입 기능
 export const useAccountStore = defineStore(
   "account",
   () => {
-    const API_URL = "http://127.0.0.1:8000";
     const token = ref(null);
     const isLogin = computed(() => {
       if (token.value === null) {
@@ -19,12 +18,14 @@ export const useAccountStore = defineStore(
 
     const router = useRouter();
 
+    const userinfo = ref(null);
+
     // 회원가입 요청
     const signUp = function (payload) {
       const { username, password1, password2, nickname, name } = payload;
       axios({
         method: "post",
-        url: `${API_URL}/accounts/signup/`,
+        url: `/accounts/signup/`,
         data: {
           username,
           password1,
@@ -49,7 +50,7 @@ export const useAccountStore = defineStore(
 
       axios({
         method: "post",
-        url: `${API_URL}/accounts/login/`,
+        url: `/accounts/login/`,
         data: {
           username,
           password,
@@ -57,6 +58,20 @@ export const useAccountStore = defineStore(
       })
         .then((response) => {
           token.value = response.data.key;
+
+          // 유저 정보를 조회, 저장
+          axios({
+            method: "get",
+            url: `/user/${username}/`,
+          })
+            .then((response) => {
+              userinfo.value = response.data;
+              console.log(`현재 유저(${userinfo.value.nickname})프로필 조회 성공`);
+            })
+            .catch((error) => {
+              console.log("getProfile error = ", error);
+            });
+
           console.log("로그인 성공");
           router.push({ name: "home" });
         })
@@ -69,7 +84,7 @@ export const useAccountStore = defineStore(
     const logOut = function () {
       axios({
         method: "post",
-        url: `${API_URL}/accounts/logout/`,
+        url: `/accounts/logout/`,
       })
         .then((response) => {
           token.value = null;
@@ -80,7 +95,7 @@ export const useAccountStore = defineStore(
         });
     };
 
-    return { API_URL, token, isLogin, router, signUp, logIn, logOut };
+    return { token, isLogin, router, userinfo, signUp, logIn, logOut };
   },
   { persist: true }
 );
