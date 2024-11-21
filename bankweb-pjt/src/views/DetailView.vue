@@ -65,14 +65,14 @@ const accountStore = useAccountStore();
 const route = useRoute();
 const articledetaildata = ref({ "id": '', "user": { "username": "", "nickname": "", "profile_img": "" }, "like_users": [], "title": "", "content": "", "created_at": "", "updated_at": "", "category": "" })
 
-onMounted(() => {
-  const payload = {
-    articleid: route.params.id,
-  };
-  articleStore.getArticleDetail(payload);
+// onMounted(() => {
+//   const payload = {
+//     articleid: route.params.id,
+//   };
+//   articleStore.getArticleDetail(payload);
 
-  articledetaildata.value = articleStore.articledetail
-});
+//   articledetaildata.value = articleStore.articledetail
+// });
 
 
 
