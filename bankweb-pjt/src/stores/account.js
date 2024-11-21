@@ -1,12 +1,13 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { useRouter } from "vue-router";
-import axios from "@/apis";
+import axios from "axios";
 
 // 로그인, 로그아웃, 회원가입 기능
 export const useAccountStore = defineStore(
   "account",
   () => {
+    const API_URL = "http://127.0.0.1:8000";
     const token = ref(null);
     const isLogin = computed(() => {
       if (token.value === null) {
@@ -25,7 +26,7 @@ export const useAccountStore = defineStore(
       const { username, password1, password2, nickname, name } = payload;
       axios({
         method: "post",
-        url: `/accounts/signup/`,
+        url: `${API_URL}/accounts/signup/`,
         data: {
           username,
           password1,
@@ -50,7 +51,7 @@ export const useAccountStore = defineStore(
 
       axios({
         method: "post",
-        url: `/accounts/login/`,
+        url: `${API_URL}/accounts/login/`,
         data: {
           username,
           password,
@@ -62,7 +63,10 @@ export const useAccountStore = defineStore(
           // 유저 정보를 조회, 저장
           axios({
             method: "get",
-            url: `/user/${username}/`,
+            url: `${API_URL}/user/${username}/`,
+            headers: {
+              Authorization: `Token ${token.value}`
+            }
           })
             .then((response) => {
               userinfo.value = response.data;
@@ -84,7 +88,7 @@ export const useAccountStore = defineStore(
     const logOut = function () {
       axios({
         method: "post",
-        url: `/accounts/logout/`,
+        url: `${API_URL}/accounts/logout/`,
       })
         .then((response) => {
           token.value = null;

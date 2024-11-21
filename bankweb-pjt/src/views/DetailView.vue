@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex justify-center align-center flex-column ga-6">
     <v-card class="px-13 py-12" width="950px" min-height="530px" rounded="xl">
+
       <!-- 뒤로가기 버튼 -->
       <v-btn variant="flat" @click="goBack" class="mb-4">
         <svg-icon type="mdi" :path="mdiArrowLeft" width="20px"></svg-icon>
@@ -10,33 +11,33 @@
       <!-- 프로필, 아이디 -->
       <div class="d-flex justify-space-between">
         <div div class="d-flex align-center">
-          <img :src="articleStore.articledetail.user.profile_img" alt="프로필 이미지" class="profile-img" />
+          <img :src="articledetaildata.user.profile_img" alt="프로필 이미지" class="profile-img" />
           <p class="nickname">
-            {{ articleStore.articledetail.user.nickname }}
+            {{ articledetaildata.user.nickname }}
           </p>
         </div>
         <div class="article-category">
-          <p>{{ articleStore.articledetail.category }}</p>
+          <p>{{ articledetaildata.category }}</p>
         </div>
       </div>
 
       <!-- 글 제목 -->
-      <p class="article-title">{{ articleStore.articledetail.title }}</p>
+      <p class="article-title">{{ articledetaildata.title }}</p>
 
       <!-- 글 작성 날짜 + 수정, 삭제 버튼 -->
       <div class="d-flex justify-space-between align-center mb-5">
         <div>
           <p class="article-createdat">{{ formattedCreatedAt }}</p>
         </div>
-        <div v-if="accountStore.userinfo.nickname == articleStore.articledetail.user.nickname" class="d-flex ga-6 article-update-delete mr-8">
+        <div v-if="accountStore.userinfo.nickname == articledetaildata.user.nickname" class="d-flex ga-6 article-update-delete mr-8">
           <a href="#" class="article-update">수정</a>
-          <a href="#" class="article-delete" @click="deleteArticle(articleStore.articledetail.id)">삭제</a>
+          <a href="#" class="article-delete" @click="deleteArticle(articledetaildata.id)">삭제</a>
         </div>
       </div>
 
       <!-- 글 내용 -->
       <textarea class="article-content" readonly>
-        {{ articleStore.articledetail.content }}
+        {{ articledetaildata.content }}
       </textarea>
     </v-card>
 
@@ -47,7 +48,7 @@
 
 <script setup>
 import { useArticleStore } from "@/stores/article";
-import { computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 // pictogrammers mdi icon
 import SvgIcon from "@jamescoyle/vue-icon";
@@ -62,13 +63,19 @@ const profileStore = useProfileStore();
 const accountStore = useAccountStore();
 
 const route = useRoute();
+const articledetaildata = ref({ "id": '', "user": { "username": "", "nickname": "", "profile_img": "" }, "like_users": [], "title": "", "content": "", "created_at": "", "updated_at": "", "category": "" })
 
 onMounted(() => {
   const payload = {
     articleid: route.params.id,
   };
   articleStore.getArticleDetail(payload);
+
+  articledetaildata.value = articleStore.articledetail
 });
+
+
+
 
 // 게시글 삭제 함수
 const deleteArticle = function (articleid) {

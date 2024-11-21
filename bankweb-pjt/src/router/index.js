@@ -42,7 +42,7 @@ const router = createRouter({
       //환율계산기 페이지
       path: "/currencycalculator",
       name: "currencycalculator",
-      component: CurrencyCalculatorView,
+      component: CurrencyCalculatorView
     },
     {
       // 주변은행 페이지

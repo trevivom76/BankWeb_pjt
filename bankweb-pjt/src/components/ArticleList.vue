@@ -9,9 +9,9 @@
         <v-btn variant="tonal" rounded="lg" width="100px" height="31px" @click="selectedCategory = '자유'">자유</v-btn>
       </div>
       <div>
-        <v-btn variant="flat" rounded="lg" color="#0B5BCB" width="92px" height="36px">
+        <!-- <v-btn variant="flat" rounded="lg" color="#0B5BCB" width="92px" height="36px"> -->
           <RouterLink :to="{ name: 'create' }" class="delete-a-underline-color">글쓰기</RouterLink>
-        </v-btn>
+        <!-- </v-btn> -->
       </div>
     </div>
 

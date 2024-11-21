@@ -32,7 +32,7 @@
 
             <div class="d-flex justify-end">
                 <v-btn class="mt-4" variant="flat" @click="createArticle" rounded="lg" color="#0B5BCB" width="92px" height="36px">
-                    <RouterLink :to="{name: 'create'}" class="delete-a-underline-color"> 작성하기 </RouterLink>
+                    <p>작성하기</p>
                 </v-btn>
             </div>
 

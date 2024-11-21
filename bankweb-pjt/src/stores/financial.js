@@ -9,6 +9,16 @@ export const useFinancialStore = defineStore("financial", () => {
     const savings = ref([]);
     const banks = ref([]);
 
+    axios({
+      method: "get",
+      url: `${API_URL}/api/v1/deposits/`,
+    })
+    .then((res) => {
+      console.log('성공')
+    }).catch((error) => {
+      console.log('실패:', error);
+    })
+
     // 전체 예금 조회 함수
     const getDepositDatas = function () {
       axios({

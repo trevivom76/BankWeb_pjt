@@ -288,3 +288,5 @@ pyrightconfig.json
 secrets.json
 
 .DS_Store
+
+migrations/

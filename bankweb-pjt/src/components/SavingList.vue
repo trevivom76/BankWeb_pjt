@@ -16,7 +16,7 @@
             <v-select
             label="예치기간"
             :items="['전체기간', 6, 12, 24, 36]"
-            v-model="selectedDepositPeriod"
+            v-model="selectedSavingPeriod"
             variant="outlined"
             class="flex-item-period"
             ></v-select>
@@ -105,7 +105,7 @@ const financialStore = useFinancialStore();
 const savingItems = ref([]);
 const banks = ref(["전체은행"]);
 const selectedBank = ref("전체은행");
-const selectedDepositPeriod = ref("전체기간");
+const selectedSavingPeriod = ref("전체기간");
 
 const isModalVisible = ref(false)
 const selectedRowItem = ref(null)
@@ -228,11 +228,11 @@ const clickedSearchButton = () => {
       const matchesBank =
         selectedBank.value === "전체은행" || saving.kor_co_nm === selectedBank.value;
 
-      const matchesDepositPeriod =
-        selectedDepositPeriod.value === "전체기간" ||
-        saving.depositoption_set.some((option) => option.save_trm === String(selectedDepositPeriod.value));
+      const matchesSavingPeriod =
+        selectedSavingPeriod.value === "전체기간" ||
+        saving.savingoption_set.some((option) => option.save_trm === String(selectedSavingPeriod.value));
 
-      return matchesBank && matchesDepositPeriod;
+      return matchesBank && matchesSavingPeriod;
     })
     .map(mapSavingData);
 };
