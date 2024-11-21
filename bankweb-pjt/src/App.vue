@@ -1,13 +1,11 @@
 <template>
   <div>
-    <v-container class="py-0" fluid style="padding-left: 400px; padding-right: 400px">
+    <header>
       <CommonHeader />
-    </v-container>
+    </header>
 
     <div class="RouterView-div">
-      <v-container fluid style="padding-left: 400px; padding-right: 400px">
-        <RouterView />
-      </v-container>
+      <RouterView />
     </div>
   </div>
 </template>
@@ -19,6 +17,8 @@ import CommonHeader from "./components/CommonHeader.vue";
 
 <style scoped>
 .RouterView-div {
-  background: #eeeeeee7;
+  background: #F3F6F8;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 </style>

@@ -1,7 +1,11 @@
 <template>
   <div>
     <!-- 로그인/로그아웃/회원가입 버튼 위치 -->
+<<<<<<< HEAD
+    <div class="d-flex justify-end">
+=======
     <div class="d-flex justify-end" :style="{ paddingRight: '80px', paddingTop: '10px' }">
+>>>>>>> develop
       <!-- 로그인/회원가입 버튼 -->
       <!-- 로그인 되어있다면 -->
       <div v-if="isLogin()">
@@ -30,7 +34,11 @@
     </div>
 
     <!-- 네비게이션 바 -->
+<<<<<<< HEAD
+    <nav class="d-flex justify-space-between align-center">
+=======
     <nav class="d-flex justify-space-between align-center" :style="{ paddingLeft: '80px' }">
+>>>>>>> develop
       <!-- 인행 로고 네비게이션 주요 컴포넌트 묶음 (아이디 프로필 제외) -->
       <div class="d-flex justify-start align-center ga-10">
         <!-- 은행 로고 -->
@@ -45,8 +53,20 @@
         <div v-if="isLogin()">
           <div class="text-center">
             <!-- 금리비교 태그 -->
+<<<<<<< HEAD
+            <RouterLink :to="{ name: 'depositList' }">
+              <span
+                class="text"
+                :class="{ hovered: isHovered1 }"
+                @mouseover="isHovered1 = true"
+                @mouseleave="isHovered1 = false"
+              >
+                금리 비교
+              </span>  
+=======
             <RouterLink :to="{ name: 'interestrate' }">
               <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true" @mouseleave="isHovered1 = false">금리 비교</span>
+>>>>>>> develop
             </RouterLink>
             &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
             <!-- 환율계산 태그 -->

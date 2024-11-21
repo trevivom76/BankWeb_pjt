@@ -1,0 +1,64 @@
+/* 프리텐다드 폰트 설정 */
+@import url('https://cdn.jsdelivr.net/npm/pretendard@latest/dist/web/variable/pretendardvariable.css');
+
+/* 기본 스타일 설정 */
+body {
+    font-family: 'Pretendard', sans-serif; /* 전체 폰트를 Pretendard로 설정 */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #ffffff; /* 기본 배경색 (선택 사항) */
+}
+
+/* 레이아웃 설정 */
+.container, header{
+    max-width: calc(100% - 970px); /* 양쪽 485px 간격 유지 (970px = 485px x 2) */
+    margin: 0 auto;
+    padding: 0; /* 좁은 화면에서도 기본 패딩 제공 */
+}
+
+/* 반응형 레이아웃 */
+@media (max-width: 1440px) {
+    .container, header {
+        max-width: calc(100% - 500px); /* 양쪽 250px 간격 */
+    }
+}
+
+@media (max-width: 1024px) {
+.container, header {
+    max-width: calc(100% - 200px); /* 양쪽 100px 간격 */
+}
+}
+
+@media (max-width: 768px) {
+.container, header {
+    max-width: 100%; /* 작은 화면에서는 꽉 채움 */
+    padding: 0 16px; /* 좌우 여백 최소화 */
+}
+}
+
+/* 기본 요소 초기화 */
+h1, h2, h3, h4, h5, h6, p, ul, ol, li {
+margin: 0;
+padding: 0;
+}
+
+ul, ol {
+list-style: none;
+}
+
+button {
+font-family: inherit; /* 버튼에도 동일한 폰트 적용 */
+cursor: pointer;
+}
+
+input, select {
+font-family: inherit; /* 입력 요소에 동일한 폰트 적용 */
+}
+
+.flex {
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
