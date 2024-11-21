@@ -2,7 +2,7 @@
   <div>
     <CurrencyCalculator />
     <!-- <CurrencyCalculatorSelect /> -->
-    <CurrencyCalculatorGraph />
+    <!-- <CurrencyCalculatorGraph /> -->
   </div>
 </template>
 

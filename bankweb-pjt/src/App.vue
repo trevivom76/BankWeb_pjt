@@ -1,13 +1,11 @@
 <template>
   <div>
-    <v-container class="py-0" fluid style="padding-left: 400px; padding-right: 400px">
+    <header>
       <CommonHeader />
-    </v-container>
+    </header>
 
     <div class="RouterView-div">
-      <v-container fluid style="padding-left: 400px; padding-right: 400px">
-        <RouterView />
-      </v-container>
+      <RouterView />
     </div>
   </div>
 </template>
@@ -15,10 +13,14 @@
 <script setup>
 import { RouterView } from "vue-router";
 import CommonHeader from "./components/CommonHeader.vue";
+import 'pretendard/dist/web/static/pretendard.css';
+
 </script>
 
 <style scoped>
 .RouterView-div {
-  background: #eeeeeee7;
+  background: #f3f6f8;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 </style>
