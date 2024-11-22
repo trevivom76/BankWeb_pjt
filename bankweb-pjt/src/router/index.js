@@ -11,6 +11,8 @@ import InterestRateView from "@/views/InterestRateView.vue";
 import LogInView from "@/views/LogInView.vue";
 import ProfileManageView from "@/views/ProfileManageView.vue";
 import ProfileView from "@/views/ProfileView.vue";
+import Recommended1View from "@/views/Recommended1View.vue";
+import Recommended2View from "@/views/Recommended2View.vue";
 import RecommendProductView from "@/views/RecommendProductView.vue";
 import SiginUpView from "@/views/SiginUpView.vue";
 import { createRouter, createWebHistory } from "vue-router";
@@ -104,8 +106,21 @@ const router = createRouter({
         {
           // 상품 추천받기 페이지
           path: "/recommendproduct",
-          name: "recommendproduct",
           component: RecommendProductView,
+          children: [
+            {
+              // 나의 금융 목표 기반 추천 페이지
+              path: "/recommended1",
+              name: "recommended1",
+              component: Recommended1View,
+            },
+            {
+              // 자산 성장 시뮬레이션 기반 추천 페이지
+              path: "/recommended2",
+              name: "recommended2",
+              component: Recommended2View,
+            },
+          ],
         },
       ],
     },

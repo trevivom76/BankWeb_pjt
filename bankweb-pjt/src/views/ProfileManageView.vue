@@ -27,6 +27,7 @@
 
         <!-- 프로필 정보 -->
         <div>
+          {{ accountStore.userinfo }}
           <p>이름: {{ accountStore.userinfo.name }}</p>
           <p>닉네임: {{ accountStore.userinfo.nickname }}</p>
           <p>아이디: {{ accountStore.userinfo.username }}</p>

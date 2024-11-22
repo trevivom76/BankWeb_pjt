@@ -35,7 +35,7 @@ def user_info(request, username):
 def user_profile(request, username):
     if request.user.username == username:
         user = get_object_or_404(get_user_model(), username=username)
-        serializer = UserProfileSerializer(user)
+        serializer = UserProfileSerializer(user, context={'request': request})
         return Response(serializer.data)
 
 
