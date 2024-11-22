@@ -1,10 +1,11 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, get_list_or_404
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from django.conf import settings
 from deposits.models import *
 from deposits.serializers import *
-from django.db import transaction
 import requests
 
 
@@ -192,3 +193,59 @@ def saving_detail(request, saving_id):
 def bank_list(request):
     banks = Deposit.objects.values_list('kor_co_nm', flat=True).distinct()
     return Response({'banks': banks})
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def deposit_toggle_contract_user(request, deposit_id):
+    deposit = get_object_or_404(Deposit, fin_prdt_cd=deposit_id)
+
+    # 현재 사용자가 contract_user에 있는지 확인
+    if request.user in deposit.contract_user.all():
+        deposit.contract_user.remove(request.user)  # 이미 존재하면 제거
+        is_liked = False
+    else:
+        deposit.contract_user.add(request.user)  # 존재하지 않으면 추가
+        is_liked = True
+
+    return Response({"is_liked": is_liked})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # 인증된 사용자만 접근 가능
+def deposit_get_contract_status(request, deposit_id):
+    # 특정 예금 상품 가져오기
+    deposit = get_object_or_404(Deposit, fin_prdt_cd=deposit_id)
+    
+    # 현재 사용자가 contract_user에 포함되어 있는지 확인
+    is_liked = request.user in deposit.contract_user.all()
+    
+    return Response({"is_liked": is_liked})
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def saving_toggle_contract_user(request, saving_id):
+    saving = get_object_or_404(Saving, fin_prdt_cd=saving_id)
+
+    # 현재 사용자가 contract_user에 있는지 확인
+    if request.user in saving.contract_user.all():
+        saving.contract_user.remove(request.user)  # 이미 존재하면 제거
+        is_liked = False
+    else:
+        saving.contract_user.add(request.user)  # 존재하지 않으면 추가
+        is_liked = True
+
+    return Response({"is_liked": is_liked})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # 인증된 사용자만 접근 가능
+def saving_get_contract_status(request, saving_id):
+    # 특정 예금 상품 가져오기
+    saving = get_object_or_404(Saving, fin_prdt_cd=saving_id)
+    
+    # 현재 사용자가 contract_user에 포함되어 있는지 확인
+    is_liked = request.user in saving.contract_user.all()
+    
+    return Response({"is_liked": is_liked})

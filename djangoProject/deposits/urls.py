@@ -4,8 +4,12 @@ from . import views
 urlpatterns = [
     path('', views.create_financial_data),
     path('deposit/', views.deposit_list),
-    path('deposit/<int:deposit_id>/', views.deposit_detail),
     path('saving/', views.saving_list),
-    path('saving/<int:saving_id>/', views.saving_detail),
     path('bank_list/', views.bank_list),
+    path('deposit/<str:deposit_id>/toggle-like/', views.deposit_toggle_contract_user),
+    path('deposit/<str:deposit_id>/contract-status/', views.deposit_get_contract_status, name='deposit_get_contract_status'),
+    path('saving/<str:saving_id>/toggle-like/', views.saving_toggle_contract_user),
+    path('saving/<str:saving_id>/contract-status/', views.saving_get_contract_status, name='saving_get_contract_status'),
 ]
+
+
