@@ -9,50 +9,49 @@
         <v-btn variant="tonal" rounded="lg" width="100px" height="31px" @click="selectedCategory = '자유'">자유</v-btn>
       </div>
       <div>
-        <!-- <v-btn variant="flat" rounded="lg" color="#0B5BCB" width="92px" height="36px"> -->
-          <RouterLink :to="{ name: 'create' }" class="delete-a-underline-color">글쓰기</RouterLink>
-        <!-- </v-btn> -->
+        <RouterLink :to="{ name: 'create' }" class="delete-a-underline-color">글쓰기</RouterLink>
       </div>
     </div>
 
+    <!-- 로딩 상태 표시 -->
+    <div v-if="isLoading" class="d-flex justify-center align-center" style="height: 400px">
+      <v-progress-circular indeterminate color="primary" :size="50"></v-progress-circular>
+    </div>
+
     <!-- (전체)게시판글 -->
-    <v-data-table :items="filteredArticles" :headers="headers">
-      <!-- 글 제목을 클릭 시 다른 페이지로 이동 -->
-      <template v-slot:item.title="{ item }">
-        <RouterLink :to="{ name: 'detail', params: { id: item.id } }" class="delete-a-underline-color">
-          {{ item.title }}
-        </RouterLink>
-      </template>
-
-      <template v-slot:item.category="{ item }">
-        <!-- 카테고리별 CSS적용 -->
-        <div v-if="item.category == '질문/답변'" class="question-answer">
-          <p>
-            {{ item.category }}
-          </p>
-        </div>
-        <div v-else-if="item.category == '팁/정보 공유'" class="tip-info">
-          <p>
-            {{ item.category }}
-          </p>
-        </div>
-        <div v-else-if="item.category == '자유'" class="free">
-          <p>
-            {{ item.category }}
-          </p>
-        </div>
-      </template>
-
-      <template v-slot:item.user.nickname="{ item }">
-        <!-- 프로필이미지, 작성자 출력 -->
-        <div class="d-flex justify-center align-center">
-          <img :src="item.user.profile_img" alt="프로필 이미지" class="profile-img" />
-          <RouterLink to="#" class="delete-a-underline-color ms-2">
-            {{ item.user.nickname }}
+    <div v-else>
+      <v-data-table :items="filteredArticles" :headers="headers">
+        <!-- 글 제목을 클릭 시 다른 페이지로 이동 -->
+        <template v-slot:item.title="{ item }">
+          <RouterLink :to="{ name: 'detail', params: { id: item.id } }" class="delete-a-underline-color">
+            {{ item.title }}
           </RouterLink>
-        </div>
-      </template>
-    </v-data-table>
+        </template>
+
+        <template v-slot:item.category="{ item }">
+          <!-- 카테고리별 CSS적용 -->
+          <div v-if="item.category == '질문/답변'" class="question-answer">
+            <p>{{ item.category }}</p>
+          </div>
+          <div v-else-if="item.category == '팁/정보 공유'" class="tip-info">
+            <p>{{ item.category }}</p>
+          </div>
+          <div v-else-if="item.category == '자유'" class="free">
+            <p>{{ item.category }}</p>
+          </div>
+        </template>
+
+        <template v-slot:item.user.nickname="{ item }">
+          <!-- 프로필이미지, 작성자 출력 -->
+          <div class="d-flex justify-center align-center">
+            <img :src="item.user.profile_img" alt="프로필 이미지" class="profile-img" />
+            <RouterLink to="#" class="delete-a-underline-color ms-2">
+              {{ item.user.nickname }}
+            </RouterLink>
+          </div>
+        </template>
+      </v-data-table>
+    </div>
   </div>
 </template>
 
@@ -61,13 +60,18 @@ import { useArticleStore } from "@/stores/article";
 import { computed, onMounted, ref } from "vue";
 
 const articleStore = useArticleStore();
+const isLoading = ref(true); // 로딩 상태를 관리하는 ref 추가
 
 // 어떤 버튼이 선택되어있는지 default는 "전체"
 const selectedCategory = ref("전체");
 
 // 모든 게시물 가져오기
-onMounted(() => {
-  articleStore.getArticles();
+onMounted(async () => {
+  try {
+    await articleStore.getArticles();
+  } finally {
+    isLoading.value = false; // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
+  }
 });
 
 // Data Table의 헤더 위치와 이름 설정
@@ -85,6 +89,17 @@ const filteredArticles = computed(() => {
     return articleStore.articles.filter((article) => article.category === selectedCategory.value);
   }
 });
+
+// 카테고리 변경 시에도 로딩 상태 처리
+const changeCategory = async (category) => {
+  isLoading.value = true;
+  try {
+    selectedCategory.value = category;
+    // 필요한 경우 여기에 카테고리 변경과 관련된 비동기 작업 추가
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>
 
 <style scoped>

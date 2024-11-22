@@ -52,19 +52,20 @@ export const useArticleStore = defineStore(
     };
 
     // 단일 게시글 조회 함수
-    const getArticleDetail = function (payload) {
+    const getArticleDetail = async function (payload) {
       const { articleid } = payload;
-      axios({
-        method: "get",
-        url: `/api/v1/articles/${articleid}/`,
-      })
-        .then((response) => {
-          console.log("단일 게시글 조회 성공");
-          articledetail.value = response.data;
-        })
-        .catch((error) => {
-          console.log("getArticleDetail error =", error);
+      try {
+        const response = await axios({
+          method: "get",
+          url: `/api/v1/articles/${articleid}/`,
         });
+        console.log("단일 게시글 조회 성공");
+        articledetail.value = response.data;
+        return response.data; // 데이터 반환 추가
+      } catch (error) {
+        console.log("getArticleDetail error =", error);
+        throw error;
+      }
     };
 
     // 게시글 삭제 함수
@@ -135,5 +136,9 @@ export const useArticleStore = defineStore(
       deleteComments,
     };
   },
-  { persist: true }
+  {
+    persist: {
+      paths: ["articles"], // articledetail은 제외
+    },
+  }
 );

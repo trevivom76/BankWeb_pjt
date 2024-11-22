@@ -42,6 +42,7 @@ export const useAccountStore = defineStore(
         })
         .catch((error) => {
           console.log("signUp error = ", error);
+          // throw error;
         });
     };
 
@@ -65,8 +66,8 @@ export const useAccountStore = defineStore(
             method: "get",
             url: `${API_URL}/user/${username}/`,
             headers: {
-              Authorization: `Token ${token.value}`
-            }
+              Authorization: `Token ${token.value}`,
+            },
           })
             .then((response) => {
               userinfo.value = response.data;

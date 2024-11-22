@@ -9,8 +9,13 @@
         </div>
       </div>
 
+      <!-- 로딩 상태 표시 -->
+      <div v-if="isLoading" class="d-flex justify-center align-center" style="height: 400px">
+        <v-progress-circular indeterminate color="primary" :size="50"></v-progress-circular>
+      </div>
+
       <!-- 작성된 댓글 리스트 -->
-      <div>
+      <div v-else>
         <div v-for="comment in articleStore.comments" :key="comment.id" class="comment">
           <div class="d-flex justify-space-between">
             <div class="d-flex align-center ga-4">
@@ -35,17 +40,17 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 댓글 작성 창 -->
-      <div>
-        <p class="currentuser-nickname">{{ accountStore.userinfo.nickname }}</p>
-        <div class="d-flex justify-center align-center ga-4">
-          <img :src="articleStore.articledetail.user.profile_img" alt="프로필 이미지" class="profile-img" />
-          <textarea class="comment-create-textarea" placeholder="댓글을 작성해주세요." v-model="content"></textarea>
-        </div>
-        <div class="d-flex justify-end align-center">
-          <v-btn class="v-btn-create-comment mt-2" rounded="lg" variant="flat" color="#484848" width="72px" height="27px" @click="createComment">작성하기</v-btn>
+        <!-- 댓글 작성 창 -->
+        <div>
+          <p class="currentuser-nickname">{{ accountStore.userinfo.nickname }}</p>
+          <div class="d-flex justify-center align-center ga-4">
+            <img :src="articleStore.articledetail.user.profile_img" alt="프로필 이미지" class="profile-img" />
+            <textarea class="comment-create-textarea" placeholder="댓글을 작성해주세요." v-model="content"></textarea>
+          </div>
+          <div class="d-flex justify-end align-center">
+            <v-btn class="v-btn-create-comment mt-2" rounded="lg" variant="flat" color="#484848" width="72px" height="27px" @click="createComment">작성하기</v-btn>
+          </div>
         </div>
       </div>
     </v-card>
@@ -64,13 +69,18 @@ const accountStore = useAccountStore();
 const profileStore = useProfileStore();
 const route = useRoute();
 const content = ref("");
+const isLoading = ref(true); // 로딩 상태를 관리하는 ref 추가
 
-onMounted(() => {
-  // 댓글 리스트 조회
-  const payload1 = {
-    articleid: route.params.id,
-  };
-  articleStore.getComments(payload1);
+onMounted(async () => {
+  try {
+    // 댓글 리스트 조회
+    const payload = {
+      articleid: route.params.id,
+    };
+    await articleStore.getComments(payload);
+  } finally {
+    isLoading.value = false; // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
+  }
 });
 
 // 댓글 생성 함수
@@ -80,23 +90,33 @@ const createComment = async () => {
     return;
   }
 
-  const payload = {
-    content: content.value,
-    articleid: route.params.id,
-  };
+  isLoading.value = true; // 댓글 생성 시작시 로딩 상태 true
+  try {
+    const payload = {
+      content: content.value,
+      articleid: route.params.id,
+    };
 
-  await articleStore.createComment(payload);
-  content.value = ""; // 댓글 작성 후 입력 필드 초기화
+    await articleStore.createComment(payload);
+    content.value = ""; // 댓글 작성 후 입력 필드 초기화
+  } finally {
+    isLoading.value = false; // 댓글 생성 완료 후 로딩 상태 false
+  }
 };
 
 // 댓글 삭제 함수
 const deleteComment = async (commentid) => {
   if (window.confirm("정말로 댓글을 삭제하시겠습니까?")) {
-    const payload = {
-      articleid: route.params.id,
-      commentid: commentid,
-    };
-    await articleStore.deleteComments(payload);
+    isLoading.value = true; // 댓글 삭제 시작시 로딩 상태 true
+    try {
+      const payload = {
+        articleid: route.params.id,
+        commentid: commentid,
+      };
+      await articleStore.deleteComments(payload);
+    } finally {
+      isLoading.value = false; // 댓글 삭제 완료 후 로딩 상태 false
+    }
   }
 };
 
@@ -113,7 +133,7 @@ const formatDate = (dateString) => {
   };
 
   const formattedDate = new Intl.DateTimeFormat("ko-KR", options).format(date);
-  return formattedDate.replace("오전", "").replace("오후", "").trim(); // 오전/오후 제거 후 포맷 수정
+  return formattedDate.replace("오전", "").replace("오후", "").trim();
 };
 </script>
 
