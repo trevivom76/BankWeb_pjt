@@ -2,12 +2,16 @@ import DepositList from "@/components/DepositList.vue";
 import SavingList from "@/components/SavingList.vue";
 import AroundBankView from "@/views/AroundBankView.vue";
 import CommunityView from "@/views/CommunityView.vue";
+import ContractedProductView from "@/views/ContractedProductView.vue";
 import CreateView from "@/views/CreateView.vue";
 import CurrencyCalculatorView from "@/views/CurrencyCalculatorView.vue";
 import DetailView from "@/views/DetailView.vue";
 import HomeView from "@/views/HomeView.vue";
 import InterestRateView from "@/views/InterestRateView.vue";
 import LogInView from "@/views/LogInView.vue";
+import ProfileManageView from "@/views/ProfileManageView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import RecommendProductView from "@/views/RecommendProductView.vue";
 import SiginUpView from "@/views/SiginUpView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -27,22 +31,22 @@ const router = createRouter({
       component: InterestRateView,
       children: [
         {
-          path: 'deposit',
-          name: 'depositList',
+          path: "deposit",
+          name: "depositList",
           component: DepositList,
         },
         {
-          path: 'saving',
-          name: 'savingList',
+          path: "saving",
+          name: "savingList",
           component: SavingList,
         },
-      ]
+      ],
     },
     {
       //환율계산기 페이지
       path: "/currencycalculator",
       name: "currencycalculator",
-      component: CurrencyCalculatorView
+      component: CurrencyCalculatorView,
     },
     {
       // 주변은행 페이지
@@ -79,6 +83,31 @@ const router = createRouter({
       path: "/signup",
       name: "signup",
       component: SiginUpView,
+    },
+    {
+      // 프로필 페이지
+      path: "/profile",
+      component: ProfileView,
+      children: [
+        {
+          // 회원정보 관리 페이지
+          path: "/profilemanage",
+          name: "profilemanage",
+          component: ProfileManageView,
+        },
+        {
+          // 관심상품 관리 페이지
+          path: "/contractedproduct",
+          name: "contractedproduct",
+          component: ContractedProductView,
+        },
+        {
+          // 상품 추천받기 페이지
+          path: "/recommendproduct",
+          name: "recommendproduct",
+          component: RecommendProductView,
+        },
+      ],
     },
   ],
 });
