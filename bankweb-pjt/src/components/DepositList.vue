@@ -212,7 +212,7 @@ const openModal = async function (item) {
   selectedRowItem.value = item
   isModalVisible.value = true
 
-   // 좋아요 상태를 서버에서 가져오기
+  // 좋아요 상태를 서버에서 가져오기
   try {
     const response = await axios.get(`http://127.0.0.1:8000/api/v1/deposits/deposit/${item["금융 상품 ID"]}/contract-status/`, {
       headers: {
