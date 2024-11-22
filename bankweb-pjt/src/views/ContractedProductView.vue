@@ -1,48 +1,61 @@
 <template>
-  <div class="interest-products">
-    <h1>관심 상품 리스트</h1>
+  <div class="layout">
+    <div class="layout-product-list">
+      <!-- 적금 상품 리스트 -->
+      <div class="interest-products">
+        <h2 class="title">적금 상품 리스트</h2>
+        <div class="carousel-container">
+          <div
+            class="carousel"
+            :style="{ transform: `translateY(-${currentSavingsIndex * cardHeight}px)` }"
+          >
+            <div
+              class="card"
+              v-for="(product, index) in savings"
+              :key="'savings-' + product.id"
+            >
+              <h3>{{ product.fin_prdt_nm }}</h3>
+              <p>{{ product.kor_co_nm }}</p>
+              <button class="detail-btn" @click="openModal(product, false)">
+                상세 보기
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- 적금 상품 -->
-    <div v-if="savings.length > 0" class="savings">
-      <h2>적금 상품</h2>
-      <ul>
-        <li 
-        v-for="saving in savings" 
-        :key="saving.id"
-        @click="openModal(saving, false)"
-        class="clickable-item"
-        >
-          <strong>{{ saving.fin_prdt_nm }}</strong> ({{ saving.kor_co_nm }})<br />
-          - 최대 한도: {{ saving.max_limit || '제한 없음' }}<br />
-          - 우대 조건: {{ saving.spcl_cnd || '없음' }}
-        </li>
-      </ul>
-    </div>
-    <div v-else>
-      <p>관심 있는 적금 상품이 없습니다.</p>
+      <!-- 예금 상품 리스트 -->
+      <div class="interest-products">
+        <h2 class="title">예금 상품 리스트</h2>
+        <div class="carousel-container">
+          <div
+            class="carousel"
+            :style="{ transform: `translateY(-${currentDepositsIndex * cardHeight}px)` }"
+          >
+            <div
+              class="card"
+              v-for="(product, index) in deposits"
+              :key="'deposits-' + product.id"
+            >
+              <h3>{{ product.fin_prdt_nm }}</h3>
+              <p>{{ product.kor_co_nm }}</p>
+              <button class="detail-btn" @click="openModal(product, true)">
+                상세 보기
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- 예금 상품 -->
-    <div v-if="deposits.length > 0" class="deposits">
-      <h2>예금 상품</h2>
-      <ul>
-        <li 
-        v-for="deposit in deposits"
-        :key="deposit.id"
-        @click="openModal(deposit, true)"
-        >
-          <strong>{{ deposit.fin_prdt_nm }}</strong> ({{ deposit.kor_co_nm }})<br />
-          - 최대 한도: {{ deposit.max_limit || '제한 없음' }}<br />
-          - 우대 조건: {{ deposit.spcl_cnd || '없음' }}
-        </li>
-      </ul>
-    </div>
-    <div v-else>
-      <p>관심 있는 예금 상품이 없습니다.</p>
+    <!-- 예적금 금리 비교 (슬라이드 애니메이션 적용 안됨) -->
+    <div class="comparison">
+      <FinanceProductComparison :products="likeProducts" />
     </div>
   </div>
+
   <v-dialog v-model="isModalVisible" width="800">
-    <v-card v-if="selectedProduct" class="card">
+    <v-card v-if="selectedProduct" class="modal-container">
       <v-card-title class="d-flex align-center justify-space-between">
         <div>
           <div class="bank-label">{{ selectedProduct.kor_co_nm }}</div>
@@ -91,9 +104,6 @@
             </tr>
           </tbody>
         </v-table>
-        <!-- <DepositChart 
-        :intr-rate-data="selectedRowItem['depositRateData']" 
-        :intr-rate2-data="selectedRowItem['depositRateData2']"/> -->
       </div>
       <v-card-actions>
         <button class="close-button" @click="closeModal">닫기</button>
@@ -103,9 +113,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, onUnmounted } from 'vue';
 import { useAccountStore } from '@/stores/account';
 import { useFinancialStore } from '@/stores/financial';
+import FinanceProductComparison from '@/components/FinanceProductComparison.vue'
 import axios from 'axios';
 
 const accountStore = useAccountStore()
@@ -115,6 +126,7 @@ const financialStore = useFinancialStore()
 const API_BASE_URL = 'http://127.0.0.1:8000/api/v1/deposits'; // Django API 기본 URL
 const savings = ref([]); // 적금 상품 리스트
 const deposits = ref([]); // 예금 상품 리스트
+const likeProducts = computed(() => [...savings.value, ...deposits.value]);
 const error = ref(null); // 오류 메시지
 
 // 모달 관련 상태
@@ -124,15 +136,53 @@ const selectedProduct = ref(null); // 선택된 상품 정보
 const isLiked = ref(false)
 const isDeposit = ref(false)
 
-const comparisonResults = ref([])
+// 현재 페이지와 페이지당 카드 수 관리
+const cardHeight = ref(0); // 카드 하나의 높이
+const currentSavingsIndex = ref(0); // 적금 리스트 슬라이더의 현재 인덱스
+const currentDepositsIndex = ref(0); // 예금 리스트 슬라이더의 현재 인덱스
+
+let savingsSlideInterval = null;
+let depositsSlideInterval = null;
 
 // 컴포넌트가 마운트될 때 API 호출
 onMounted(async () => {
   await fetchUserSavings();
   await fetchUserDeposits();
-  compareRates()
+
+  const firstCard = document.querySelector(".card");
+  if (firstCard) {
+    cardHeight.value = firstCard.offsetHeight + 20; // 카드 높이 + 간격
+  }
+
+  // 적금 슬라이더 시작 (적금 상품이 3개 이상일 경우에만 애니메이션 시작)
+  if (savings.value.length > 3) {
+    savingsSlideInterval = setInterval(() => {
+      slideToNext(currentSavingsIndex, savings.value);
+    }, 3000); // 3초 간격
+  }
+
+  // 예금 슬라이더 시작 (예금 상품이 3개 이상일 경우에만 애니메이션 시작)
+  if (deposits.value.length > 3) {
+    depositsSlideInterval = setInterval(() => {
+      slideToNext(currentDepositsIndex, deposits.value);
+    }, 3000); // 3초 간격
+  }
 });
 
+// 슬라이더 동작
+const slideToNext = (currentIndex, products) => {
+  if (products.length > 0) {
+    const firstProduct = products.shift(); // 첫 번째 카드 제거
+    products.push(firstProduct); // 맨 뒤로 추가
+    currentIndex.value = 0; // transform 초기화
+  }
+};
+
+// 슬라이더 정지 (컴포넌트가 사라질 때)
+onUnmounted(() => {
+  if (savingsSlideInterval) clearInterval(savingsSlideInterval);
+  if (depositsSlideInterval) clearInterval(depositsSlideInterval);
+});
 
 // API 호출 함수
 const fetchUserSavings = async () => {
@@ -149,7 +199,6 @@ const fetchUserSavings = async () => {
   }
 };
 
-
 const fetchUserDeposits = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/user/deposits/`, {
@@ -163,7 +212,6 @@ const fetchUserDeposits = async () => {
     error.value = '예금 데이터를 가져오는 데 실패했습니다.';
   }
 };
-
 
 // 모달 열기
 const openModal = async (product, isD) => {
@@ -200,8 +248,6 @@ const openModal = async (product, isD) => {
   }
 };
 
-
-// 모달 닫기
 const closeModal = () => {
   selectedProduct.value = null;
   isModalVisible.value = false;
@@ -209,8 +255,6 @@ const closeModal = () => {
   fetchUserSavings();
 };
 
-
-// 좋아요 버튼
 const toggleLike = (id) => {
   isLiked.value = !isLiked.value;
   if (isDeposit.value) {
@@ -218,40 +262,144 @@ const toggleLike = (id) => {
   } else {
     financialStore.savingToggleLike(id)
   }
-
 };
 </script>
 
 <style scoped>
-.interest-products {
-  max-width: 800px;
+/* 전체 레이아웃 */
+.layout {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  font-family: 'Pretendard', sans-serif;
 }
 
-.savings, .deposits {
+/* 관심 상품 리스트 */
+.interest-products {
+  flex: 1;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
   margin-bottom: 20px;
+  color: #333; /* 짙은 회색 텍스트 */
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+/* 슬라이더 */
+.carousel-container {
+  overflow: hidden;
+  height: 300px; /* 카드 3개까지만 보이도록 고정 높이 설정 */
 }
 
-li {
+.carousel {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* 카드 디자인 */
+.card {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* 마우스 오버 시 그림자 강조 */
+}
+
+.card h3 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 12px;
+  color: #777;
   margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
-.error {
-  color: red;
-  font-weight: bold;
+.detail-btn {
+  padding: 8px 12px;
+  background: #007bff; /* 파란색 버튼 */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.detail-btn:hover {
+  background: #0056b3; /* 버튼 색상 변화 */
+}
+
+/* '상품이 없음' 메시지 */
+.no-carousel {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+}
+
+/* 예적금 금리 비교 */
+.comparison {
+  flex: 2;
+  padding: 15px;
+  background: #f9f9f9; /* 밝은 회색 배경 */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.comparison .title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* 예적금 금리 비교 내부 */
+.comparison > div {
   margin-top: 20px;
 }
 
-.card {
+/* 슬라이더 슬라이드 동작 */
+.carousel-container {
+  position: relative;
+}
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* 버튼 및 카드 레이아웃 */
+.layout .interest-products .carousel-container {
+  margin-bottom: 20px;
+}
+
+/* 예적금 금리 비교 하위 컴포넌트 */
+.interest-products + .interest-products {
+  margin-top: 20px;
+}
+
+
+.modal-container {
   padding: 40px;
 }
 
