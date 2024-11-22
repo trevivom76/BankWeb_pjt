@@ -29,6 +29,9 @@ export const useProfileStore = defineStore(
         });
     };
 
+
+    // 프로필 사진 수정
+
     return { userprofile, getProfile };
   },
   { persist: true }
