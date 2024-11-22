@@ -58,10 +58,12 @@
           <div class="bank-label">{{ selectedRowItem['금융 회사명'] }}</div>
           <p class="product-label">{{ selectedRowItem['금융 상품명'] }}</p>
         </div>
-        <button
-          :class="['btn_like', { on: isLiked }]"
-          @click="toggleLike"
-        ></button>
+        <template v-if="isLoggedin">
+          <button
+            :class="['btn_like', { on: isLiked }]"
+            @click="toggleLike(selectedRowItem['금융 상품 ID'])"
+          ></button>
+        </template>
       </v-card-title>
       <div>
         <div class="line"></div>
@@ -71,7 +73,7 @@
             v-for="(value, key) in selectedRowItem"
             :key="key"
             >
-              <template v-if="['금융 회사명', '금융 상품명', '6개월 자유', '6개월 정액', '12개월 자유','12개월 정액', '24개월 자유','24개월 정액', '36개월 자유','36개월 정액', 'freeSavingData', 'freeSavingData2','freeSavingData3','fixedSavingData','fixedSavingData2','fixedSavingData3'].includes(key)"></template>
+              <template v-if="['금융 회사명', '금융 상품명', '6개월 자유', '6개월 정액', '12개월 자유','12개월 정액', '24개월 자유','24개월 정액', '36개월 자유','36개월 정액', 'freeSavingData', 'freeSavingData2','freeSavingData3','fixedSavingData','fixedSavingData2','fixedSavingData3', '금융 상품 ID'].includes(key)"></template>
               <template v-else>
                 <td width="20%" class="table-title">{{ key }}</td>
                 <td v-if="key === '최고 한도'">{{ value?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
@@ -98,18 +100,43 @@
 
 <script setup>
 import { useFinancialStore } from "@/stores/financial";
+import { useAccountStore } from "@/stores/account";
 import { onMounted, ref, watch } from "vue";
 import SavingChart from "./SavingChart.vue";
+import axios from "axios";
 
 const financialStore = useFinancialStore();
+const accountStore = useAccountStore();
+
 const savingItems = ref([]);
 const banks = ref(["전체은행"]);
 const selectedBank = ref("전체은행");
 const selectedSavingPeriod = ref("전체기간");
 
-const isModalVisible = ref(false)
-const selectedRowItem = ref(null)
-const isLiked = ref(false)
+const selectedRowItem = ref(null) // 적금 리스트에서 선택된 적금 데이터
+
+const isModalVisible = ref(false) // 모달창 활성화 여부
+const isLiked = ref(false)        // 적금상품 관심항목으로 등록 여부
+const isLoggedin = ref(false)     // 로그인 여부
+
+
+onMounted(() => {
+  financialStore.getSavingDatas();
+  financialStore.getBankDatas();
+
+  banks.value.push(...financialStore.banks);
+
+  // 로그인 여부 확인
+  isLoggedin.value = accountStore.isLogin
+
+  watch(
+    () => financialStore.savings,
+    (newSavings) => {
+      savingItems.value = newSavings.map(mapSavingData);
+    },
+    { immediate: true }
+  );
+});
 
 
 // 테이블 헤더 설정
@@ -211,6 +238,7 @@ const mapSavingData = (saving) => {
     "24개월 정액": `${interestRates["24"]["정액적립식"] || "-"}`,
     "36개월 자유": `${interestRates["36"]["자유적립식"] || "-"}`,
     "36개월 정액": `${interestRates["36"]["정액적립식"] || "-"}`,
+    "금융 상품 ID": saving.fin_prdt_cd,
     freeSavingData,
     freeSavingData2,
     freeSavingData3,
@@ -222,26 +250,40 @@ const mapSavingData = (saving) => {
 
 
 // 검색 데이터에 따른 데이터 필터링
-const clickedSearchButton = () => {
-    savingItems.value = financialStore.savings
-    .filter((saving) => {
-      const matchesBank =
-        selectedBank.value === "전체은행" || saving.kor_co_nm === selectedBank.value;
+const clickedSearchButton = async () => {
+  await financialStore.getSavingDatas(); 
+  savingItems.value = financialStore.savings
+  .filter((saving) => {
+    const matchesBank =
+      selectedBank.value === "전체은행" || saving.kor_co_nm === selectedBank.value;
 
-      const matchesSavingPeriod =
-        selectedSavingPeriod.value === "전체기간" ||
-        saving.savingoption_set.some((option) => option.save_trm === String(selectedSavingPeriod.value));
+    const matchesSavingPeriod =
+      selectedSavingPeriod.value === "전체기간" ||
+      saving.savingoption_set.some((option) => option.save_trm === String(selectedSavingPeriod.value));
 
-      return matchesBank && matchesSavingPeriod;
-    })
-    .map(mapSavingData);
+    return matchesBank && matchesSavingPeriod;
+  })
+  .map(mapSavingData);
 };
 
 
 // 모달창 띄우기
-const openModal = function (item) {
+const openModal = async function (item) {
   selectedRowItem.value = item
   isModalVisible.value = true
+
+  // 좋아요 상태를 서버에서 가져오기
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/v1/deposits/saving/${item["금융 상품 ID"]}/contract-status/`, {
+      headers: {
+        Authorization: `Token ${accountStore.token}`,
+      },
+    });
+    isLiked.value = response.data.is_liked;
+  } catch (error) {
+    console.error("좋아요 상태 확인 오류:", error);
+    isLiked.value = false;
+  }
 }
 
 
@@ -252,26 +294,10 @@ const closeModal = function () {
 
 
 // 좋아요 버튼
-const toggleLike = () => {
+const toggleLike = (savingID) => {
   isLiked.value = !isLiked.value;
-  console.log("좋아요 상태:", isLiked.value);
+  financialStore.savingToggleLike(savingID)
 };
-
-
-onMounted(() => {
-  financialStore.getSavingDatas();
-  financialStore.getBankDatas();
-
-  banks.value.push(...financialStore.banks);
-
-  watch(
-    () => financialStore.savings,
-    (newSavings) => {
-      savingItems.value = newSavings.map(mapSavingData);
-    },
-    { immediate: true }
-  );
-});
 
 </script>
 
