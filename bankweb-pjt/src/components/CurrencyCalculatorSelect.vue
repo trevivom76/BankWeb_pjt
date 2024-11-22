@@ -36,6 +36,9 @@
         <p class="" :style="{ marginLeft: '59px', marginBottom: '56px' }">
           환율 계산기는 단순 참고용이므로 위 계산 결과는 환율변동 또는 우대율 적용에 따라 실제 거래 시 적용되는 환율과의 차이가 있을 수 있습니다.
         </p>
+        <v-btn class="reverse" @click="swapCountries" :style="{ marginRight: '82px', marginBottom: '44px' }">
+          <v-icon size="large">mdi-cached</v-icon>
+        </v-btn>
         <v-btn class="custom-button" @click="convertCurrency" :style="{ marginRight: '82px', marginBottom: '44px' }">환 전</v-btn>
       </div>
     </div>
@@ -55,12 +58,10 @@ const formattedMoney1 = ref(""); // 포맷팅된 표시 값
 const money2 = ref(""); // 환전된 실제 값
 const formattedMoney2 = ref(""); // 포맷팅된 표시 값
 
-
 const formatNumber = (value) => {
   if (!value) return "0";
   return new Intl.NumberFormat("ko-KR").format(value);
 };
-
 
 // 금액 입력 처리 함수
 const onInputMoney = (event) => {
@@ -74,12 +75,12 @@ const convertCurrency = () => {
   if (!selectedCountry.value || !selectedCountry2.value || !money1.value) {
     alert("금액을 올바르게 입력해주세요!!");
     return;
-  }  
+  }
 
   // 선택한 국가의 환율 정보 가져오기
   const country1 = currenystore.currency.find((item) => item.cur_unit === selectedCountry.value);
   const country2 = currenystore.currency.find((item) => item.cur_unit === selectedCountry2.value);
-  
+
   if (country1 && country2) {
     const rate1 = parseFloat(country1.deal_bas_r.replace(",", "")); // 쉼표 제거 후 숫자 변환
     const rate2 = parseFloat(country2.deal_bas_r.replace(",", "")); // 쉼표 제거 후 숫자 변환
@@ -87,23 +88,38 @@ const convertCurrency = () => {
     formattedMoney2.value = formatNumber(money2.value); // 포맷팅된 값 업데이트
   } else {
     alert("해당 국가의 환율 정보를 찾을 수 없습니다.");
-  }  
-};  
+  }
+};
 
 const addAmount = (amount) => {
   money1.value = (parseFloat(money1.value) || 0) + amount;
   formattedMoney1.value = formatNumber(money1.value); // 포맷팅된 값 업데이트
-};  
+};
 
 const resetFields = () => {
   money1.value = "";
   formattedMoney1.value = ""; // 추가
   money2.value = "";
   formattedMoney2.value = ""; // 추가
-};  
+};
 
+// 국가 코드 교환 함수
+const swapCountries = () => {
+  // selectedCountry와 selectedCountry2 교환
+  const tempCountry = selectedCountry.value;
+  selectedCountry.value = selectedCountry2.value;
+  selectedCountry2.value = tempCountry;
 
+  // formattedMoney1과 formattedMoney2 교환
+  const tempMoney = formattedMoney1.value;
+  formattedMoney1.value = formattedMoney2.value;
+  formattedMoney2.value = tempMoney;
 
+  // money1과 money2 교환 (실제 값도 교환)
+  const tempActualMoney = money1.value;
+  money1.value = money2.value;
+  money2.value = tempActualMoney;
+};
 
 // 컴포넌트가 마운트될 때 실행
 onMounted(() => {
@@ -111,8 +127,10 @@ onMounted(() => {
   // currency 데이터가 변경될 때 국가 코드 목록을 업데이트
   watch(
     () => currenystore.currency, // 관찰할 대상: currency 데이터
-    (newCurrency) => {          // 데이터가 변경될 때 실행할 콜백
-      if (newCurrency && Array.isArray(newCurrency)) {                // 데이터가 배열인지 확인
+    (newCurrency) => {
+      // 데이터가 변경될 때 실행할 콜백
+      if (newCurrency && Array.isArray(newCurrency)) {
+        // 데이터가 배열인지 확인
         countryCodes.value = newCurrency.map((item) => item.cur_unit); // 국가 코드 목록 만들기
       }
     },
@@ -170,6 +188,15 @@ onMounted(() => {
   font-size: 14px;
   font-family: "Pretendard", sans-serif; /* Pretendard 폰트 적용 */
   font-weight: 800;
+}
+
+.reverse {
+  min-height: 44px;
+  font-size: 11px;
+  font-family: "Pretendard", sans-serif; /* Pretendard 폰트 적용 */
+  font-weight: 800;
+  background-color: #0b5bcb; /* 원하는 색상 코드 */
+  color: white; /* 텍스트 색상 */
 }
 
 p {

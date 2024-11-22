@@ -4,12 +4,16 @@
       <p :style="{ fontWeight: 'bold', fontSize: '24px', color: 'black' }">환율 계산기</p>
       <CurrencyCalculatorSelect />
     </v-card>
+    <div class="container">
+      <!-- <CurrencyCalculatorGraph /> -->
+    </div>
   </div>
 </template>
 
 <script setup>
 import { VCard } from "vuetify/components";
 import CurrencyCalculatorSelect from "./CurrencyCalculatorSelect.vue"; // CurrencyCalculatorSelect 컴포넌트 가져오기
+// import CurrencyCalculatorGraph from "./CurrencyCalculatorGraph.vue";
 </script>
 
 <style scoped>
