@@ -54,10 +54,12 @@
           <div class="bank-label">{{ selectedRowItem['금융 회사명'] }}</div>
           <p class="product-label">{{ selectedRowItem['금융 상품명'] }}</p>
         </div>
-        <button
-          :class="['btn_like', { on: isLiked }]"
-          @click="toggleLike"
-        ></button>
+        <template v-if="isLoggedin">
+          <button
+            :class="['btn_like', { on: isLiked }]"
+            @click="toggleLike(selectedRowItem['금융 상품 ID'])"
+          ></button>
+        </template>
       </v-card-title>
       <div>
         <div class="line"></div>
@@ -67,7 +69,7 @@
             v-for="(value, key) in selectedRowItem"
             :key="key"
             >
-              <template v-if="['금융 회사명', '금융 상품명', '6개월', '12개월', '24개월', '36개월', 'intrRate', 'intrRate2'].includes(key)"></template>
+              <template v-if="['금융 회사명', '금융 상품명', '6개월', '12개월', '24개월', '36개월', 'depositRateData', 'depositRateData2', '금융 상품 ID'].includes(key)"></template>
               <template v-else>
                 <td width="20%" class="table-title">{{ key }}</td>
                 <td v-if="key === '최고 한도'">{{ value?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
@@ -77,8 +79,8 @@
           </tbody>
         </v-table>
         <DepositChart 
-        :intr-rate-data="selectedRowItem['intrRate']" 
-        :intr-rate2-data="selectedRowItem['intrRate2']"/>
+        :intr-rate-data="selectedRowItem['depositRateData']" 
+        :intr-rate2-data="selectedRowItem['depositRateData2']"/>
       </div>
       <v-card-actions>
         <button class="close-button" @click="closeModal">닫기</button>
@@ -89,18 +91,43 @@
 
 <script setup>
 import { useFinancialStore } from "@/stores/financial";
+import { useAccountStore } from "@/stores/account";
 import { onMounted, ref, watch } from "vue";
 import DepositChart from "@/components/DepositChart.vue";
+import axios from "axios";
 
 const financialStore = useFinancialStore();
-const depositItems = ref([]);
-const banks = ref(["전체은행"]);
-const selectedBank = ref("전체은행");
-const selectedDepositPeriod = ref("전체기간");
+const accountStore = useAccountStore();
 
-const isModalVisible = ref(false)
-const selectedRowItem = ref(null)
-const isLiked = ref(false)
+const depositItems = ref([]);                  // 전체 예금 정보
+const banks = ref(["전체은행"]);                // 전체 은행 정보
+const selectedBank = ref("전체은행");           // 필터링을 위한 은행 정보
+const selectedDepositPeriod = ref("전체기간");  // 필터링을 위한 예치 기간
+
+const selectedRowItem = ref(null) // 예금 리스트에서 선택된 예금 데이터
+
+const isModalVisible = ref(false) // 모달창 활성화 여부
+const isLiked = ref(false)        // 예금상품 관심항목으로 등록 여부
+const isLoggedin = ref(false)     // 로그인 여부
+
+
+onMounted(() => {
+  financialStore.getDepositDatas();
+  financialStore.getBankDatas();
+
+  banks.value.push(...financialStore.banks);
+  
+  // 로그인 여부 확인
+  isLoggedin.value = accountStore.isLogin
+
+  watch(
+    () => financialStore.deposits,
+    (newDeposits) => {
+      depositItems.value = newDeposits.map(mapDepositData);
+    },
+    { immediate: true }
+  );
+});
 
 
 // 테이블 헤더 설정
@@ -119,16 +146,16 @@ const headers = [
 const mapDepositData = (deposit) => {
   const terms = ["6", "12", "24", "36"];
   const interestRates = {};
-  const intrRate = Array(terms.length).fill(0); // [0, 0, 0, 0]
-  const intrRate2 = Array(terms.length).fill(0); // [0, 0, 0, 0]
+  const depositRateData = Array(terms.length).fill(0);
+  const depositRateData2 = Array(terms.length).fill(0);
 
   // 각 예치 기간에 대해 금리 데이터를 처리
   for (const term of terms) {
     const option = deposit.depositoption_set.find((opt) => opt.save_trm === term);
     interestRates[term] = option ? `${option.intr_rate || 0}%` : "";
     const index = terms.indexOf(term);
-    intrRate[index] = option?.intr_rate || 0;
-    intrRate2[index] = option?.intr_rate2 || 0;
+    depositRateData[index] = option?.intr_rate || 0;
+    depositRateData2[index] = option?.intr_rate2 || 0;
   }
 
   const formattedDate = deposit.dcls_month
@@ -155,14 +182,16 @@ const mapDepositData = (deposit) => {
     "12개월": interestRates["12"],
     "24개월": interestRates["24"],
     "36개월": interestRates["36"],
-    intrRate,
-    intrRate2,
+    "금융 상품 ID": deposit.fin_prdt_cd,
+    depositRateData: depositRateData,
+    depositRateData2: depositRateData2,
   };
 };
 
 
 // 검색 데이터에 따른 데이터 필터링
-const clickedSearchButton = () => {
+const clickedSearchButton = async () => {
+  await financialStore.getDepositDatas(); 
   depositItems.value = financialStore.deposits
     .filter((deposit) => {
       const matchesBank =
@@ -179,10 +208,22 @@ const clickedSearchButton = () => {
 
 
 // 모달창 띄우기
-const openModal = function (item) {
-  console.log(item)
+const openModal = async function (item) {
   selectedRowItem.value = item
   isModalVisible.value = true
+
+   // 좋아요 상태를 서버에서 가져오기
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/v1/deposits/deposit/${item["금융 상품 ID"]}/contract-status/`, {
+      headers: {
+        Authorization: `Token ${accountStore.token}`,
+      },
+    });
+    isLiked.value = response.data.is_liked;
+  } catch (error) {
+    console.error("좋아요 상태 확인 오류:", error);
+    isLiked.value = false;
+  }
 }
 
 
@@ -193,26 +234,10 @@ const closeModal = function (){
 
 
 // 좋아요 버튼
-const toggleLike = () => {
+const toggleLike = (depositID) => {
   isLiked.value = !isLiked.value;
-  console.log("좋아요 상태:", isLiked.value);
+  financialStore.depositToggleLike(depositID)
 };
-
-
-onMounted(() => {
-  financialStore.getDepositDatas();
-  financialStore.getBankDatas();
-
-  banks.value.push(...financialStore.banks);
-
-  watch(
-    () => financialStore.deposits,
-    (newDeposits) => {
-      depositItems.value = newDeposits.map(mapDepositData);
-    },
-    { immediate: true }
-  );
-});
 
 </script>
 

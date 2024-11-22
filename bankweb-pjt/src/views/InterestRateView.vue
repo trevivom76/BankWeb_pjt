@@ -20,7 +20,18 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted } from "vue";
+import { useFinancialStore } from "@/stores/financial";
+
+
+const financialStore = useFinancialStore();
+
+onMounted(() => {
+  financialStore.fetchAllData();
+});
+
+</script>
 
 <style scoped>
 .button-box {
