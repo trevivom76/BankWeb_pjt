@@ -114,7 +114,7 @@ const headers = ref([
   { title: "글 제목", align: "start", key: "title", width: "50%" },
   { title: "카테고리", align: "center", key: "category", width: "35%" },
   { title: "작성자", align: "center", key: "user.nickname", width: "50%" },
-  { title: "", key: "id", align: "center", sortable: false, width: "0%" },
+  { title: "", key: "id", align: "center", sortable: false, width: "0%"},
 ]);
 
 // 선택된 카테고리에 맞춰 필터링된 게시물 리스트
@@ -194,4 +194,11 @@ const changeCategory = async (category) => {
   justify-content: center;
   align-items: center;
 }
+
+/* id 컬럼 숨기기 */
+:deep(.v-data-table__th:last-child),
+:deep(.v-data-table__td:last-child) {
+  display: none !important;
+}
+
 </style>

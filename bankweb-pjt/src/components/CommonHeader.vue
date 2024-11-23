@@ -109,7 +109,7 @@
       <v-dialog v-model="dialog" max-width="380" height="300" persistent>
         <v-card>
           <div class="d-flex flex-column justify-center align-center" style="height: 100%; padding: 24px">
-            <svg-icon type="mdi" :path="mdiInformationSlabCircleOutline" style="font-size: 150px; margin-bottom: 24px"></svg-icon>
+            <v-icon color="warning" size="32" class="mb-3">mdi-alert-circle</v-icon>
             <p class="text-center" style="font-size: 22px; margin-bottom: 24px; line-height: 1.5">안전한 금융서비스를 위해 로그인 화면으로 이동합니다</p>
             <v-card-text class="d-flex justify-center align-center pt-0" style="flex-grow: 1; margin-top: 16px">
               <v-progress-circular color="primary" indeterminate disable-shrink size="60" width="8"></v-progress-circular>

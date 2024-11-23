@@ -68,7 +68,9 @@ const updateArticle = function () {
         content: content.value,
         category: category.value
     }
-    articleStore.createArticle(payload)
+    // #################################!!!!!!!!!!! 여기가 문제!~!!!!!!!!!!!!!!!!!!!!!$################################
+    // Create 가아니라 findindex와 filter로 articleid에 해당하는 게시글의 찾은후 그 index에 수정본을 새로 할당!!!!
+    articleStore.updateArticle(payload)
 }
 
 

@@ -1,3 +1,4 @@
+<!-- Recommended2View.vue -->
 <template>
   <div class="simulation-container">
     <!-- 헤더 섹션 -->

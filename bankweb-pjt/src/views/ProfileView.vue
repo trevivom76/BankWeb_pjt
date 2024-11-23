@@ -23,7 +23,7 @@
         <v-card-text class="pa-6">
           <div class="text-center mb-4">
             <v-icon color="warning" size="32" class="mb-3">mdi-alert-circle</v-icon>
-            <p class="text-body-1">
+            <p>
               금융 상품 맞춤 추천을 위해 프로필 정보를 입력해주세요
             </p>
           </div>

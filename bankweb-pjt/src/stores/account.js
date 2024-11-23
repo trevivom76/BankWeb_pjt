@@ -17,72 +17,80 @@ export const useAccountStore = defineStore(
       }
     });
 
+    const signUpErrorMessage = ref({})
+
     const router = useRouter();
 
     const userinfo = ref(null);
 
     // 회원가입 요청
-    const signUp = function (payload) {
-      const { username, password1, password2, nickname, name } = payload;
-      axios({
-        method: "post",
-        url: `${API_URL}/accounts/signup/`,
-        data: {
-          username,
-          password1,
-          password2,
-          nickname,
-          name,
-        },
-      })
-        .then((response) => {
-          const password = password1;
-          console.log("회원가입 성공");
-          logIn({ username, password });
-        })
-        .catch((error) => {
-          console.log("signUp error = ", error);
-          // throw error;
+    const signUp = async function (payload) {
+      const { username, password1, password2, nickname, name, email } = payload;
+      console.log(email);
+      
+      try {
+        const response = await axios({
+          method: "post",
+          url: `${API_URL}/accounts/signup/`,
+          data: {
+            username,
+            password1,
+            password2,
+            nickname,
+            name
+          },
         });
+        
+        const password = password1;
+        console.log("회원가입 성공");
+        await logIn({ username, password });
+        
+      } catch (error) {
+        console.log("signUp error = ", error);
+        signUpErrorMessage.value = error.response.data
+        console.log(signUpErrorMessage.value)
+      }
     };
 
-    // 로그인 요청
-    const logIn = function (payload) {
+    const logIn = async function (payload) {
       const { username, password } = payload;
-
-      axios({
-        method: "post",
-        url: `${API_URL}/accounts/login/`,
-        data: {
-          username,
-          password,
-        },
-      })
-        .then((response) => {
-          token.value = response.data.key;
-
-          // 유저 정보를 조회, 저장
-          axios({
+    
+      try {
+        // 로그인 요청
+        const loginResponse = await axios({
+          method: "post",
+          url: `${API_URL}/accounts/login/`,
+          data: {
+            username,
+            password,
+          },
+        });
+        
+        token.value = loginResponse.data.key;
+    
+        try {
+          // 유저 정보 조회 요청
+          const profileResponse = await axios({
             method: "get",
             url: `${API_URL}/user/${username}/`,
             headers: {
               Authorization: `Token ${token.value}`,
             },
-          })
-            .then((response) => {
-              userinfo.value = response.data;
-              console.log(`현재 유저(${userinfo.value.nickname})프로필 조회 성공`);
-            })
-            .catch((error) => {
-              console.log("getProfile error = ", error);
-            });
-
-          console.log("로그인 성공");
-          router.push({ name: "home" });
-        })
-        .catch((error) => {
-          console.log("logIn error = ", error);
-        });
+          });
+    
+          userinfo.value = profileResponse.data;
+          console.log(`현재 유저(${userinfo.value.nickname})프로필 조회 성공`);
+          
+        } catch (error) {
+          console.log("getProfile error = ", error);
+        }
+    
+        console.log("로그인 성공");
+        router.push({ name: "home" });
+        
+      } catch (error) {
+        console.log("logIn error = ", error);
+      }
     };
 
     // 로그아웃 요청
@@ -120,7 +128,7 @@ export const useAccountStore = defineStore(
       }
     };
 
-    return { token, isLogin, router, userinfo, signUp, logIn, logOut, refreshUserInfo   };
+    return { token, isLogin, router, userinfo, signUpErrorMessage, signUp, logIn, logOut, refreshUserInfo   };
   },
   { persist: true }
 );
