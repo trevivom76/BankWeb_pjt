@@ -225,6 +225,7 @@
 import { ref, onMounted, nextTick } from 'vue';
 import Chart from 'chart.js/auto';
 import { useFinancialStore } from '@/stores/financial';
+import { useAccountStore } from '@/stores/account';
 
 // 상태 관리
 const financialStore = useFinancialStore();
@@ -232,6 +233,8 @@ const loading = ref(false);
 const chartRef = ref(null);
 const chart = ref(null);
 const selectedProduct = ref(null);
+
+const accountStore = useAccountStore()
 
 // 예금/적금 데이터
 const deposits = ref([
@@ -243,8 +246,8 @@ const savings = ref([
 
 // 사용자 프로필 상태
 const userProfile = ref({
-  age: null,
-  currentAssets: null,
+  age: accountStore.userinfo?.age || null,
+  currentAssets: accountStore.userinfo?.money || null,
   monthlySavings: null,
   period: 12,
   isCompound: true

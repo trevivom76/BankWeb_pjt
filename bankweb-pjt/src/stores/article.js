@@ -86,6 +86,28 @@ export const useArticleStore = defineStore(
         });
     };
 
+    // 게시글 수정 함수
+    const updateArticle = function (payload) {
+      const { articleid, title, content, category } = payload;
+      axios({
+        method: "put",
+        url: `/api/v1/articles/${articleid}/`,
+        data: {
+          title,
+          content,
+          category,
+        },
+      })
+        .then((response) => {
+          console.log("게시글 수정 성공");
+          console.log(response);
+          router.push({ name: "detail", params:{ id: articleid} });
+        })
+        .catch((error) => {
+          console.log("deleteArticle error =", error);
+        });
+    };
+
     // 댓글 생성
     const createComment = async (payload) => {
       const { content, articleid } = payload;
@@ -123,6 +145,23 @@ export const useArticleStore = defineStore(
       }
     };
 
+    // 댓글 수정
+    const updateComment = async (payload) => {
+      const { articleid, commentid, content } = payload;
+    
+      try {
+        const response = await axios.put(`/api/v1/articles/${articleid}/comment/${commentid}/`, { content });
+        // 특정 댓글만 업데이트
+        const index = comments.value.findIndex(comment => comment.id === commentid);
+        if (index !== -1) {
+          comments.value[index] = response.data;
+        }
+      } catch (error) {
+        console.error("updateComment error:", error);
+        throw error; // 에러를 상위로 전파
+      }
+    };
+
     return {
       articles,
       articledetail,
@@ -131,9 +170,11 @@ export const useArticleStore = defineStore(
       createArticle,
       getArticleDetail,
       deleteArticle,
+      updateArticle,
       createComment,
       getComments,
       deleteComments,
+      updateComment
     };
   },
   {

@@ -15,6 +15,7 @@ import Recommended1View from "@/views/Recommended1View.vue";
 import Recommended2View from "@/views/Recommended2View.vue";
 import RecommendProductView from "@/views/RecommendProductView.vue";
 import SiginUpView from "@/views/SiginUpView.vue";
+import UpdateView from "@/views/UpdateView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -73,6 +74,12 @@ const router = createRouter({
       path: "/create",
       name: "create",
       component: CreateView,
+    },
+    {
+      // 게시글 Update 페이지
+      path: "/update/:id",
+      name: "update",
+      component: UpdateView,
     },
     {
       // 로그인 페이지

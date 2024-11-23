@@ -1,13 +1,6 @@
 <template>
   <div>
-    <div>
-      <p>
-        <span class="username">{{ accountStore.userinfo.name }}</span>
-        님의 프로필 페이지
-      </p>
-    </div>
-    <hr />
-
+    <hr>
     <div>
       <RouterLink :to="{ name: 'recommended1' }">나의 금융 목표 기반 추천</RouterLink>
       |

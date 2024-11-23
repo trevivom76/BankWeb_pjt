@@ -20,7 +20,7 @@
 
     <!-- (전체)게시판글 -->
     <div v-else>
-      <v-data-table :items="filteredArticles" :headers="headers">
+      <v-data-table :items="filteredArticles" :headers="headers" :sort-by="[{ key: 'id', order: 'desc' }]">
         <!-- 글 제목을 클릭 시 다른 페이지로 이동 -->
         <template v-slot:item.title="{ item }">
           <RouterLink :to="{ name: 'detail', params: { id: item.id } }" class="delete-a-underline-color">
@@ -79,6 +79,7 @@ const headers = ref([
   { title: "글 제목", align: "start", key: "title", width: "50%" },
   { title: "카테고리", align: "center", key: "category", width: "35%" },
   { title: "작성자", align: "center", key: "user.nickname", width: "50%" },
+  { title: "", key: "id", align: "center", sortable: false, width: "0%" }, // id 컬럼 추가
 ]);
 
 // 선택된 카테고리에 맞춰 필터링된 게시물 리스트

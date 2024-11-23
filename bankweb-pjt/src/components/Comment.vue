@@ -16,26 +16,76 @@
 
       <!-- 작성된 댓글 리스트 -->
       <div v-else>
-        <div v-for="comment in articleStore.comments" :key="comment.id" class="comment">
-          <div class="d-flex justify-space-between">
-            <div class="d-flex align-center ga-4">
-              <img :src="comment.user.profile_img" alt="프로필 이미지" class="profile-img" />
-
-              <div class="d-flex flex-column">
-                <p class="nickname">{{ comment.user.nickname }}</p>
-                <p class="comment-content">{{ comment.content }}</p>
+        <!-- 댓글 수정 버튼을 안눌렀다면 -->
+        <div v-if="!isCommentUpdating">
+          <div v-for="comment in articleStore.comments" :key="comment.id" class="comment">
+            <div class="d-flex justify-space-between">
+              <div class="d-flex align-center ga-4">
+                <img :src="comment.user.profile_img" alt="프로필 이미지" class="profile-img" />
+  
+                <div class="d-flex flex-column">
+                  <p class="nickname">{{ comment.user.nickname }}</p>
+                  <p class="comment-content">{{ comment.content }}</p>
+                </div>
+              </div>
+  
+              <!-- 포맷팅된 날짜 출력 -->
+              <div class="d-flex flex-column align-end justify-center ga-2">
+                <div>
+                  <p class="formated-date">{{ formatDate(comment.created_at) }}</p>
+                </div>
+  
+                <div v-if="accountStore.userinfo.nickname == comment.user.nickname" class="d-flex ga-2">
+                  <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#1E9FFB" @click="isCommentUpdating = true, clicked_commentId = comment.id, clicked_commentContent = comment.content">수정</v-btn>
+                  <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#FF3D3D" @click="deleteComment(comment.id)">삭제</v-btn>
+                </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <!-- 포맷팅된 날짜 출력 -->
-            <div class="d-flex flex-column align-end justify-center ga-2">
-              <div>
-                <p class="formated-date">{{ formatDate(comment.created_at) }}</p>
+        <!-- 댓글 수정 버튼을 눌렀다면 -->
+        <div v-else>
+          <div v-for="comment in articleStore.comments" :key="comment.id" class="comment">
+            <div class="d-flex justify-space-between">
+              <div class="d-flex align-center ga-4">
+                <img :src="comment.user.profile_img" alt="프로필 이미지" class="profile-img" />
+  
+                <div class="d-flex flex-column">
+                  <p class="nickname">{{ comment.user.nickname }}</p>
+                
+                  <!-- 수정 버튼을 누른 댓글만 텍스트로 변환 -->
+                  <textarea v-if="comment.id == clicked_commentId" class="comment-update-textarea" placeholder="댓글을 작성해주세요." v-model="clicked_commentContent"></textarea>
+                  <p v-else class="comment-content">{{ comment.content }}</p>
+                </div>
               </div>
+  
+              <!-- 포맷팅된 날짜 출력 -->
+              <div class="d-flex flex-column align-end justify-center ga-2">
+                <div>
+                  <p class="formated-date">{{ formatDate(comment.created_at) }}</p>
+                </div>
+  
+                <div v-if="accountStore.userinfo.nickname == comment.user.nickname" class="d-flex ga-2">
+                  <!-- 수정 버튼을 누른 댓글만 의 버튼만 수정 완료 버튼으로 변환 -->
+                  <v-btn v-if="comment.id == clicked_commentId" 
+                    class="px-2 update-complete" 
+                    rounded="lg" 
+                    min-width="47px" 
+                    height="26px" 
+                    variant="flat" 
+                    @click="updateComment">수정 완료</v-btn>
+                <v-btn v-else 
+                    class="px-2" 
+                    rounded="lg" 
+                    min-width="47px" 
+                    height="26px" 
+                    variant="flat" 
+                    color="#1E9FFB" 
+                    @click="startEditing(comment)">수정</v-btn>
 
-              <div v-if="accountStore.userinfo.nickname == comment.user.nickname" class="d-flex ga-2">
-                <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#1E9FFB">수정</v-btn>
-                <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#FF3D3D" @click="deleteComment(comment.id)">삭제</v-btn>
+                  <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#FF3D3D" @click="deleteComment(comment.id)">삭제</v-btn>
+                </div>
               </div>
             </div>
           </div>
@@ -70,6 +120,10 @@ const profileStore = useProfileStore();
 const route = useRoute();
 const content = ref("");
 const isLoading = ref(true); // 로딩 상태를 관리하는 ref 추가
+
+const isCommentUpdating = ref(false) // 현재 댓글 수정 버튼을 눌렀는지 아닌지
+const clicked_commentId = ref(null)
+const clicked_commentContent = ref(null)
 
 onMounted(async () => {
   try {
@@ -118,6 +172,40 @@ const deleteComment = async (commentid) => {
       isLoading.value = false; // 댓글 삭제 완료 후 로딩 상태 false
     }
   }
+};
+
+// 댓글 수정 함수
+const updateComment = async () => {
+  if (!clicked_commentContent.value.trim()) {
+    alert("댓글 내용을 입력해주세요.");
+    return;
+  }
+
+  isLoading.value = true;
+  try {
+    const payload = {
+      articleid: route.params.id,
+      commentid: clicked_commentId.value,
+      content: clicked_commentContent.value
+    };
+    await articleStore.updateComment(payload);
+    
+    // 수정 모드 종료
+    isCommentUpdating.value = false;
+    clicked_commentId.value = null;
+    clicked_commentContent.value = null;
+  } catch (error) {
+    console.error("댓글 수정 중 오류 발생:", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// 수정 버튼 클릭 이벤트 핸들러 분리
+const startEditing = (comment) => {
+  isCommentUpdating.value = true;
+  clicked_commentId.value = comment.id;
+  clicked_commentContent.value = comment.content;
 };
 
 // 날짜 포맷 함수
@@ -183,6 +271,20 @@ const formatDate = (dateString) => {
   resize: none;
 }
 
+.comment-update-textarea{
+  width: 250%;
+  min-height: 50px;
+  background-color: #f5f5f5;
+  border-width: 1px;
+  border-color: rgb(114, 114, 114);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 1ch;
+  font-size: 16px;
+  padding: 15px;
+  resize: none;
+}
+
 .v-btn-create-comment {
   font-size: 13px;
 }
@@ -211,5 +313,9 @@ const formatDate = (dateString) => {
   .comment-create-textarea {
     width: 100%;
   }
+}
+.update-complete{
+  background-color:rgb(51, 196, 11);
+  color:white
 }
 </style>

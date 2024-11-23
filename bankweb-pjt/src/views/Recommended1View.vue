@@ -34,17 +34,14 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="userProfile.monthlySalary"
+                v-model="formattedMonthlySalary"
                 label="월 급여"
-                type="number"
                 variant="outlined"
                 :rules="[v => !!v || '월 급여를 입력해주세요']"
                 required
                 class="input-field"
                 suffix="원"
                 hide-details="auto"
-                :hint="formatCurrency(userProfile.monthlySalary) + '원'"
-                persistent-hint
               ></v-text-field>
             </v-col>
 
@@ -55,49 +52,40 @@
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="userProfile.currentAssets"
+                v-model="formattedCurrentAssets"
                 label="현재 보유 자산"
-                type="number"
                 variant="outlined"
                 :rules="[v => !!v || '현재 자산을 입력해주세요']"
                 required
                 class="input-field"
                 suffix="원"
                 hide-details="auto"
-                :hint="formatCurrency(userProfile.currentAssets) + '원'"
-                persistent-hint
               ></v-text-field>
             </v-col>
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="userProfile.monthlySavings"
+                v-model="formattedMonthlySavings"
                 label="월 저축 가능 금액"
-                type="number"
                 variant="outlined"
                 :rules="[v => !!v || '저축 가능 금액을 입력해주세요']"
                 required
                 class="input-field"
                 suffix="원"
                 hide-details="auto"
-                :hint="formatCurrency(userProfile.monthlySavings) + '원'"
-                persistent-hint
               ></v-text-field>
             </v-col>
 
             <v-col cols="12" md="6">
               <v-text-field
-                v-model="userProfile.targetAmount"
+                v-model="formattedTargetAmount"
                 label="목표 자산"
-                type="number"
                 variant="outlined"
                 :rules="[v => !!v || '목표 금액을 입력해주세요']"
                 required
                 class="input-field"
                 suffix="원"
                 hide-details="auto"
-                :hint="formatCurrency(userProfile.targetAmount) + '원'"
-                persistent-hint
               ></v-text-field>
             </v-col>
 
@@ -298,10 +286,12 @@
 </template>
             
 <script setup>
+import { useAccountStore } from '@/stores/account';
 import { useFinancialStore } from '@/stores/financial';
 import { ref, computed, onMounted } from 'vue';
 
 const financialStore = useFinancialStore();
+const accountStore = useAccountStore()
 
 // 기간 선택 옵션
 const periodOptions = [
@@ -314,9 +304,9 @@ const periodOptions = [
 // 상태 관리
 const loading = ref(false);
 const userProfile = ref({
-  age: null,
-  currentAssets: null,
-  monthlySalary: null,
+  age: accountStore.userinfo?.age || null,
+  currentAssets: accountStore.userinfo?.money || null,
+  monthlySalary: accountStore.userinfo?.salary || null,
   monthlySavings: null,
   targetAmount: null,
   targetPeriod: 12
@@ -330,7 +320,7 @@ const recommendedProducts = ref({
 const depositProducts = ref([]);
 const savingProducts = ref([]);
 
-// 폼 유효성 검사
+// 입력값이 있을 때만 폼 유효성 검사
 const isFormValid = computed(() => {
   const { age, currentAssets, monthlySalary, monthlySavings, targetAmount, targetPeriod } = userProfile.value;
   return age > 0 && 
@@ -346,6 +336,48 @@ const formatCurrency = (value) => {
   if (!value) return '0';
   return new Intl.NumberFormat('ko-KR').format(Math.round(value));
 };
+
+// 천 단위 구분 포맷터
+const formatNumber = (value) => {
+  if (!value) return '';
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+// 포맷 제거 함수
+const unformatNumber = (value) => {
+  if (!value) return '';
+  return value.toString().replace(/,/g, '');
+};
+
+// 각 금액 필드에 대한 포맷팅된 computed 속성
+const formattedMonthlySalary = computed({
+  get: () => formatNumber(userProfile.value.monthlySalary),
+  set: (value) => {
+    userProfile.value.monthlySalary = Number(unformatNumber(value));
+  }
+});
+
+const formattedCurrentAssets = computed({
+  get: () => formatNumber(userProfile.value.currentAssets),
+  set: (value) => {
+    userProfile.value.currentAssets = Number(unformatNumber(value));
+  }
+});
+
+const formattedMonthlySavings = computed({
+  get: () => formatNumber(userProfile.value.monthlySavings),
+  set: (value) => {
+    userProfile.value.monthlySavings = Number(unformatNumber(value));
+  }
+});
+
+const formattedTargetAmount = computed({
+  get: () => formatNumber(userProfile.value.targetAmount),
+  set: (value) => {
+    userProfile.value.targetAmount = Number(unformatNumber(value));
+  }
+});
+
 
 // 적금 이자 계산 (단리)
 const calculateSavingInterest = (monthlyPayment, rate, period) => {

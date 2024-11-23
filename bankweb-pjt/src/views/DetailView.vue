@@ -35,7 +35,7 @@
             <p class="article-createdat">{{ formattedCreatedAt }}</p>
           </div>
           <div v-if="accountStore.userinfo.nickname == articledetaildata.user.nickname" class="d-flex ga-6 article-update-delete mr-8">
-            <a href="#" class="article-update">수정</a>
+            <a href="#" class="article-update" @click.prevent="updateArticle">수정</a>
             <a href="#" class="article-delete" @click="deleteArticle(articledetaildata.id)">삭제</a>
           </div>
         </div>
@@ -56,7 +56,7 @@
 <script setup>
 import { useArticleStore } from "@/stores/article";
 import { ref, computed, watch } from "vue"; // watch 추가
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiArrowLeft } from "@mdi/js";
 import Comment from "@/components/Comment.vue";
@@ -67,6 +67,7 @@ const articleStore = useArticleStore();
 const profileStore = useProfileStore();
 const accountStore = useAccountStore();
 const route = useRoute();
+const router = useRouter();
 const articledetaildata = ref(null);
 const isLoading = ref(true);
 
@@ -109,6 +110,18 @@ const deleteArticle = async function (articleid) {
     } finally {
       isLoading.value = false;
     }
+  }
+};
+
+// 게시글 수정 함수
+const updateArticle = function () {
+  if (window.confirm("정말로 게시글을 수정하시겠습니까?")) {
+    router.push({ 
+      name: 'update', 
+      params: { 
+        id: articledetaildata.value.id 
+      } 
+    });
   }
 };
 

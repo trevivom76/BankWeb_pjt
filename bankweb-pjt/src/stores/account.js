@@ -100,7 +100,26 @@ export const useAccountStore = defineStore(
         });
     };
 
-    return { token, isLogin, router, userinfo, signUp, logIn, logOut };
+    // 유저 정보 새로고침 함수 추가
+    const refreshUserInfo = async function () {
+      try {
+        const response = await axios({
+          method: "get",
+          url: `${API_URL}/user/${userinfo.value.username}/`,
+          headers: {
+            Authorization: `Token ${token.value}`,
+          },
+        });
+        userinfo.value = response.data;
+        console.log('사용자 정보 새로고침 성공');
+        return response.data;
+      } catch (error) {
+        console.error('사용자 정보 새로고침 실패:', error);
+        throw error;
+      }
+    };
+
+    return { token, isLogin, router, userinfo, signUp, logIn, logOut, refreshUserInfo   };
   },
   { persist: true }
 );
