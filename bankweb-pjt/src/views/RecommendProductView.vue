@@ -9,9 +9,9 @@
     <hr />
 
     <div>
-      <RouterLink :to="{ name: 'recommended1' }">자산 성장 시뮬레이션 기반 추천</RouterLink>
+      <RouterLink :to="{ name: 'recommended1' }">나의 금융 목표 기반 추천</RouterLink>
       |
-      <RouterLink :to="{ name: 'recommended2' }">나의 금융 목표 기반 추천</RouterLink>
+      <RouterLink :to="{ name: 'recommended2' }">자산 성장 시뮬레이션 기반 추천</RouterLink>
     </div>
 
     <RouterView />

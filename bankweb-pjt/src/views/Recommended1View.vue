@@ -1,8 +1,8 @@
 <template>
   <v-container class="financial-advisor" fluid>
     <!-- 헤더 섹션 -->
-    <div class="header-section mb-8">
-      <h1 class="text-h4 text-center font-weight-bold mb-2">맞춤 금융상품 추천</h1>
+    <div class="mb-8">
+      <h1 class="text-h4 text-center font-weight-bold mb-2">금융 목표 기반 추천</h1>
       <p class="text-subtitle-1 text-center text-medium-emphasis">
         고객님의 정보를 입력하시면 최적의 금융상품을 추천해드립니다.
       </p>
@@ -531,7 +531,8 @@ onMounted(async () => {
 }
 
 .rank-badge {
-  background: #f0f0f0;
+  background: #1976d2;
+  color: white;
   width: 32px;
   height: 32px;
   border-radius: 50%;
