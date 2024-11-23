@@ -95,7 +95,7 @@
         <div>
           <p class="currentuser-nickname">{{ accountStore.userinfo.nickname }}</p>
           <div class="d-flex justify-center align-center ga-4">
-            <img :src="articleStore.articledetail.user.profile_img" alt="프로필 이미지" class="profile-img" />
+            <img :src="accountStore.userinfo.profile_img" alt="프로필 이미지" class="profile-img" />
             <textarea class="comment-create-textarea" placeholder="댓글을 작성해주세요." v-model="content"></textarea>
           </div>
           <div class="d-flex justify-end align-center">

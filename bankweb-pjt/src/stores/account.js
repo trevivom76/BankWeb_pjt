@@ -93,6 +93,7 @@ export const useAccountStore = defineStore(
       })
         .then((response) => {
           token.value = null;
+          userinfo.value = null
           router.push({ name: "home" });
         })
         .catch((error) => {

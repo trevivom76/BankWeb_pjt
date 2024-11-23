@@ -4,7 +4,7 @@
       <!-- 헤더 -->
       <div class="profile-header">
         <h2 class="text-h5">
-          <span class="username">{{ accountStore.userinfo?.name }}</span>
+          <span class="username">{{userInfo?.name }}</span>
           님의 프로필
         </h2>
       </div>
@@ -49,7 +49,7 @@
             <!-- 아이디 (수정 불가) -->
             <div class="form-field">
               <v-text-field
-                v-model="accountStore.userinfo.username"
+                v-model="userInfo.username"
                 label="아이디"
                 readonly
                 variant="outlined"
@@ -161,17 +161,16 @@ const isUpdating = ref(false);
 const fileInput = ref(null);
 const form = ref(null);
 
-const selectedImage = ref(null);  // 선택된 이미지 파일 저장용
-const previewImage = ref(null);   // 이미지 미리보기용
+const userInfo = accountStore.userinfo
 
 // 프로필 데이터
 const profileData = reactive({
-  name: accountStore.userinfo.username,
-  nickname: accountStore.userinfo.nickname,
-  email: accountStore.userinfo.email,
-  age: accountStore.userinfo.age,
-  money: accountStore.userinfo.money,
-  salary: accountStore.userinfo.salary
+  name: userInfo.username,
+  nickname: userInfo.nickname,
+  email: userInfo.email,
+  age: userInfo.age,
+  money: userInfo.money,
+  salary: userInfo.salary
 });
 
 // 유효성 검사 규칙
@@ -213,7 +212,7 @@ const updateProfile = async () => {
   try {
     isUpdating.value = true;
     await profileStore.updateProfile({
-      username: accountStore.userinfo.username,
+      username: userInfo.username,
       nickname: profileData.nickname,
       name: profileData.name,
       email: profileData.email,
@@ -225,7 +224,7 @@ const updateProfile = async () => {
     // 프로필 정보와 계정 정보를 모두 새로고침
     await Promise.all([
       profileStore.getProfile({
-        username: accountStore.userinfo.username
+        username: userInfo.username
       }),
       accountStore.refreshUserInfo()
     ]);
@@ -269,13 +268,13 @@ const handleFileChange = async (event) => {
     formData.append('profile_img[]', file);
 
     await profileStore.updateProfileImg({
-      username: accountStore.userinfo.username,
+      username: userInfo.username,
       formData: formData
     });
 
     // 프로필 정보 새로고침
     await profileStore.getProfile({
-      username: accountStore.userinfo.username
+      username: userInfo.username
     });
   } catch (error) {
     console.error('프로필 이미지 업데이트 실패:', error);
@@ -289,18 +288,18 @@ const handleFileChange = async (event) => {
 onMounted(async () => {
   try {
     const payload = {
-      username: accountStore.userinfo?.username,
+      username: userInfo?.username,
     };
     if (payload.username) {
       await profileStore.getProfile(payload);
       // 프로필 데이터 초기화
       Object.assign(profileData, {
-        name: accountStore.userinfo.name,
-        nickname: accountStore.userinfo.nickname,
-        email: accountStore.userinfo.email,
-        age: accountStore.userinfo.age,
-        money: accountStore.userinfo.money,
-        salary: accountStore.userinfo.salary
+        name: userInfo.name,
+        nickname: userInfo.nickname,
+        email: userInfo.email,
+        age: userInfo.age,
+        money: userInfo.money,
+        salary: userInfo.salary
       });
     }
   } finally {

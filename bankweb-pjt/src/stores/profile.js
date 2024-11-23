@@ -11,6 +11,7 @@ export const useProfileStore = defineStore(
     const userprofile = ref(null);
     const router = useRouter();
     const accountStore = useAccountStore();
+    
 
     // 사용자 프로필 조회
     const getProfile = async function (payload) {

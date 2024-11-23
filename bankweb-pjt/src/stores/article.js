@@ -15,18 +15,35 @@ export const useArticleStore = defineStore(
     const accountStore = useAccountStore();
 
     // 전체 게시글 조회 함수
-    const getArticles = function () {
-      axios({
-        method: "get",
-        url: `/api/v1/articles/`,
-      })
-        .then((response) => {
-          console.log("게시글 작성 조회");
-          articles.value = response.data;
-        })
-        .catch((error) => {
-          console.log("getArticles error =", error);
+    const getArticles = async function () {
+      try {
+        const response = await axios({
+          method: "get",
+          url: `/api/v1/articles/`,
+          headers: {
+            'Content-Type': 'application/json',
+          }
         });
+        
+        // 정상적인 응답이면 데이터 저장
+        if (response.data) {
+          articles.value = response.data;
+          console.log("게시글 조회 완료");
+        } else {
+          articles.value = [];  // 데이터가 없으면 빈 배열
+        }
+        
+      } catch (error) {
+        console.error("게시글 조회 중 에러 발생:", error.message);
+        articles.value = [];  // 에러 발생시 빈 배열로 초기화
+        
+        // 에러 세부 정보 로깅
+        if (error.response) {
+          console.log("Response Error Data:", error.response.data);
+          console.log("Response Error Status:", error.response.status);
+          console.log("Response Error Headers:", error.response.headers);
+        }
+      }
     };
 
     // 게시글 생성 함수
