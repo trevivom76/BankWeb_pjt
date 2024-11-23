@@ -41,10 +41,19 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 # 유저 프로필
 class UserProfileSerializer(serializers.ModelSerializer):
+    profile_img = serializers.SerializerMethodField()
+    
     class Meta:
         model = User
         fields = ('profile_img', 'nickname', 'username', 'name', 'email', 'age', 'money', 'salary')
         read_only_fields = ('id', 'username', 'name',)
+
+    def get_profile_img(self, obj):
+        request = self.context.get('request')
+        if obj.profile_img:
+            # 절대 URL 생성
+            return request.build_absolute_uri(obj.profile_img.url)
+        return None
 
 
 # 유저 정보

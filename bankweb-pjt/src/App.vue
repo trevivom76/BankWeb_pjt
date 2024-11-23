@@ -13,7 +13,7 @@
 <script setup>
 import { RouterView } from "vue-router";
 import CommonHeader from "./components/CommonHeader.vue";
-import "pretendard/dist/web/static/pretendard.css";
+// import "pretendard/dist/web/static/pretendard.css";
 </script>
 
 <style scoped>
