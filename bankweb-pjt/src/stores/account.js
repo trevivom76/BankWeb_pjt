@@ -18,6 +18,7 @@ export const useAccountStore = defineStore(
     });
 
     const signUpErrorMessage = ref({})
+    const loginErrorMessage = ref({})
 
     const router = useRouter();
 
@@ -90,6 +91,8 @@ export const useAccountStore = defineStore(
         
       } catch (error) {
         console.log("logIn error = ", error);
+        loginErrorMessage.value = error.response.data
+        console.log(loginErrorMessage.value)
       }
     };
 
