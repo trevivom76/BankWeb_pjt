@@ -13,7 +13,6 @@
           상품 추천받기 페이지
         </a>
       </div>
-
       <RouterView />
     </v-card>
 

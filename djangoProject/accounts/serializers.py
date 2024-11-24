@@ -42,6 +42,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 # 유저 프로필
 class UserProfileSerializer(serializers.ModelSerializer):
     profile_img = serializers.SerializerMethodField()
+    
     class Meta:
         model = User
         fields = ('profile_img', 'nickname', 'username', 'name', 'email', 'age', 'money', 'salary')

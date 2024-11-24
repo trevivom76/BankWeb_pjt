@@ -249,3 +249,21 @@ def saving_get_contract_status(request, saving_id):
     is_liked = request.user in saving.contract_user.all()
     
     return Response({"is_liked": is_liked})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_deposit_list(request):
+    user = request.user
+    deposits = Deposit.objects.filter(contract_user=user)
+    serializer = DepositSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_saving_list(request):
+    user = request.user
+    savings = Saving.objects.filter(contract_user=user)
+    serializer = SavingSerializer(savings, many=True)
+    return Response(serializer.data)
