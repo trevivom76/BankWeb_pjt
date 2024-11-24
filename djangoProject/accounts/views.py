@@ -4,7 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
-# from django.views.decorators.csrf import csrf_exempt
 from .serializers import *
 
 
@@ -35,7 +34,7 @@ def user_info(request, username):
 def user_profile(request, username):
     if request.user.username == username:
         user = get_object_or_404(get_user_model(), username=username)
-        serializer = UserProfileSerializer(user)
+        serializer = UserProfileSerializer(user, context={'request': request})
         return Response(serializer.data)
 
 
