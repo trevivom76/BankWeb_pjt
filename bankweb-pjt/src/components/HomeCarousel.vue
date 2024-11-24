@@ -1,7 +1,7 @@
 <template>
   <div class="carousel">
     <!-- 슬라이드 트랙 -->
-    <div class="carousel-track">
+    <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
       <div
         v-for="(slide, index) in slides"
         :key="index"
@@ -13,7 +13,7 @@
           <div class="text t1" :class="{ fadeOut: isFadingOut }">{{ slide.title }}</div>
           <div class="text t2" :class="{ fadeOut: isFadingOut }">{{ slide.subtitle }}</div>
           <div class="text t3" :class="{ fadeOut: isFadingOut }">{{ slide.description }}</div>
-          <button class="btn-detail t4" :class="{ fadeOut: isFadingOut }">{{ slide.buttonText }}</button>
+          <button class="text t4" :class="{ fadeOut: isFadingOut }">{{ slide.buttonText }}</button>
         </div>
       </div>
     </div>
@@ -39,22 +39,22 @@ import deposit_bg from "@/assets/icon/main_causel_deposit.png";
 const slides = [
   {
     image: deposit_bg,
-    title: "금융상품 추천",
-    subtitle: "나에게 맞는 금융 상품 추천받기",
+    title: "나에게 맞는",
+    subtitle: "금융 상품 추천받기",
     description: "내 목표에 꼭 맞는 금융 상품, 지금 바로 찾아보세요!",
     buttonText: "바로가기 >",
   },
   {
     image: deposit_bg,
-    title: "환율 조회",
-    subtitle: "실시간 환율 정보 확인하기",
-    description: "최신 환율 데이터를 제공받고 빠르게 대응하세요!",
+    title: "빠르고 스마트한",
+    subtitle: "환율 계산하기",
+    description: "여행 준비? 투자 계획? 환율 계산기로 빠르게 해결하세요!",
     buttonText: "바로가기 >",
   },
   {
     image: deposit_bg,
-    title: "주변 은행 찾기",
-    subtitle: "가장 가까운 은행 확인",
+    title: "은행 방문을 간편하게,",
+    subtitle: "주변 지점 확인하기",
     description: "편리하게 내 위치에서 가까운 은행을 찾아보세요!",
     buttonText: "바로가기 >",
   },
@@ -70,10 +70,9 @@ const goToSlide = (nextIndex) => {
   setTimeout(() => {
     currentSlide.value = nextIndex;
     isFadingOut.value = false;
-  },1000); // 사라지는 애니메이션 1초
+  },500);
 };
 
-// 자동 슬라이드
 onMounted(() => {
   slideInterval = setInterval(() => {
     goToSlide((currentSlide.value + 1) % slides.length);
@@ -92,13 +91,11 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-/* 슬라이드 트랙 */
 .carousel-track {
   display: flex;
   transition: transform 1s ease;
 }
 
-/* 개별 슬라이드 */
 .slide {
   flex: 0 0 100%;
   height: auto;
@@ -110,65 +107,67 @@ onUnmounted(() => {
   transition: opacity 1s ease;
 }
 
+.slide-nav {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-top: 16px;
+}
+
 .slide.active {
   opacity: 1;
 }
 
-/* 슬라이드 이미지 */
 .slide-image {
   width: 100%;
   height: auto;
-  object-fit: contain;
+  object-fit: cover;
 }
 
-/* 텍스트 컨테이너 */
 .text-container {
   position: absolute;
-  top: 50%;
-  left: 10%;
+  top: 47%;
+  left: 8%;
   transform: translateY(-50%);
   color: white;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 4px;
+  align-items: flex-start;
 }
 
 .text {
-  font-family: Arial, sans-serif;
   opacity: 0;
   transform: translateX(-50px);
   animation: fade-in-left 1s forwards;
 }
 
 .text.fadeOut {
-  animation: fade-out-left 1s forwards;
+  animation: fade-out-left 0.5s forwards;
 }
 
 .t1 {
-  font-size: 36px;
+  font-size: 40px;
   font-weight: bold;
   animation-delay: 0.3s;
 }
 
 .t2 {
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 40px;
+  font-weight: bold;
   animation-delay: 0.6s;
 }
 
 .t3 {
-  font-size: 16px;
-  color: #ddd;
+  font-size: 20px;
+  font-weight: light;
   animation-delay: 0.9s;
 }
 
 .t4 {
-  background: #636acc;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
+  color: #2F2A78;
   font-size: 16px;
+  font-weight: semibold;
   cursor: pointer;
   transition: transform 0.3s ease, background-color 0.3s ease;
   animation-delay: 1.2s;
@@ -176,22 +175,20 @@ onUnmounted(() => {
 
 .t4:hover {
   transform: scale(1.1);
-  background-color: #5058cc;
 }
 
-/* 네비게이션 점 */
 .slide-nav {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
+  bottom: 60px;
+  left: 11%;
   transform: translateX(-50%);
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .dot {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   background-color: #ccc;
   border-radius: 50%;
   cursor: pointer;
@@ -199,7 +196,9 @@ onUnmounted(() => {
 }
 
 .dot.active {
-  background-color: #636acc;
+  background-color: #ffffff;
+  width: 16px;
+  border-radius: 4px;
 }
 
 /* 등장 애니메이션 */
