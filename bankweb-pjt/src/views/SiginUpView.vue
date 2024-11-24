@@ -87,6 +87,7 @@
       class="my-2"
       type="error"
       text="중복된 아이디입니다."
+      variant="tonal"
     ></v-alert>
 
     <!-- 비밀번호 관련 에러 -->
@@ -95,6 +96,7 @@
       class="my-2"
       type="error"
       text="비밀번호가 너무 단순합니다."
+      variant="tonal"
     ></v-alert>
 
     <!-- 닉네임 관련 에러 -->
@@ -102,6 +104,7 @@
       v-if="accountStore.signUpErrorMessage?.nickname"
       class="my-2"
       type="error"
+      variant="tonal"
       :text="accountStore.signUpErrorMessage.nickname[0]"
     ></v-alert>
 
@@ -110,26 +113,27 @@
       v-if="accountStore.signUpErrorMessage?.name"
       class="my-2"
       type="error"
+      variant="tonal"
       :text="accountStore.signUpErrorMessage.name[0]"
     ></v-alert>
 
       <!-- 아이디를 입력하지 않았을때 -->
-      <v-alert v-if="!usernameIsOk" class="my-2" text="아이디를 입력해주세요" type="error"></v-alert>
+      <v-alert v-if="!usernameIsOk" class="my-2" text="아이디를 입력해주세요" type="error" variant="tonal"></v-alert>
 
       <!-- 이름 입력 확인 -->
-      <v-alert v-if="!nameIsOk" class="my-2" text="이름을 입력해주세요" type="error"></v-alert>
+      <v-alert v-if="!nameIsOk" class="my-2" text="이름을 입력해주세요" type="error" variant="tonal"></v-alert>
 
       <!-- 닉네임 입력 확인 -->
-      <v-alert v-if="!nicknameIsOk" class="my-2" text="닉네임을 입력해주세요" type="error"></v-alert>
+      <v-alert v-if="!nicknameIsOk" class="my-2" text="닉네임을 입력해주세요" type="error" variant="tonal"></v-alert>
 
       <!-- "비밀 번호"를 입력/길이조건에 맞게 입력하지 않았을때 -->
-      <v-alert v-if="!password1IsOk" class="my-2" text="비밀번호를 확인해주세요" type="error"></v-alert>
+      <v-alert v-if="!password1IsOk" class="my-2" text="비밀번호를 확인해주세요" type="error" variant="tonal"></v-alert>
 
       <!-- "비밀번호 확인"을 입력/길이조건에 맞게 입력하지 않았을때 -->
-      <v-alert v-if="!password2IsOk" class="my-2" text="비밀번호 확인란을 확인해주세요" type="error"></v-alert>
+      <v-alert v-if="!password2IsOk" class="my-2" text="비밀번호 확인란을 확인해주세요" type="error" variant="tonal"></v-alert>
 
       <!-- 입력은 했으나 "비밀번호 !== 비밀번호 확인" 일때 -->
-      <v-alert v-if="!passwordsIsOk" class="my-2" text="비밀번호와 비밀번호 확인이 같지 않습니다." type="error"></v-alert>
+      <v-alert v-if="!passwordsIsOk" class="my-2" text="비밀번호와 비밀번호 확인이 같지 않습니다." type="error" variant="tonal"></v-alert>
 
         <!-- 이메일 형식 에러 -->
       <v-alert 
@@ -137,10 +141,11 @@
         class="my-2" 
         text="이메일을 올바르게 입력해 주세요" 
         type="error"
+        variant="tonal"
       ></v-alert>
 
       <!-- 이용약관(체크박스)에 체크하지 않은 경우 -->
-      <v-alert v-if="!checkboxsIsOk" class="my-2" text="이용약관에 동의해주세요." type="error"></v-alert>
+      <v-alert v-if="!checkboxsIsOk" class="my-2" text="이용약관에 동의해주세요." type="error" variant="tonal"></v-alert>
 
       <v-hover v-slot="{ isHovering, props }">
         <v-btn :class="{ 'on-hover': isHovering }" :elevation="isHovering ? 10 : 2" v-bind="props" class="mt-3 ,mb-8" color="blue-darken-1" size="large" block @click.prevent="signUp()">

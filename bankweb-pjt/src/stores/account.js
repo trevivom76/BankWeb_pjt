@@ -35,6 +35,7 @@ export const useAccountStore = defineStore(
           url: `${API_URL}/accounts/signup/`,
           data: {
             username,
+            email,
             password1,
             password2,
             nickname,
@@ -131,7 +132,7 @@ export const useAccountStore = defineStore(
       }
     };
 
-    return { token, isLogin, router, userinfo, signUpErrorMessage, signUp, logIn, logOut, refreshUserInfo   };
+    return { token, isLogin, router, userinfo, signUpErrorMessage, loginErrorMessage, signUp, logIn, logOut, refreshUserInfo   };
   },
   { persist: true }
 );

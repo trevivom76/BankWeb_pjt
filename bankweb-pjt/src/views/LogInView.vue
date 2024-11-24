@@ -16,6 +16,7 @@
         color="primary" 
         label="아이디" 
         variant="outlined"
+        @keyup.enter="logIn()"
       ></v-text-field>
 
       <!-- "비밀번호" 입력 text-field -->
@@ -32,48 +33,37 @@
         name="input-10-1"
         counter
         @click:append="show1 = !show1"
+        @keyup.enter="logIn()"
       ></v-text-field>
 
       <!-- 서버에서 받은 에러 메시지 -->
-      <!-- 일반 로그인 에러 -->
       <v-alert
         v-if="accountStore.loginErrorMessage?.non_field_errors"
         class="my-2"
         type="error"
-        :text="accountStore.loginErrorMessage.non_field_errors[0]"
-      ></v-alert>
-
-      <!-- 아이디 관련 에러 -->
-      <v-alert
-        v-if="accountStore.loginErrorMessage?.username"
-        class="my-2"
-        type="error"
-        :text="accountStore.loginErrorMessage.username[0]"
-      ></v-alert>
-
-      <!-- 비밀번호 관련 에러 -->
-      <v-alert
-        v-if="accountStore.loginErrorMessage?.password"
-        class="my-2"
-        type="error"
-        :text="accountStore.loginErrorMessage.password[0]"
-      ></v-alert>
+        variant="tonal"
+        
+      >
+        아이디 또는 비밀번호가 올바르지 않습니다.
+      </v-alert>
 
       <!-- 입력값 검증 에러 메시지 -->
-      <!-- 아이디를 입력하지 않았을때 -->
       <v-alert 
         v-if="!usernameIsOk" 
         class="my-2" 
         text="아이디를 입력해주세요" 
         type="error"
+        variant="tonal"
+        
       ></v-alert>
 
-      <!-- "비밀번호"를 입력/길이조건에 맞게 입력하지 않았을때 -->
       <v-alert 
         v-if="!passwordIsOk" 
         class="my-2" 
         text="비밀번호를 확인해주세요 (8-16자)" 
         type="error"
+        variant="tonal"
+        
       ></v-alert>
 
       <v-hover v-slot="{ isHovering, props }">

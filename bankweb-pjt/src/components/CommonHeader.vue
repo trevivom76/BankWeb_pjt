@@ -1,4 +1,3 @@
-<!-- CommonHeader.vue -->
 <template>
   <div>
     <!-- 로딩 상태 표시 -->
@@ -91,14 +90,30 @@
             </div>
           </div>
 
-          <!-- 프로필 영역 - 조건부 렌더링 추가 -->
-          <RouterLink v-if="isLogin() && accountStore.userinfo" :to="{ name: 'profilemanage' }">
+          <!-- 프로필 영역 - 조건부 렌더링 -->
+          <RouterLink v-if="isLogin() && userinfo" :to="{ name: 'profilemanage' }">
             <div class="d-flex ga-4">
               <p class="delete-a-underline-color">
-                {{ accountStore.userinfo.nickname }}
+                {{ userinfo.nickname }}
               </p>
               <div v-if="userprofileInfo">
-                <img :src="userprofileInfo.profile_img" alt="프로필 이미지" class="profile-img" />
+                <img 
+                  v-show="userprofileInfo.profile_img"
+                  :src="userprofileInfo.profile_img" 
+                  :alt="userprofileInfo.nickname"
+                  class="profile-img"
+                  @load="handleImageLoad"
+                  @error="handleImageError"
+                />
+                <v-skeleton-loader
+                  v-if="!userprofileInfo.profile_img"
+                  type="avatar"
+                  width="25"
+                  height="25"
+                ></v-skeleton-loader>
+                <v-avatar v-if="imageError" size="25">
+                  {{ userprofileInfo.nickname?.charAt(0) }}
+                </v-avatar>
               </div>
             </div>
           </RouterLink>
@@ -123,6 +138,7 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
+import { storeToRefs } from 'pinia';
 import { useAccountStore } from "@/stores/account";
 import { useProfileStore } from "@/stores/profile";
 import { RouterLink, useRouter } from "vue-router";
@@ -134,29 +150,57 @@ const accountStore = useAccountStore();
 const profileStore = useProfileStore();
 const router = useRouter();
 
+// store의 상태를 반응형으로 가져오기
+const { userprofile: userprofileInfo } = storeToRefs(profileStore);
+const { userinfo } = storeToRefs(accountStore);
+
 const isHovered1 = ref(false);
 const isHovered2 = ref(false);
 const isHovered3 = ref(false);
 const isHovered4 = ref(false);
 const dialog = ref(false);
 const isLoading = ref(true);
+const imageLoading = ref(true);
+const imageError = ref(false);
 
-const userprofileInfo = profileStore.userprofile
+// 이미지 로드 완료 핸들러
+const handleImageLoad = () => {
+  imageLoading.value = false;
+};
 
-// 프로필 정보 가져오기
-onMounted(async () => {
-  try {
-    if (accountStore.userinfo) {
-      const payload = {
-        username: accountStore.userinfo.username,
-      };
-      await profileStore.getProfile(payload);
+// 이미지 로드 실패 핸들러
+const handleImageError = () => {
+  imageError.value = true;
+  imageLoading.value = false;
+  console.log('프로필 이미지 로드 실패');
+};
+
+// userinfo 변경 시 항상 프로필 새로 가져오기
+watch(userinfo, async (newUserInfo) => {
+  if (newUserInfo) {
+    try {
+      imageLoading.value = true;
+      imageError.value = false;
+      await profileStore.getProfile({
+        username: newUserInfo.username
+      });
+    } catch (error) {
+      console.error('프로필 동기화 실패:', error);
+      imageError.value = true;
     }
-  } catch (error) {
-    console.error('프로필 로딩 중 에러 발생:', error);
-  } finally {
-    isLoading.value = false;
   }
+}, { immediate: true });
+
+// userprofileInfo가 변경될 때마다 이미지 상태 초기화
+watch(userprofileInfo, () => {
+  if (userprofileInfo.value) {
+    imageLoading.value = true;
+    imageError.value = false;
+  }
+});
+
+onMounted(() => {
+  isLoading.value = false;
 });
 
 const goToHome = () => {
@@ -168,6 +212,10 @@ const isLogin = () => {
 };
 
 const logOut = () => {
+  // 프로필 정보 초기화 추가
+  profileStore.resetProfile();  // 프로필 스토어 초기화
+  imageError.value = false;
+  imageLoading.value = true;
   accountStore.logOut();
 };
 
@@ -229,6 +277,10 @@ watch(dialog, (val) => {
 
 .profile-img {
   width: 25px;
+  height: 25px;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: opacity 0.3s ease;
 }
 
 .ga-2 {

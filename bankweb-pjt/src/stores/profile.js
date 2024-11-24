@@ -11,27 +11,36 @@ export const useProfileStore = defineStore(
     const userprofile = ref(null);
     const router = useRouter();
     const accountStore = useAccountStore();
+
+    const isLoading = ref(false)
+    const error = ref(null)
+
+    // 프로필 초기화 함수 추가
+    const resetProfile = () => {
+      userprofile.value = null;
+    };
     
 
     // 사용자 프로필 조회
-    const getProfile = async function (payload) {
+    const getProfile = async (payload) => {
       const { username } = payload;
+      isLoading.value = true
+      error.value = null
       
       try {
         const response = await axios({
           method: "get",
           url: `/user/${username}/`,
         });
-        
-        userprofile.value = response.data;
-        console.log(`현재 유저(${userprofile.value.nickname})프로필 조회 성공`);
-        return response.data;  // 필요한 경우 데이터 반환
-        
-      } catch (error) {
-        console.error("getProfile error = ", error);
-        throw error;  // 에러를 상위로 전파하여 호출하는 쪽에서 처리할 수 있게 함
+        userprofile.value = response.data
+        return response.data
+      } catch (err) {
+        error.value = err
+        throw err
+      } finally {
+        isLoading.value = false
       }
-    };
+    }
 
     // 사용자 프로필 수정
     const updateProfile = async function (payload) {
@@ -86,7 +95,7 @@ export const useProfileStore = defineStore(
     };   
 
 
-    return { userprofile, getProfile, updateProfile, updateProfileImg };
+    return { userprofile, isLoading, error, resetProfile, getProfile, updateProfile, updateProfileImg };
   },
   { persist: true }
 );
