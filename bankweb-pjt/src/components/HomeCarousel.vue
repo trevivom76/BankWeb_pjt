@@ -229,6 +229,60 @@ onUnmounted(() => {
   border-radius: 4px;
 }
 
+@media (max-width: 1200px) {
+  .t1 {
+    font-size: 30px;
+  }
+
+  .t2 {
+    font-size: 30px;
+  }
+
+  .t3 {
+    font-size: 15px;
+  }
+
+  .t4 {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 800px) {
+  .t1 {
+    font-size: 20px;
+  }
+
+  .t2 {
+    font-size: 20px;
+  }
+
+  .t3 {
+    font-size: 10px;
+  }
+
+  .t4 {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .t1 {
+    font-size: 15px;
+  }
+
+  .t2 {
+    font-size: 15px;
+  }
+
+  .t3 {
+    font-size: 7px;
+  }
+
+  .t4 {
+    font-size: 4px;
+  }
+}
+
 /* 등장 애니메이션 */
 @keyframes fade-in-left {
   from {

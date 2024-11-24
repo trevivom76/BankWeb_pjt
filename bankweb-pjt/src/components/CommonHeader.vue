@@ -1,116 +1,76 @@
 <template>
-  <div>
+  <div class="nav">
     <!-- 로딩 상태 표시 -->
     <div v-if="isLoading" class="d-flex justify-center align-center" style="height: 400px">
       <v-progress-circular indeterminate color="primary" :size="50"></v-progress-circular>
     </div>
 
     <div v-else>
-      <!-- 로그인/로그아웃/회원가입 버튼 위치 -->
-      <div class="d-flex justify-end padding-sm">
-        <!-- 로그인/회원가입 버튼 -->
-        <!-- 로그인 되어있다면 -->
+      <div class="header">
         <div v-if="isLogin()">
-          <div>
+          <div class="first-header">
             <!-- 로그아웃 버튼 -->
-            <a href="#" @click.prevent="logOut" class="delete-a-underline-color">
+            <a @click.prevent="logOut" class="first-header-text">
               <p class="authenticationTag">로그아웃</p>
             </a>
           </div>
         </div>
-
-        <!-- 로그인 되어있지 않다면 -->
         <div v-else>
-          <div class="d-flex justify-center align-center ga-2">
+          <div class="first-header">
             <!-- 로그인 버튼 -->
-            <RouterLink :to="{ name: 'login' }" class="delete-a-underline-color">
+            <RouterLink :to="{ name: 'login' }" class="first-header-text">
               <p class="authenticationTag">로그인</p>
             </RouterLink>
-            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            <img src="@/assets/icon/header_bar.png" height="14px">
             <!-- 회원가입 버튼 -->
-            <RouterLink :to="{ name: 'signup' }" class="delete-a-underline-color">
+            <RouterLink :to="{ name: 'signup' }" class="first-header-text">
               <p class="authenticationTag">회원가입</p>
             </RouterLink>
           </div>
         </div>
       </div>
-
-      <!-- 네비게이션 바 -->
-      <nav class="nav">
-        <!-- 인행 로고 네비게이션 주요 컴포넌트 묶음 (아이디 프로필 제외) -->
+      <div class="line-header"></div>
+      <nav class="header second-header">
         <div class="nav-container">
-          <!-- 은행 로고 -->
           <div class="logo-container">
             <a href="#" @click.prevent="goToHome">
               <img src="@/assets/icon/BBK_Logo.png" alt="Example Image" class="logo"/>
             </a>
           </div>
-
-          <!-- 네비게이션바 주요 링크 -->
-          <!-- 로그인 되어있다면 -->
-          <div v-if="isLogin()">
-            <div class="d-flex">
-              <div class="text-center">
-                <!-- 금리비교 태그 -->
-                <RouterLink :to="{ name: 'depositList' }">
-                  <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true" @mouseleave="isHovered1 = false">금리 비교</span>
-                </RouterLink>
-                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                <!-- 환율계산 태그 -->
-                <RouterLink :to="{ name: 'currencycalculator' }">
-                  <span class="text" :class="{ hovered: isHovered2 }" @mouseover="isHovered2 = true" @mouseleave="isHovered2 = false">환율 계산</span>
-                </RouterLink>
-                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                <!-- 주변은행 태그 -->
-                <RouterLink :to="{ name: 'aroundbank' }">
-                  <span class="text" :class="{ hovered: isHovered3 }" @mouseover="isHovered3 = true" @mouseleave="isHovered3 = false">주변 은행</span>
-                </RouterLink>
-                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                <!-- 커뮤니티 태그 -->
-                <RouterLink :to="{ name: 'community' }">
-                  <span class="text" :class="{ hovered: isHovered4 }" @mouseover="isHovered4 = true" @mouseleave="isHovered4 = false">커뮤니티</span>
-                </RouterLink>
-              </div>
-
-              <!-- 프로필 이미지 + 사용자 아이디 -->
-              <RouterLink :to="{ name: 'profilemanage' }">
-                <div class="d-flex ga-4">
-                  <p class=".delete-a-underline-color">
-                    {{ accountStore.userinfo.nickname }}
-                  </p>
-                  <div>
-                    <img :src="profileStore.userprofile.profile_img" alt="프로필 이미지" class="profile-img" />
-                  </div>
-                </div>
-              </RouterLink>
-            </div>
-          </div>
-
-          <!-- 로그인 되어있지 않다면 -->
-          <div v-else>
-            <div class="text-center">
-              <!-- 금리비교 태그 -->
-              <RouterLink :to="{ name: 'depositList' }">
-                <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true" @mouseleave="isHovered1 = false">금리 비교</span>
-              </RouterLink>
-              &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-              <!-- 환율계산 태그 -->
-              <RouterLink :to="{ name: 'currencycalculator' }">
-                <span class="text" :class="{ hovered: isHovered2 }" @mouseover="isHovered2 = true" @mouseleave="isHovered2 = false">환율 계산</span>
-              </RouterLink>
-              &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-              <!-- 주변은행 태그 -->
-              <RouterLink :to="{ name: 'aroundbank' }">
-                <span class="text" :class="{ hovered: isHovered3 }" @mouseover="isHovered3 = true" @mouseleave="isHovered3 = false">주변 은행</span>
-              </RouterLink>
-              &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+          <div class="nav-bar">
+            <!-- 금리비교 태그 -->
+            <RouterLink :to="{ name: 'depositList' }">
+              <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true" @mouseleave="isHovered1 = false">금리비교</span>
+            </RouterLink>
+            <!-- 환율계산 태그 -->
+            <RouterLink :to="{ name: 'currencycalculator' }">
+              <span class="text" :class="{ hovered: isHovered2 }" @mouseover="isHovered2 = true" @mouseleave="isHovered2 = false">환율계산기</span>
+            </RouterLink>
+            <!-- 주변은행 태그 -->
+            <RouterLink :to="{ name: 'aroundbank' }">
+              <span class="text" :class="{ hovered: isHovered3 }" @mouseover="isHovered3 = true" @mouseleave="isHovered3 = false">주변은행</span>
+            </RouterLink>
+            <template v-if="isLogin">
               <!-- 커뮤니티 태그 -->
+              <RouterLink :to="{ name: 'community' }">
+                <span class="text" :class="{ hovered: isHovered4 }" @mouseover="isHovered4 = true" @mouseleave="isHovered4 = false">커뮤니티</span>
+              </RouterLink>
+            </template>
+            <template v-else>
               <a href="#" @click="dialog = true">
                 <span class="text" :class="{ hovered: isHovered4 }" @mouseover="isHovered4 = true" @mouseleave="isHovered4 = false">커뮤니티</span>
               </a>
-            </div>
+            </template>
           </div>
         </div>
+        <RouterLink :to="{ name: 'profilemanage' }">
+          <div class="profile-container">
+            <p class="nickname-text">{{ accountStore.userinfo.nickname }}</p>
+            <div>
+              <img :src="profileStore.userprofile.profile_img" alt="프로필 이미지" class="profile-img" />
+            </div>
+          </div>
+        </RouterLink>
       </nav>
 
       <!-- 로그인 안내 다이얼로그 -->
@@ -199,79 +159,94 @@ watch(dialog, (val) => {
 </script>
 
 <style scoped>
+.first-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 6px 0px;
+}
 
-.nav {
+.first-header-text {
+  text-decoration: none;
+  color: #444444;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 0px 16px;
+}
+
+.line-header {
+  background-color: #f3f6f8;
+  height: 4px;
+}
+
+.second-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
 }
 
-/* 전체 네비게이션 바 */
 .nav-container {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 16px 0px;
-  gap: 20px;
 }
 
-/* 로고 컨테이너 */
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 0px 20px;
+}
+
 .logo-container {
   flex: 0 0 auto;
 }
 
 .logo {
-  width: 120px; /* 로고 크기 */
+  width: 120px;
   height: auto;
 }
 
-/* 기본 텍스트 스타일 */
 .text {
-  font-weight: bold;
-  color: black;
+  font-weight: 600;
+  font-size: 16px;
+  color: rgb(50, 50, 50);
   display: inline-block;
   position: relative;
+  text-align: center;
+  text-decoration: none;
   transition: transform 0.3s ease, color 0.3s ease;
+  width: 75px;
 }
 
-/* 호버 상태 */
 .text.hovered {
-  color: rgb(59, 59, 216);
-  transform: scale(1.2);
-}
-
-/* 밑줄 효과 (둥근 모서리 적용) */
-.text::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px; /* 밑줄 위치 */
-  width: 0;
-  height: 2px; /* 밑줄 두께 */
-  background-color: rgb(59, 59, 216);
-  transition: width 0.3s ease;
-  border-radius: 2px; /* 둥근 모서리 적용 */
+  color: #2F2A78;
+  transform: scale(1.05);
 }
 
 .text.hovered::after {
   width: 100%;
 }
 
-.delete-a-underline-color {
-  text-decoration: none;
-  color: inherit;
+.profile-container {
+  display: flex;
+  justify-self: flex-end;
+  align-items: center;
+  gap: 12px;
 }
 
-.authenticationTag {
-  font-size: 12px;
-  color: #444444;
+.nickname-text, a{
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  color: black;
 }
+
 .profile-img {
   width: 25px;
-}
-
-.delete-a-underline-color {
-  text-decoration: none;
-  color: inherit;
 }
 </style>

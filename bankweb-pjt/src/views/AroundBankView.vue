@@ -1,32 +1,34 @@
 <template>
-  <div class="d-flex justify-center align-center">
-    <v-card class="px-10 pt-12" width="950px" height="785px" rounded="xl">
-
-      <p :style="{ fontWeight: 'bold' , fontSize: '24px'}">
+  <div class="container">
+    <div class="card">
+      <h1 :style="{ fontWeight: 600 , fontSize: '24px'}">
         주변은행
         <span :style="{ color: '#0B5BCB' }">검색하기</span>
-      </p>
-
-      <div class="mt-11">
+      </h1>
+      <div>
         <BankMapSelect @change="handleRegionChange" />
       </div>
-
       <BankMap :selected-region="selectedRegion" />
-      
-    </v-card>
+    </div>
   </div>
-</template>
+  </template>
 
 <script setup>
 import BankMapSelect from "@/components/BankMapSelect.vue";
 import BankMap from "@/components/BankMap.vue";
 import { ref } from "vue";
 
-// <BankMapSelect> 에서 선택된 Regin정보를 보관하여 <BankMap> 에 넘겨줌
 const selectedRegion = ref({});
+
 const handleRegionChange = (selection) => {
   selectedRegion.value = selection;
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.card {
+  background-color: white;
+  padding: 48px 40px;
+  border-radius: 20px;
+}
+</style>

@@ -45,7 +45,7 @@ import HomeDeposit from "@/components/HomeDeposit.vue";
   display: flex; /* 기본 flex 속성 */
 }
 
-@media (max-width: 1700px) {
+@media (max-width: 1200px) {
   .container-2 {
     flex-direction: column; /* 작은 화면에서는 세로 배치 */
   }

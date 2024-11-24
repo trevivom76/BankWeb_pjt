@@ -4,7 +4,7 @@
         <p class="chart-title">{{ name }}</p>
         <button 
             color="#424242"
-            class="btn"
+            class="link"
             :href="`https://finance.naver.com/marketindex/exchangeDetail.naver?marketindexCd=FX_${currency}KRW`"
         >
             {{ name }} 증권페이지 바로가기 >
@@ -40,7 +40,7 @@ const props = defineProps({
     font-size: 12px;
     font-weight: 500;
 }
-.btn {
+.link {
     padding: 4px 8px; /* 위아래 8px, 좌우 16px */
     text-decoration: underline; /* 밑줄 추가 */
     font-size: 9px; /* 글씨 크기 */
@@ -50,7 +50,7 @@ const props = defineProps({
     margin-top: 8px; /* 위쪽 여백 */
     transition: 400ms;
 }
-.btn:hover {
+.link:hover {
     transform: scale(1.1); /* 크기 살짝 확대 */
     font-weight: 700; /* 글씨 굵기 */
     color: #333; /* 글씨 색 */

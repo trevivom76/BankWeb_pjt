@@ -98,7 +98,7 @@ img {
   background-color: #5058cc;
 }
 
-@media (max-width: 1700px) {
+@media (max-width: 1200px) {
   .chatbot-layer {
     flex-direction: row;
     gap: 40px;

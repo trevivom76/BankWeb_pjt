@@ -3,17 +3,19 @@
     <header>
       <CommonHeader />
     </header>
-
     <div class="RouterView-div">
       <RouterView />
     </div>
+    <footer>
+      <CommonFooter />
+    </footer>
   </div>
 </template>
 
 <script setup>
 import { RouterView } from "vue-router";
-import CommonHeader from "./components/CommonHeader.vue";
-// import "pretendard/dist/web/static/pretendard.css";
+import CommonHeader from "@/components/CommonHeader.vue";
+import CommonFooter from "@/components/CommonFooter.vue";
 </script>
 
 <style scoped>
