@@ -90,19 +90,19 @@
           <div v-else>
             <div class="text-center">
               <!-- 금리비교 태그 -->
-              <a href="#" @click="dialog = true">
+              <RouterLink :to="{ name: 'depositList' }">
                 <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true" @mouseleave="isHovered1 = false">금리 비교</span>
-              </a>
+              </RouterLink>
               &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
               <!-- 환율계산 태그 -->
-              <a href="#" @click="dialog = true">
+              <RouterLink :to="{ name: 'currencycalculator' }">
                 <span class="text" :class="{ hovered: isHovered2 }" @mouseover="isHovered2 = true" @mouseleave="isHovered2 = false">환율 계산</span>
-              </a>
+              </RouterLink>
               &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
               <!-- 주변은행 태그 -->
-              <a href="#" @click="dialog = true">
+              <RouterLink :to="{ name: 'aroundbank' }">
                 <span class="text" :class="{ hovered: isHovered3 }" @mouseover="isHovered3 = true" @mouseleave="isHovered3 = false">주변 은행</span>
-              </a>
+              </RouterLink>
               &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
               <!-- 커뮤니티 태그 -->
               <a href="#" @click="dialog = true">

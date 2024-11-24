@@ -7,45 +7,37 @@
         뒤로가기
       </v-btn>
 
-      <!-- 로딩 상태 표시 -->
-      <div v-if="isLoading" class="d-flex justify-center align-center" style="height: 400px">
-        <v-progress-circular indeterminate color="primary" :size="50"></v-progress-circular>
+      <!-- 프로필, 아이디 -->
+      <div class="d-flex justify-space-between">
+        <div div class="d-flex align-center">
+          <img :src="articleStore.articledetail.user.profile_img" alt="프로필 이미지" class="profile-img" />
+          <p class="nickname">
+            {{ articleStore.articledetail.user.nickname }}
+          </p>
+        </div>
+        <div class="article-category">
+          <p>{{ articleStore.articledetail.category }}</p>
+        </div>
       </div>
 
-      <div v-else>
-        <!-- 프로필, 아이디 -->
-        <div class="d-flex justify-space-between">
-          <div div class="d-flex align-center">
-            <img :src="articledetaildata.user.profile_img" alt="프로필 이미지" class="profile-img" />
-            <p class="nickname">
-              {{ articledetaildata.user.nickname }}
-            </p>
-          </div>
-          <div class="article-category">
-            <p>{{ articledetaildata.category }}</p>
-          </div>
+      <!-- 글 제목 -->
+      <p class="article-title">{{ articleStore.articledetail.title }}</p>
+
+      <!-- 글 작성 날짜 + 수정, 삭제 버튼 -->
+      <div class="d-flex justify-space-between align-center mb-5">
+        <div>
+          <p class="article-createdat">{{ formattedCreatedAt }}</p>
         </div>
-
-        <!-- 글 제목 -->
-        <p class="article-title">{{ articledetaildata.title }}</p>
-
-        <!-- 글 작성 날짜 + 수정, 삭제 버튼 -->
-        <div class="d-flex justify-space-between align-center mb-5">
-          <div>
-            <p class="article-createdat">{{ formattedCreatedAt }}</p>
-          </div>
-          <div v-if="accountStore.userinfo.nickname == articledetaildata.user.nickname" class="d-flex ga-6 article-update-delete mr-8">
-            <a href="#" class="article-update">수정</a>
-            <a href="#" class="article-delete" @click="deleteArticle(articledetaildata.id)">삭제</a>
-          </div>
+        <div v-if="accountStore.userinfo.nickname == articleStore.articledetail.user.nickname" class="d-flex ga-6 article-update-delete mr-8">
+          <a href="#" class="article-update">수정</a>
+          <a href="#" class="article-delete" @click="deleteArticle(articleStore.articledetail.id)">삭제</a>
         </div>
-
-        <!-- 글 내용 -->
-        <textarea class="article-content" readonly>
-         {{ articledetaildata.content }}
-       </textarea
-        >
       </div>
+
+      <!-- 글 내용 -->
+      <textarea class="article-content" readonly>
+        {{ articleStore.articledetail.content }}
+      </textarea>
     </v-card>
 
     <!-- 댓글 창 -->
@@ -55,10 +47,12 @@
 
 <script setup>
 import { useArticleStore } from "@/stores/article";
-import { ref, computed, watch } from "vue"; // watch 추가
+import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+// pictogrammers mdi icon
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiArrowLeft } from "@mdi/js";
+
 import Comment from "@/components/Comment.vue";
 import { useProfileStore } from "@/stores/profile";
 import { useAccountStore } from "@/stores/account";
@@ -66,55 +60,30 @@ import { useAccountStore } from "@/stores/account";
 const articleStore = useArticleStore();
 const profileStore = useProfileStore();
 const accountStore = useAccountStore();
+
 const route = useRoute();
-const articledetaildata = ref(null);
-const isLoading = ref(true);
 
-// 게시글 데이터 가져오는 함수
-const fetchArticleDetail = async () => {
-  isLoading.value = true;
-  try {
-    const payload = {
-      articleid: route.params.id,
-    };
-    await articleStore.getArticleDetail(payload);
-    articledetaildata.value = articleStore.articledetail;
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-// 초기 데이터 로드
-fetchArticleDetail();
-
-// route.params.id가 변경될 때마다 데이터 다시 로드
-watch(
-  () => route.params.id,
-  (newId) => {
-    if (newId) {
-      fetchArticleDetail();
-    }
-  }
-);
+onMounted(() => {
+  const payload = {
+    articleid: route.params.id,
+  };
+  articleStore.getArticleDetail(payload);
+  
+});
 
 // 게시글 삭제 함수
-const deleteArticle = async function (articleid) {
+const deleteArticle = function (articleid) {
   if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
-    isLoading.value = true;
-    try {
-      const payload = {
-        articleid: articleid,
-      };
-      await articleStore.deleteArticle(payload);
-    } finally {
-      isLoading.value = false;
-    }
+    const payload = {
+      articleid: articleid,
+    };
+    articleStore.deleteArticle(payload);
   }
 };
 
 // 뒤로가기 함수
 const goBack = () => {
-  window.history.back();
+  window.history.back(); // 브라우저의 뒤로가기
 };
 
 // 날짜 포맷팅
@@ -126,13 +95,15 @@ const formattedCreatedAt = computed(() => {
 
   const options = {
     year: "numeric",
-    month: "long",
+    month: "long", // 월을 'long' 형식으로 (예: 11월)
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
   };
 
   const formattedDate = new Intl.DateTimeFormat("ko-KR", options).format(date);
+
+  // "오전" / "오후"를 제거하고 원하시는 형식에 맞게 수정
   return formattedDate.replace("오전", "").replace("오후", "").trim();
 });
 </script>
@@ -157,7 +128,6 @@ const formattedCreatedAt = computed(() => {
   background-color: #0b5bcb;
   color: white;
 }
-
 .article-title {
   margin-top: 20px;
   margin-bottom: 12px;
