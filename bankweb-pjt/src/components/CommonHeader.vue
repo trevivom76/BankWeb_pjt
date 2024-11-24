@@ -7,7 +7,7 @@
 
     <div v-else>
       <!-- 로그인/로그아웃/회원가입 버튼 위치 -->
-      <div class="d-flex justify-end">
+      <div class="d-flex justify-end padding-sm">
         <!-- 로그인/회원가입 버튼 -->
         <!-- 로그인 되어있다면 -->
         <div v-if="isLogin()">
@@ -36,13 +36,13 @@
       </div>
 
       <!-- 네비게이션 바 -->
-      <nav class="d-flex justify-space-between align-center">
+      <nav class="nav">
         <!-- 인행 로고 네비게이션 주요 컴포넌트 묶음 (아이디 프로필 제외) -->
-        <div class="d-flex justify-start align-center ga-10">
+        <div class="nav-container">
           <!-- 은행 로고 -->
-          <div>
+          <div class="logo-container">
             <a href="#" @click.prevent="goToHome">
-              <img :src="BBK_Logo" alt="Example Image" class="bank-logo" />
+              <img src="@/assets/icon/BBK_Logo.png" alt="Example Image" class="logo"/>
             </a>
           </div>
 
@@ -90,19 +90,19 @@
           <div v-else>
             <div class="text-center">
               <!-- 금리비교 태그 -->
-              <a href="#" @click="dialog = true">
+              <RouterLink :to="{ name: 'depositList' }">
                 <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true" @mouseleave="isHovered1 = false">금리 비교</span>
-              </a>
+              </RouterLink>
               &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
               <!-- 환율계산 태그 -->
-              <a href="#" @click="dialog = true">
+              <RouterLink :to="{ name: 'currencycalculator' }">
                 <span class="text" :class="{ hovered: isHovered2 }" @mouseover="isHovered2 = true" @mouseleave="isHovered2 = false">환율 계산</span>
-              </a>
+              </RouterLink>
               &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
               <!-- 주변은행 태그 -->
-              <a href="#" @click="dialog = true">
+              <RouterLink :to="{ name: 'aroundbank' }">
                 <span class="text" :class="{ hovered: isHovered3 }" @mouseover="isHovered3 = true" @mouseleave="isHovered3 = false">주변 은행</span>
-              </a>
+              </RouterLink>
               &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
               <!-- 커뮤니티 태그 -->
               <a href="#" @click="dialog = true">
@@ -117,7 +117,7 @@
       <v-dialog v-model="dialog" max-width="380" height="300" persistent>
         <v-card>
           <div class="d-flex flex-column justify-center align-center" style="height: 100%; padding: 24px">
-            <!-- 아이콘 크기 조정 -->
+            <!-- 아이콘 크기 조정 --> 
             <svg-icon type="mdi" :path="mdiInformationSlabCircleOutline" style="font-size: 150px; margin-bottom: 24px"></svg-icon>
 
             <!-- 안내 텍스트 -->
@@ -140,7 +140,6 @@ import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiInformationSlabCircleOutline } from "@mdi/js";
 
 // BBK_Logo 사진 가져오기
-import BBK_Logo from "@/images/BBK_Logo.png";
 
 import { RouterLink, useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/account";
@@ -200,9 +199,30 @@ watch(dialog, (val) => {
 </script>
 
 <style scoped>
-.bank-logo {
-  width: 144px;
-  height: 53px;
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 전체 네비게이션 바 */
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 0px;
+  gap: 20px;
+}
+
+/* 로고 컨테이너 */
+.logo-container {
+  flex: 0 0 auto;
+}
+
+.logo {
+  width: 120px; /* 로고 크기 */
+  height: auto;
 }
 
 /* 기본 텍스트 스타일 */

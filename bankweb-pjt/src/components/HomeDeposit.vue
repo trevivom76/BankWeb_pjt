@@ -351,19 +351,32 @@ const clickedResult = () => {
   align-items: flex-end;
   justify-content: space-between;
 }
-
+/* 버튼 스타일 */
 .btn {
-  padding: 8px 16px;
-
-  background: #636ACC;
-  border-radius: 32px;
-
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  width: 10%;
+  display: flex;
+  justify-content: center; /* 텍스트 가운데 정렬 */
+  align-items: flex-end; /* 세로 정렬 */
+  padding: 6px 16px; /* 내부 여백 */
+  background: #636ACC; /* 배경색 */
+  border-radius: 32px; /* 둥근 모서리 */
+  color: white; /* 텍스트 색상 */
+  font-size: 13px; /* 글씨 크기 */
+  font-weight: 700; /* 글씨 굵기 */
+  cursor: pointer; /* 클릭 가능한 커서 */
+  width: auto; /* 버튼 너비를 텍스트에 맞춤 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 선택 사항: 버튼 그림자 */
+  transition: transform 0.3s ease, background-color 0.3s ease; /* 선택 사항: 애니메이션 */
 }
 
+.btn:active {
+  transform: scale(0.95); /* 살짝 줄어듦 */
+  background-color: #5058cc; /* 색상 변화 */
+}
+
+.btn:hover {
+  transform: scale(1.05); /* 호버 시 확대 효과 */
+  background-color: #5058cc; /* 호버 시 배경색 변경 */
+}
 .input-container {
   width: 90%;
   flex-wrap: wrap;
