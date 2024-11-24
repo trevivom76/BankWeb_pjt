@@ -13,7 +13,7 @@
           <div class="text t1" :class="{ fadeOut: isFadingOut }">{{ slide.title }}</div>
           <div class="text t2" :class="{ fadeOut: isFadingOut }">{{ slide.subtitle }}</div>
           <div class="text t3" :class="{ fadeOut: isFadingOut }">{{ slide.description }}</div>
-          <button class="text t4" :class="{ fadeOut: isFadingOut }">{{ slide.buttonText }}</button>
+          <button class="text t4" :class="{ fadeOut: isFadingOut }" @click="handleButtonClick(slide.ButtonAction)">{{ slide.buttonText }}</button>
         </div>
       </div>
     </div>
@@ -34,6 +34,16 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import deposit_bg from "@/assets/icon/main_causel_deposit.png";
+import { useAccountStore } from "@/stores/account";
+import { useRouter } from "vue-router";
+
+const accountStore = useAccountStore()
+const router = useRouter()
+
+const currentSlide = ref(0);
+const isFadingOut = ref(false);
+let slideInterval;
+
 
 // 슬라이드 데이터
 const slides = [
@@ -43,6 +53,7 @@ const slides = [
     subtitle: "금융 상품 추천받기",
     description: "내 목표에 꼭 맞는 금융 상품, 지금 바로 찾아보세요!",
     buttonText: "바로가기 >",
+    ButtonAction: "recommendproduct"
   },
   {
     image: deposit_bg,
@@ -50,6 +61,7 @@ const slides = [
     subtitle: "환율 계산하기",
     description: "여행 준비? 투자 계획? 환율 계산기로 빠르게 해결하세요!",
     buttonText: "바로가기 >",
+    ButtonAction: "currencycalculator",
   },
   {
     image: deposit_bg,
@@ -57,12 +69,10 @@ const slides = [
     subtitle: "주변 지점 확인하기",
     description: "편리하게 내 위치에서 가까운 은행을 찾아보세요!",
     buttonText: "바로가기 >",
+    ButtonAction: "aroundbank",
   },
 ];
 
-const currentSlide = ref(0);
-const isFadingOut = ref(false);
-let slideInterval;
 
 // 슬라이드 전환 전/후 애니메이션 처리
 const goToSlide = (nextIndex) => {
@@ -73,15 +83,33 @@ const goToSlide = (nextIndex) => {
   },500);
 };
 
+
+// 버튼 클릭 처리
+const handleButtonClick = (action) => {
+  if (action === "recommendproduct") {
+    if (accountStore.isLogin) {
+      router.push({ name: action });
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push({ name: "login" });
+    }
+  } else {
+    router.push({ name: action });
+  }
+};
+
+
 onMounted(() => {
   slideInterval = setInterval(() => {
     goToSlide((currentSlide.value + 1) % slides.length);
   }, 5000);
 });
 
+
 onUnmounted(() => {
   clearInterval(slideInterval);
 });
+
 </script>
 
 <style scoped>
