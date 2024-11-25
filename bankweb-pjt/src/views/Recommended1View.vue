@@ -468,49 +468,46 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* 메인 컨테이너 */
 .financial-advisor {
-  background-color: #f5f5f5;
-  min-height: 100vh;
-  padding: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f8f9fa;
+  padding: 40px;
+  transition: all 0.5s ease-in-out;
 }
 
-.header-section {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1a237e;
-  margin-bottom: 0.5rem;
-}
-
-.subtitle {
+.text-subtitle-1 {
   font-size: 1.1rem;
-  color: #666;
+  color: #636ACC;
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 
+/* 폼 섹션 */
 .form-section {
   background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
   max-width: 1000px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 3rem;
+  transition: transform 0.3s ease;
+}
+
+.form-section:hover {
+  transform: translateY(-4px);
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
 }
 
+/* 입력 그룹 스타일링 */
 .input-group {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
 .input-group.full-width {
@@ -518,101 +515,100 @@ onMounted(async () => {
 }
 
 .section-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-
-  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #636ACC;
+  margin: 1.5rem 0 1rem;
 }
 
 .divider {
-  height: 1px;
-  background-color: #e0e0e0;
-  margin: 1rem 0;
+  height: 2px;
+  background: linear-gradient(to right, #e9ecef, #636ACC, #e9ecef);
+  margin: 2rem 0;
+  border-radius: 2px;
 }
 
+/* 입력 필드 스타일링 */
 .input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.input-group label {
+label {
+  font-size: 0.95rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
+  color: #4a5568;
 }
 
-.input-group input,
-.input-group select {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.2s;
+input, select {
   width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: white;
 }
 
-.input-group input:focus,
-.input-group select:focus {
+input:focus, select:focus {
   outline: none;
-  border-color: #1976d2;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  border-color: #636ACC;
+  box-shadow: 0 0 0 3px rgba(99, 106, 204, 0.15);
 }
 
-.prefix,
 .suffix {
   position: absolute;
-  color: #666;
-  font-size: 0.9rem;
+  right: 1rem;
+  color: #718096;
+  font-weight: 500;
 }
 
-.prefix {
-  left: 0.75rem;
-}
-
-.suffix {
-  right: 0.75rem;
-}
-
+/* 제출 버튼 영역 */
 .submit-section {
+  margin-top: 2.5rem;
   text-align: center;
-  margin-top: 2rem;
 }
 
 .submit-button {
-  background-color: #1976d2;
+  background: #636ACC;
   color: white;
-  padding: 0.75rem 2.5rem;
   border: none;
-  border-radius: 8px;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  min-width: 200px;
+  gap: 1rem;
+  min-width: 220px;
 }
 
 .submit-button:hover {
-  background-color: #1565c0;
+  background: #5058cc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 106, 204, 0.2);
 }
 
 .submit-button:disabled {
-  background-color: #ccc;
+  background: #e2e8f0;
   cursor: not-allowed;
+  transform: none;
 }
 
+/* 로딩 스피너 */
 .loading-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid #fff;
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
 }
 
+/* 결과 섹션 */
 .results-section {
   max-width: 1200px;
   margin: 3rem auto;
@@ -620,15 +616,16 @@ onMounted(async () => {
 
 .products-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 2rem;
 }
 
+/* 상품 카테고리 */
 .product-category {
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
 }
 
 .category-header {
@@ -636,169 +633,129 @@ onMounted(async () => {
 }
 
 .saving-header {
-  background-color: #e8f5e9;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
 }
 
 .deposit-header {
-  background-color: #e3f2fd;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
 }
 
 .category-title {
   font-size: 1.5rem;
-  font-weight: 600;
-  color: #1a237e;
+  font-weight: 700;
+  color: #2c3e50;
   margin-bottom: 0.5rem;
 }
 
-.category-subtitle {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.products-list {
-  padding: 1.5rem;
-}
-
+/* 상품 카드 */
 .product-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  margin-bottom: 1.5rem;
+  margin: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .top-product {
-  border: 2px solid #1976d2;
-}
-
-.product-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  border: 2px solid #636ACC;
+  background: linear-gradient(to right bottom, #ffffff, #f8f9ff);
 }
 
 .rank-badge {
-  background: #1976d2;
+  background: #636ACC;
   color: white;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-.product-info {
-  flex: 1;
+.top-rank {
+  background: linear-gradient(135deg, #636ACC, #5058cc);
 }
 
-.product-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-  color: #1a237e;
-}
-
-.company-name {
-  font-size: 0.875rem;
-  color: #666;
-  margin: 0.25rem 0 0 0;
-}
-
-.product-details {
-  margin-bottom: 1.5rem;
-}
-
+/* 상품 상세 정보 */
 .detail-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 1.5rem;
+  margin: 1rem 0;
 }
 
 .detail-item {
-  display: flex;
-  flex-direction: column;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
 }
 
-.detail-item.full-width {
-  grid-column: 1 / -1;
+.detail-item:hover {
+  background: #f1f3f5;
 }
 
 .label {
-  font-size: 0.875rem;
-  color: #666;
-  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  color: #718096;
+  margin-bottom: 0.4rem;
 }
 
 .value {
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: #2d3748;
 }
 
 .highlight {
-  color: #1976d2;
-  font-weight: 600;
+  color: #636ACC;
 }
 
 .profit {
-  color: #2e7d32;
-  font-weight: 600;
+  color: #2F855A;
 }
 
+/* 조건 섹션 */
 .product-conditions {
-  border-top: 1px solid #eee;
-  padding-top: 1rem;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 12px;
   margin-top: 1rem;
 }
 
-.conditions-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.conditions-content {
-  font-size: 0.875rem;
-  color: #666;
-  line-height: 1.5;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* 반응형 디자인 */
 @media (max-width: 768px) {
   .financial-advisor {
     padding: 1rem;
   }
 
-  .title {
-    font-size: 2rem;
+  .form-section {
+    padding: 1.5rem;
   }
 
-  .form-section,
-  .product-category {
-    border-radius: 12px;
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .products-container {
     grid-template-columns: 1fr;
   }
 
-  .product-card {
-    margin: 1rem;
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>

@@ -7,17 +7,17 @@
         <div v-if="!isSavingsExpanded" class="carousel-container">
           <div class="carousel" :style="{ transform: `translateY(-${currentSavingsIndex * cardHeight}px)` }">
             <div class="card" v-for="(product, index) in savings" :key="'savings-' + product.id">
-              <h3>{{ product.fin_prdt_nm }}</h3>
               <p>{{ product.kor_co_nm }}</p>
-              <button class="detail-btn" @click="openModal(product, false)">상세 보기</button>
+              <h3>{{ product.fin_prdt_nm }}</h3>
+              <button @click="openModal(product, false)">상세 보기 ></button>
             </div>
           </div>
         </div>
         <div v-else class="product-list">
           <div class="card" v-for="(product, index) in savings" :key="'savings-' + product.id">
-            <h3>{{ product.fin_prdt_nm }}</h3>
             <p>{{ product.kor_co_nm }}</p>
-            <button class="detail-btn" @click="openModal(product, false)">상세 보기</button>
+            <h3>{{ product.fin_prdt_nm }}</h3>
+            <button @click="openModal(product, false)">상세 보기 ></button>
           </div>
         </div>
         <button class="expand-btn" @click="toggleSavingsExpand">
@@ -31,17 +31,17 @@
         <div v-if="!isDepositsExpanded" class="carousel-container">
           <div class="carousel" :style="{ transform: `translateY(-${currentDepositsIndex * cardHeight}px)` }">
             <div class="card" v-for="(product, index) in deposits" :key="'deposits-' + product.id">
-              <h3>{{ product.fin_prdt_nm }}</h3>
               <p>{{ product.kor_co_nm }}</p>
-              <button class="detail-btn" @click="openModal(product, true)">상세 보기</button>
+              <h3>{{ product.fin_prdt_nm }}</h3>
+              <button @click="openModal(product, true)">상세 보기 ></button>
             </div>
           </div>
         </div>
         <div v-else class="product-list">
           <div class="card" v-for="(product, index) in deposits" :key="'deposits-' + product.id">
-            <h3>{{ product.fin_prdt_nm }}</h3>
             <p>{{ product.kor_co_nm }}</p>
-            <button class="detail-btn" @click="openModal(product, true)">상세 보기</button>
+            <h3>{{ product.fin_prdt_nm }}</h3>
+            <button @click="openModal(product, true)">상세 보기 ></button>
           </div>
         </div>
         <button class="expand-btn" @click="toggleDepositsExpand">
@@ -302,7 +302,6 @@ const toggleLike = (id) => {
 </script>
 
 <style scoped>
-/* 전체 레이아웃 */
 .layout {
   display: flex;
   justify-content: space-between;
@@ -312,18 +311,17 @@ const toggleLike = (id) => {
   font-family: "Pretendard", sans-serif;
 }
 
-/* 관심 상품 리스트 */
 .interest-products {
   flex: 1;
-  padding: 15px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .title {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 20px;
   color: #333;
 }
@@ -331,7 +329,7 @@ const toggleLike = (id) => {
 /* 슬라이더 */
 .carousel-container {
   overflow: hidden;
-  height: 300px;
+  height: 400px;
 }
 
 .carousel {
@@ -342,13 +340,13 @@ const toggleLike = (id) => {
 
 /* 펼쳐진 상품 리스트 */
 .product-list {
-  max-height: 500px;
+  max-height: 600px;
   overflow-y: auto;
   padding-right: 10px;
 }
 
 .product-list::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
 
 .product-list::-webkit-scrollbar-track {
@@ -377,39 +375,39 @@ const toggleLike = (id) => {
   align-items: center;
   text-align: center;
   transition: transform 0.3s ease-in-out;
+  height: 120px;
 }
 
 .card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .card h3 {
-  font-size: 16px;
+  font-size: 17px;
   color: #333;
   margin-bottom: 8px;
 }
 
 .card p {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 4px 12px; 
+  background: #5A87F2;
+  border-radius: 32px;
+  color: white;
+  width: auto; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 11px;
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+
+.card button {
   font-size: 12px;
-  color: #777;
-  margin-bottom: 10px;
 }
-
-.detail-btn {
-  padding: 8px 12px;
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.detail-btn:hover {
-  background: #0056b3;
-}
-
 /* 펼치기 버튼 */
 .expand-btn {
   width: 100%;
@@ -436,17 +434,6 @@ const toggleLike = (id) => {
 /* 예적금 금리 비교 */
 .comparison {
   flex: 2;
-  padding: 15px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-}
-
-.comparison .title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #333;
 }
 
 /* 모달 스타일 */
@@ -461,7 +448,7 @@ const toggleLike = (id) => {
   align-items: center;
   flex-wrap: wrap;
   padding: 4px 16px;
-  background: #0b5bcb;
+  background: #5A87F2;
   border-radius: 20px;
   font-weight: 600;
   font-size: 12px;
@@ -539,7 +526,7 @@ td {
   font-size: 16px;
   font-weight: bold;
   color: #ffffff;
-  background-color: #0b5bcb;
+  background-color: #5A87F2;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -548,12 +535,12 @@ td {
 }
 
 .close-button:hover {
-  background-color: #004a9f;
+  background-color: #3F75F2;
   transform: translateY(-2px);
 }
 
 .close-button:active {
-  background-color: #003a7e;
+  background-color: #3F75F2;
   transform: translateY(0);
 }
 
