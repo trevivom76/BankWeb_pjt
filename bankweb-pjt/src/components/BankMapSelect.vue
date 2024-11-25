@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="select-container flex">
+    <div class="select-container">
       <!-- 시/도 선택 -->
       <div class="select-box">
         <p class="select-text">광역시/도</p>
@@ -260,24 +260,31 @@ const selectBank = (option) => {
 
 <style scoped>
 .select-container {
+  display: flex;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  padding: 28px 0px;
+  padding-bottom: 24px;
   flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 16px;
 }
 
 .select-box {
   display: flex;
   flex-direction: column;
-  flex-grow: 0.8; /* 모든 select-box가 균등한 너비를 가집니다 */
-  max-width: 300px; /* 각 드롭다운의 최대 너비를 제한합니다 */
+  flex-grow: 1;
+  max-width: 250px;
+  margin: 0px 10px;
 }
 
 .select-text {
   padding-left: 4px;
   padding-bottom: 4px;
   font-weight: 400;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .cont-select {
@@ -288,8 +295,8 @@ const selectBank = (option) => {
 .btn-select {
   display: flex;
   width: 100%;
-  padding: 6px 12px;
-  font-size: 13px;
+  padding:8px 12px;
+  font-size: 15px;
   line-height: 13px;
   font-weight: 600;
   border: 1px solid #C4C4C4;
@@ -304,6 +311,10 @@ const selectBank = (option) => {
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
+}
+
+.btn-select:disabled {
+  color: #4242425c;
 }
 
 /* 드롭다운 리스트 */
@@ -324,8 +335,12 @@ const selectBank = (option) => {
   z-index: 1000;
 }
 
-.btn {
-  align-items: self-end;
+.search-button-container {
+  margin-top: auto; /* 버튼을 컨테이너의 가장 아래로 밀어냄 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 /* v-show 상태 활성화 */
