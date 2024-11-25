@@ -62,6 +62,33 @@
               </a>
             </template>
           </div>
+
+          <RouterLink v-if="isLogin() && userinfo" :to="{ name: 'profilemanage' }">
+            <div class="d-flex ga-4">
+              <p class="delete-a-underline-color">
+                {{ userinfo.nickname }}
+              </p>
+              <div v-if="userprofileInfo">
+                <img 
+                  v-show="userprofileInfo.profile_img"
+                  :src="userprofileInfo.profile_img" 
+                  :alt="userprofileInfo.nickname"
+                  class="profile-img"
+                  @load="handleImageLoad"
+                  @error="handleImageError"
+                />
+                <v-skeleton-loader
+                  v-if="!userprofileInfo.profile_img"
+                  type="avatar"
+                  width="25"
+                  height="25"
+                ></v-skeleton-loader>
+                <v-avatar v-if="imageError" size="25">
+                  {{ userprofileInfo.nickname?.charAt(0) }}
+                </v-avatar>
+              </div>
+            </div>
+          </RouterLink>
         </div>
         <RouterLink :to="{ name: 'profilemanage' }">
           <div class="profile-container">
@@ -82,8 +109,6 @@
 
             <!-- 안내 텍스트 -->
             <p class="text-center" style="font-size: 22px; margin-bottom: 24px; line-height: 1.5">안전한 금융서비스를 위해 로그인 화면으로 이동합니다</p>
-
-            <!-- 원형 프로그레스 바 -->
             <v-card-text class="d-flex justify-center align-center pt-0" style="flex-grow: 1; margin-top: 16px">
               <v-progress-circular color="primary" indeterminate disable-shrink size="60" width="8"></v-progress-circular>
             </v-card-text>
@@ -95,62 +120,91 @@
 </template>
 
 <script setup>
-// SvgIcon 컴포넌트와 MDI 아이콘 가져오기
+import { onMounted, ref, watch } from "vue";
+import { storeToRefs } from 'pinia';
+import { useAccountStore } from "@/stores/account";
+import { useProfileStore } from "@/stores/profile";
+import { RouterLink, useRouter } from "vue-router";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiInformationSlabCircleOutline } from "@mdi/js";
 
-// BBK_Logo 사진 가져오기
-
-import { RouterLink, useRouter } from "vue-router";
-import { useAccountStore } from "@/stores/account";
-import { onMounted, ref, watch } from "vue";
-import { useProfileStore } from "@/stores/profile";
-
 const accountStore = useAccountStore();
 const profileStore = useProfileStore();
-
 const router = useRouter();
+
+// store의 상태를 반응형으로 가져오기
+const { userprofile: userprofileInfo } = storeToRefs(profileStore);
+const { userinfo } = storeToRefs(accountStore);
 
 const isHovered1 = ref(false);
 const isHovered2 = ref(false);
 const isHovered3 = ref(false);
 const isHovered4 = ref(false);
-
-// dialog 상태를 ref로 선언
 const dialog = ref(false);
+const isLoading = ref(true);
+const imageLoading = ref(true);
+const imageError = ref(false);
 
-const isLoading = ref(true); // 로딩 상태를 관리하는 ref 추가
+// 이미지 로드 완료 핸들러
+const handleImageLoad = () => {
+  imageLoading.value = false;
+};
 
-// 프로필 정보 가져오기
-onMounted(async () => {
-  try {
-    const payload = {
-      username: accountStore.userinfo.username,
-    };
-    await profileStore.getProfile(payload);
-  } finally {
-    isLoading.value = false; // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
+// 이미지 로드 실패 핸들러
+const handleImageError = () => {
+  imageError.value = true;
+  imageLoading.value = false;
+  console.log('프로필 이미지 로드 실패');
+};
+
+// userinfo 변경 시 항상 프로필 새로 가져오기
+watch(userinfo, async (newUserInfo) => {
+  if (newUserInfo) {
+    try {
+      imageLoading.value = true;
+      imageError.value = false;
+      await profileStore.getProfile({
+        username: newUserInfo.username
+      });
+    } catch (error) {
+      console.error('프로필 동기화 실패:', error);
+      imageError.value = true;
+    }
+  }
+}, { immediate: true });
+
+// userprofileInfo가 변경될 때마다 이미지 상태 초기화
+watch(userprofileInfo, () => {
+  if (userprofileInfo.value) {
+    imageLoading.value = true;
+    imageError.value = false;
   }
 });
 
-// 홈페이지로 push하는 함수
+onMounted(() => {
+  isLoading.value = false;
+});
+
 const goToHome = () => {
   router.push({ name: "home" });
 };
 
-// 로그인 되어있는지 아닌지 확인하는 함수
-const isLogin = function () {
+const isLogin = () => {
   return accountStore.isLogin;
 };
 
-const logOut = function () {
+const logOut = () => {
+  // 프로필 정보 초기화 추가
+  profileStore.resetProfile();  // 프로필 스토어 초기화
+  imageError.value = false;
+  imageLoading.value = true;
   accountStore.logOut();
 };
 
-// dialog 값이 변경될 때, watch로 4초 후에 dialog를 false로 설정
+// dialog 관련 watch
 watch(dialog, (val) => {
   if (!val) return;
-
+  
   setTimeout(() => {
     dialog.value = false;
     router.push({ name: "login" });
@@ -248,5 +302,9 @@ watch(dialog, (val) => {
 
 .profile-img {
   width: 25px;
+  height: 25px;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: opacity 0.3s ease;
 }
 </style>

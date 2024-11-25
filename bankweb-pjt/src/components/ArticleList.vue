@@ -72,15 +72,18 @@ const headers = ref([
   { title: "글 제목", align: "start", key: "title", width: "50%" },
   { title: "카테고리", align: "center", key: "category", width: "35%" },
   { title: "작성자", align: "center", key: "user.nickname", width: "50%" },
+  { title: "", key: "id", align: "center", sortable: false, width: "0%"},
 ]);
 
 const categories = ["전체", "질문/답변", "팁/정보 공유", "자유"];
 
 const filteredArticles = computed(() => {
+  const articles = articleStore.articles || [];  // 없으면 빈 배열 사용
+  
   if (selectedCategory.value === "전체") {
-    return articleStore.articles.filter((article) => ["질문/답변", "팁/정보 공유", "자유"].includes(article.category));
+    return articles.filter((article) => ["질문/답변", "팁/정보 공유", "자유"].includes(article.category));
   } else {
-    return articleStore.articles.filter((article) => article.category === selectedCategory.value);
+    return articles.filter((article) => article.category === selectedCategory.value);
   }
 });
 
