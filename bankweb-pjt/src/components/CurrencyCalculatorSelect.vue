@@ -5,7 +5,12 @@
       <div class="d-flex justify-space-between ga-5" :style="{ marginRight: '82px' }">
         <v-select class="select1" label="기준 통화 선택" v-model="selectedCountry" :items="countryCodes" variant="outlined"></v-select>
         <div class="currency-display1">
-          <v-text-field width="100%" variant="outlined" v-model="formattedMoney1" @input="onInputMoney" solo></v-text-field>
+          <v-text-field width="100%" variant="outlined" v-model="formattedMoney1" @input="onInputMoney" solo>
+            <template #append-inner>
+              <span v-if="selectedCountry" class="currency-symbol">{{ currencySymbols[selectedCountry] }}</span>
+              <img v-if="selectedCountry" :src="flagIcons[selectedCountry]" alt="국기" class="flag-icon" />
+            </template>
+          </v-text-field>
 
           <!-- 천만~초기화 클릭박스 -->
           <div>
@@ -26,7 +31,14 @@
       <div class="d-flex justify-space-between ga-5" :style="{ marginRight: '82px' }">
         <v-select class="select2" label="바꿀 통화 선택" v-model="selectedCountry2" :items="countryCodes" variant="outlined"></v-select>
         <div class="currency-display2">
-          <v-text-field variant="outlined" v-model="formattedMoney2" solo readonly></v-text-field>
+          <v-text-field variant="outlined" v-model="formattedMoney2" solo readonly>
+            <template #append-inner>
+              <span v-if="selectedCountry2" class="currency-symbol">{{ currencySymbols[selectedCountry2] }}</span>
+              <img v-if="selectedCountry2" :src="flagIcons[selectedCountry2]" alt="국기" class="flag-icon" />
+            </template>
+          </v-text-field>
+
+          <!-- <img v-if="selectedCountry2" :src="flagIcons[selectedCountry2]" alt="국기" class="flag-icon" /> -->
           <!-- 클릭 시 환전 함수 실행 -->
           <div class="d-flex justify-space-between align-center mt-4"></div>
         </div>
@@ -121,6 +133,60 @@ const swapCountries = () => {
   money2.value = tempActualMoney;
 };
 
+// 통화 심볼과 국기 매핑
+const currencySymbols = {
+  USD: "$",
+  KRW: "₩",
+  EUR: "€",
+  'JPY(100)' : "¥",
+  AED: "د.إ",
+  AUD: "A$",
+  BHD: "ب.د",
+  BND: "B$",
+  CAD: "C$",
+  CHF: "CHF",
+  CNH: "¥",
+  DKK: "kr",
+  GBP: "£",
+  HKD: "HK$",
+  'IDR(100)': "Rp",
+  KWD: "KD",
+  MYR: "RM",
+  NOK: "kr",
+  NZD: "NZ$",
+  SAR: "ر.س",
+  SEK: "kr",
+  SGD: "S$",
+  THB: "฿",
+};
+
+// 국기 표출을 위한 URL 추가, 필요한 국가 코드들(이건 내가 일일히 넣어줘야 함)
+const flagIcons = {
+  AED: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_United_Arab_Emirates.svg", // 아랍에미리트 디르함
+  AUD: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Australia.svg", // 호주 달러
+  BHD: "https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Bahrain.svg", // 바레인 디나르
+  BND: "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Brunei.svg", // 브루나이 달러
+  CAD: "https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg", // 캐나다 달러
+  CHF: "https://upload.wikimedia.org/wikipedia/commons/f/f3/Flag_of_Switzerland.svg", // 스위스 프랑
+  CNH: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg", // 위안화
+  DKK: "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Denmark.svg", // 덴마크 크로네
+  EUR: "https://upload.wikimedia.org/wikipedia/commons/b/b7/Flag_of_Europe.svg", // 유로
+  GBP: "https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg", // 영국 파운드
+  HKD: "https://upload.wikimedia.org/wikipedia/commons/5/5b/Flag_of_Hong_Kong.svg", // 홍콩 달러
+  'IDR(100)': "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg", // 인도네시아 루피아
+  'JPY(100)' : "https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg", // 일본 엔
+  KRW: "https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg", // 한국 원
+  KWD: "https://upload.wikimedia.org/wikipedia/commons/a/aa/Flag_of_Kuwait.svg", // 쿠웨이트 디나르
+  MYR: "https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg", // 말레이시아 링기트
+  NOK: "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg", // 노르웨이 크로네
+  NZD: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_New_Zealand.svg", // 뉴질랜드 달러
+  SAR: "https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg", // 사우디 리얄
+  SEK: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Sweden.svg", // 스웨덴 크로나
+  SGD: "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg", // 싱가포르 달러
+  THB: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_Thailand.svg", // 태국 바트
+  USD: "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg", // 미국 달러
+};
+
 // 컴포넌트가 마운트될 때 실행
 onMounted(() => {
   currenystore.usecurrency(); // Pinia 스토어에서 API 데이터 불러오기
@@ -202,6 +268,12 @@ onMounted(() => {
 p {
   font-size: 11px;
   color: #bdbdbd;
+}
+
+.flag-icon {
+  width: 32px;
+  height: 20px;
+  margin-left: 8px;
 }
 </style>
 
