@@ -254,7 +254,7 @@ onMounted(async () => {
 
 /* 버튼 스타일 */
 .btn-primary {
-  background-color: #636bd2;
+  background-color: #5A87F2;
   color: #fff;
   padding: 10px 20px;
   border: none;
@@ -265,11 +265,11 @@ onMounted(async () => {
 
 .btn-primary:active {
   transform: scale(0.95); 
-  background-color: #5058cc; 
+  background-color: #3F75F2; 
 }
 
 .btn-primary:hover {
   transform: scale(1.05); 
-  background-color: #5058cc;
+  background-color: #3F75F2;
 }
 </style>

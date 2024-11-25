@@ -479,18 +479,18 @@ onMounted(async () => {
 .title {
   font-size: 24px;
   font-weight: 700;
-  margin: 6px 40px;
+  margin: 6px 0px;
 }
 
 .text-subtitle-1 {
   font-size: 18px;
   font-weight: 400;
-  margin: 6px 40px;
+  margin: 6px 0px;
 }
 
 /* 폼 섹션 */
 .form-section {
-  background: rgb(239, 239, 239);
+  background-color: white;
   border-radius: 10px;
   padding: 20px 40px;
   max-width: 1000px;
@@ -674,11 +674,6 @@ input:focus, select:focus {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
-.top-product {
-  border: px solid #8b8b8b;
-  background: linear-gradient(to right bottom, #ffffff, #f8f9ff);
-}
-
 .rank-badge {
   background: #5A87F2;
   color: white;
@@ -699,14 +694,15 @@ input:focus, select:focus {
 .detail-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 12px;
 }
 
 .detail-item {
-  background: #f8f9fa;
   padding: 12px;
   border-radius: 12px;
   transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: space-between;
 }
 
 .detail-item:hover {
@@ -725,7 +721,7 @@ input:focus, select:focus {
 }
 
 .highlight {
-  color: #5A87F2;
+  color: #1f4ebc;
 }
 
 .profit {

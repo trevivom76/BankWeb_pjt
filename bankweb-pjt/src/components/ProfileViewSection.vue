@@ -111,4 +111,12 @@ watch(() => accountStore.userinfo, (newUserInfo) => {
   width: 5%;
   text-align: center;
 }
+
+.btn {
+  background-color: #5A87F2;
+}
+
+.btn:hover {
+  background-color: #3F75F2;
+}
 </style>
