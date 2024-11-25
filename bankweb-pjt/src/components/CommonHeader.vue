@@ -62,33 +62,6 @@
               </a>
             </template>
           </div>
-
-          <RouterLink v-if="isLogin() && userinfo" :to="{ name: 'profilemanage' }">
-            <div class="d-flex ga-4">
-              <p class="delete-a-underline-color">
-                {{ userinfo.nickname }}
-              </p>
-              <div v-if="userprofileInfo">
-                <img 
-                  v-show="userprofileInfo.profile_img"
-                  :src="userprofileInfo.profile_img" 
-                  :alt="userprofileInfo.nickname"
-                  class="profile-img"
-                  @load="handleImageLoad"
-                  @error="handleImageError"
-                />
-                <v-skeleton-loader
-                  v-if="!userprofileInfo.profile_img"
-                  type="avatar"
-                  width="25"
-                  height="25"
-                ></v-skeleton-loader>
-                <v-avatar v-if="imageError" size="25">
-                  {{ userprofileInfo.nickname?.charAt(0) }}
-                </v-avatar>
-              </div>
-            </div>
-          </RouterLink>
         </div>
         <RouterLink :to="{ name: 'profilemanage' }">
           <div class="profile-container">

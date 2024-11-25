@@ -1,24 +1,18 @@
 <template>
-  <div class="profile-container">
-    <v-card class="profile-card">
-      <!-- 헤더 -->
-      <div class="profile-header">
-        <h2 class="text-h5">
-          <span class="username">{{userInfo?.name }}</span>
-          님의 프로필
-        </h2>
-      </div>
-      
-      <v-divider class="my-4"></v-divider>
+  <div>
+    <!-- 로딩 상태 -->
+    <div v-if="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+    </div>
 
-      <!-- 로딩 상태 -->
-      <div v-if="isLoading" class="d-flex justify-center align-center" style="height: 400px">
-        <v-progress-circular indeterminate color="primary" :size="50"></v-progress-circular>
-      </div>
-
-      <div v-else class="profile-content">
-        <!-- 왼쪽: 프로필 이미지 섹션 -->
-        <div class="image-section">
+    <div v-else class="profile-content">
+      <!-- 왼쪽: 프로필 이미지 섹션 -->
+      <div class="image-section">
+        <div class="title-container">
+          <span class="title-name">{{ userInfo?.name }}</span>
+          <span class="title-description">님의 프로필</span>
+        </div>
+        <div class="profile-image-container-wrapper">
           <div class="profile-image-container">
             <img 
               :src="profileStore.userprofile?.profile_img" 
@@ -33,218 +27,83 @@
             accept="image/*"
             style="display: none"
           />
-          <v-btn
+          <button
             @click="$refs.fileInput.click()"
-            color="primary"
-            variant="outlined"
-            class="mt-4"
+            class="btn-primary mt-4"
           >
-            프로필 이미지 변경
-          </v-btn>
-        </div>
-
-        <!-- 오른쪽: 프로필 정보 수정 폼 -->
-        <div class="info-section">
-          <v-form @submit.prevent="updateProfile" ref="form">
-            <!-- 아이디 (수정 불가) -->
-            <div class="form-field">
-              <v-text-field
-                v-model="userInfo.username"
-                label="아이디"
-                readonly
-                variant="outlined"
-                density="comfortable"
-              ></v-text-field>
-            </div>
-
-            <!-- 이름 -->
-            <div class="form-field">
-              <v-text-field
-                v-model="profileData.name"
-                label="이름"
-                :rules="nameRules"
-                variant="outlined"
-                density="comfortable"
-              ></v-text-field>
-            </div>
-
-            <!-- 닉네임 -->
-            <div class="form-field">
-              <v-text-field
-                v-model="profileData.nickname"
-                label="닉네임"
-                :rules="nicknameRules"
-                variant="outlined"
-                density="comfortable"
-              ></v-text-field>
-            </div>
-
-            <!-- 이메일 -->
-            <div class="form-field">
-              <v-text-field
-                v-model="profileData.email"
-                label="이메일"
-                type="email"
-                :rules="emailRules"
-                variant="outlined"
-                density="comfortable"
-              ></v-text-field>
-            </div>
-
-            <!-- 나이 -->
-            <div class="form-field">
-              <v-text-field
-                v-model.number="profileData.age"
-                label="나이"
-                type="number"
-                :rules="ageRules"
-                variant="outlined"
-                density="comfortable"
-              ></v-text-field>
-            </div>
-
-            <!-- 자산 -->
-            <div class="form-field">
-              <v-text-field
-                v-model.number="profileData.money"
-                label="자산"
-                type="number"
-                :rules="moneyRules"
-                variant="outlined"
-                density="comfortable"
-                :prefix="'₩'"
-                :suffix="'원'"
-              ></v-text-field>
-            </div>
-
-            <!-- 급여 -->
-            <div class="form-field">
-              <v-text-field
-                v-model.number="profileData.salary"
-                label="급여"
-                type="number"
-                :rules="salaryRules"
-                variant="outlined"
-                density="comfortable"
-                :prefix="'₩'"
-                :suffix="'원'"
-              ></v-text-field>
-            </div>
-
-            <!-- 수정 버튼 -->
-            <div class="actions">
-              <v-btn
-                color="primary"
-                type="submit"
-                :loading="isUpdating"
-                min-width="120"
-              >
-                프로필 수정
-              </v-btn>
-            </div>
-          </v-form>
+            프로필 이미지 등록
+          </button>
         </div>
       </div>
-    </v-card>
+
+      <!-- 오른쪽: 프로필 정보 섹션 -->
+      <div class="info-section">
+        <template v-if="isEditing">
+          <ProfileEditSection
+            :initialData="userInfo"
+            @save="handleSaveChanges"
+            @cancel="cancelEditing"
+          />
+        </template>
+        <template v-else>
+          <ProfileViewSection
+            @edit="startEditing"
+          />
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/account";
 import { useProfileStore } from "@/stores/profile";
-import { onMounted, ref, reactive } from "vue";
+import ProfileEditSection from "@/components/ProfileEditSection.vue";
+import ProfileViewSection from "@/components/ProfileViewSection.vue";
 
 const accountStore = useAccountStore();
 const profileStore = useProfileStore();
+
 const isLoading = ref(true);
-const isUpdating = ref(false);
-const fileInput = ref(null);
-const form = ref(null);
+const isEditing = ref(false);
+const userInfo =  ref({ ...accountStore.userinfo });
 
-const userInfo = accountStore.userinfo
 
-// 프로필 데이터
-const profileData = reactive({
-  name: userInfo.username,
-  nickname: userInfo.nickname,
-  email: userInfo.email,
-  age: userInfo.age,
-  money: userInfo.money,
-  salary: userInfo.salary
-});
+const startEditing = async () => {
+  await syncUserInfo();
+  isEditing.value = true;
+};
 
-// 유효성 검사 규칙
-const nameRules = [
-  v => !!v || '이름을 입력해주세요',
-  v => v.length <= 50 || '이름은 50자를 초과할 수 없습니다'
-];
 
-const nicknameRules = [
-  v => !!v || '닉네임을 입력해주세요',
-  v => v.length <= 20 || '닉네임은 20자를 초과할 수 없습니다'
-];
+const cancelEditing = () => {
+  isEditing.value = false;
+};
 
-const emailRules = [
-  v => !v || /.+@.+\..+/.test(v) || '유효한 이메일을 입력해주세요'
-];
 
-const ageRules = [
-  v => v >= 0 || '나이는 0보다 작을 수 없습니다'
-];
-
-const moneyRules = [
-  v => v >= 0 || '자산은 0보다 작을 수 없습니다'
-];
-
-const salaryRules = [
-  v => v >= 0 || '급여는 0보다 작을 수 없습니다'
-];
-
-// 프로필 업데이트 함수
-const updateProfile = async () => {
-  const { valid } = await form.value.validate();
-  
-  if (!valid) {
-    alert('입력값을 확인해주세요.');
-    return;
+const handleSaveChanges = async (updatedData) => {
+  try {
+    await profileStore.updateProfile(updatedData);
+    await syncUserInfo();
+    isEditing.value = false;
+  } catch (error) {
+    console.error("Failed to refresh user info:", error);
   }
 
+  isEditing.value = false;
+};
+
+
+const syncUserInfo = async () => {
   try {
-    isUpdating.value = true;
-    await profileStore.updateProfile({
-      username: userInfo.username,
-      nickname: profileData.nickname,
-      name: profileData.name,
-      email: profileData.email,
-      age: profileData.age,
-      money: profileData.money,
-      salary: profileData.salary
-    });
-
-    // 프로필 정보와 계정 정보를 모두 새로고침
-    await Promise.all([
-      profileStore.getProfile({
-        username: userInfo.username
-      }),
-      accountStore.refreshUserInfo()
-    ]);
-
-    alert('프로필이 성공적으로 업데이트되었습니다.');
+    await accountStore.refreshUserInfo();
+    userInfo.value = { ...accountStore.userinfo };
   } catch (error) {
-    console.error('프로필 업데이트 실패:', error);
-    if (error.response?.data) {
-      // 서버에서 반환한 구체적인 에러 메시지가 있다면 표시
-      const errorMessage = Object.values(error.response.data).join('\n');
-      alert(`프로필 업데이트 실패:\n${errorMessage}`);
-    } else {
-      alert('프로필 업데이트에 실패했습니다.');
-    }
-  } finally {
-    isUpdating.value = false;
+    console.error("Failed to refresh user info:", error);
   }
 };
 
-// 파일 선택 시 호출되는 함수
+
 const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -272,7 +131,6 @@ const handleFileChange = async (event) => {
       formData: formData
     });
 
-    // 프로필 정보 새로고침
     await profileStore.getProfile({
       username: userInfo.username
     });
@@ -284,24 +142,10 @@ const handleFileChange = async (event) => {
   }
 };
 
-// 초기 데이터 로드
+
 onMounted(async () => {
   try {
-    const payload = {
-      username: userInfo?.username,
-    };
-    if (payload.username) {
-      await profileStore.getProfile(payload);
-      // 프로필 데이터 초기화
-      Object.assign(profileData, {
-        name: userInfo.name,
-        nickname: userInfo.nickname,
-        email: userInfo.email,
-        age: userInfo.age,
-        money: userInfo.money,
-        salary: userInfo.salary
-      });
-    }
+    await syncUserInfo();
   } finally {
     isLoading.value = false;
   }
@@ -309,38 +153,76 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.profile-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+/* 공통 스타일 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
 }
 
-.profile-card {
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.2);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
 }
 
-.profile-header {
-  margin-bottom: 1rem;
-}
-
-.username {
-  color: #1867C0;
-  font-weight: 600;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .profile-content {
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 2rem;
-  margin-top: 2rem;
+  margin-top: 20px;
 }
 
+/* 프로필 이미지 섹션 */
 .image-section {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.title-container {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.title-text {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.title-name {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.title-description {
+  color: #888;
+}
+
+.profile-image-container-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .profile-image-container {
@@ -348,7 +230,7 @@ onMounted(async () => {
   height: 220px;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid #E0E0E0;
+  border: 3px solid #e0e0e0;
 }
 
 .profile-image {
@@ -357,27 +239,37 @@ onMounted(async () => {
   object-fit: cover;
 }
 
+/* 정보 섹션 */
 .info-section {
-  padding: 1rem;
-}
-
-.form-field {
-  margin-bottom: 1rem;
-}
-
-.actions {
-  margin-top: 2rem;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-content: space-between;
+  justify-content: space-between;
+  height: 100%;
+  background-color: #ffffff;
+  padding: 28px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 768px) {
-  .profile-content {
-    grid-template-columns: 1fr;
-  }
+/* 버튼 스타일 */
+.btn-primary {
+  background-color: #636bd2;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
-  .image-section {
-    margin-bottom: 2rem;
-  }
+.btn-primary:active {
+  transform: scale(0.95); 
+  background-color: #5058cc; 
+}
+
+.btn-primary:hover {
+  transform: scale(1.05); 
+  background-color: #5058cc;
 }
 </style>
