@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import HomeBanklist from "@/components/HomeBanklist.vue";
+import HomeBanklist from "@/components/HomeBankList.vue";
 import HomeCarousel from "@/components/HomeCarousel.vue";
 import HomeChatBot from "@/components/HomeChatBot.vue";
 import HomeCurrency from "@/components/HomeCurrency.vue";
