@@ -35,28 +35,57 @@
             <p class="article-createdat">{{ formattedCreatedAt }}</p>
           </div>
           <div v-if="accountStore.userinfo.nickname == articledetaildata.user.nickname" class="d-flex ga-6 article-update-delete mr-8">
-            <a href="#" class="article-update">수정</a>
-            <a href="#" class="article-delete" @click="deleteArticle(articledetaildata.id)">삭제</a>
+            <a href="#" class="article-update" @click.prevent="showUpdateDialog = true">수정</a>
+            <a href="#" class="article-delete" @click.prevent="showDeleteDialog = true">삭제</a>
           </div>
         </div>
 
         <!-- 글 내용 -->
-        <textarea class="article-content" readonly>
-         {{ articledetaildata.content }}
-       </textarea
-        >
+        <textarea class="article-content" readonly>{{ articledetaildata.content }}</textarea>
       </div>
     </v-card>
 
     <!-- 댓글 창 -->
     <Comment />
+
+    <!-- 삭제 확인 다이얼로그 -->
+    <v-dialog v-model="showDeleteDialog" max-width="400">
+      <v-card>
+        <v-card-text class="pa-6">
+          <div class="text-center mb-4">
+            <v-icon color="error" size="32" class="mb-3">mdi-alert-circle</v-icon>
+            <p style="font-size: 22px">정말로 게시글을 삭제하시겠습니까?</p>
+          </div>
+          <div class="d-flex justify-center gap-button">
+            <v-btn color="error" variant="flat" @click="confirmDelete">삭제</v-btn>
+            <v-btn color="grey" variant="flat" @click="showDeleteDialog = false">취소</v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <!-- 수정 확인 다이얼로그 -->
+    <v-dialog v-model="showUpdateDialog" max-width="400">
+      <v-card>
+        <v-card-text class="pa-6">
+          <div class="text-center mb-4">
+            <v-icon color="primary" size="32" class="mb-3">mdi-pencil</v-icon>
+            <p style="font-size: 22px">게시글을 수정하시겠습니까?</p>
+          </div>
+          <div class="d-flex justify-center gap-button">
+            <v-btn color="primary" variant="flat" @click="confirmUpdate">수정</v-btn>
+            <v-btn color="grey" variant="flat" @click="showUpdateDialog = false">취소</v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script setup>
 import { useArticleStore } from "@/stores/article";
-import { ref, computed, watch } from "vue"; // watch 추가
-import { useRoute } from "vue-router";
+import { ref, computed, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiArrowLeft } from "@mdi/js";
 import Comment from "@/components/Comment.vue";
@@ -67,8 +96,12 @@ const articleStore = useArticleStore();
 const profileStore = useProfileStore();
 const accountStore = useAccountStore();
 const route = useRoute();
+const router = useRouter();
 const articledetaildata = ref(null);
 const isLoading = ref(true);
+const showDeleteDialog = ref(false);
+const showUpdateDialog = ref(false);
+const showCommentDialog = ref(false);
 
 // 게시글 데이터 가져오는 함수
 const fetchArticleDetail = async () => {
@@ -97,19 +130,29 @@ watch(
   }
 );
 
-// 게시글 삭제 함수
-const deleteArticle = async function (articleid) {
-  if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
-    isLoading.value = true;
-    try {
-      const payload = {
-        articleid: articleid,
-      };
-      await articleStore.deleteArticle(payload);
-    } finally {
-      isLoading.value = false;
-    }
+// 게시글 삭제 확인
+const confirmDelete = async () => {
+  isLoading.value = true;
+  try {
+    const payload = {
+      articleid: articledetaildata.value.id,
+    };
+    await articleStore.deleteArticle(payload);
+    showDeleteDialog.value = false;
+  } finally {
+    isLoading.value = false;
   }
+};
+
+// 게시글 수정 확인
+const confirmUpdate = () => {
+  router.push({
+    name: "update",
+    params: {
+      id: articledetaildata.value.id,
+    },
+  });
+  showUpdateDialog.value = false;
 };
 
 // 뒤로가기 함수
@@ -186,11 +229,14 @@ const formattedCreatedAt = computed(() => {
   font-size: 18px;
   width: 100%;
   min-height: 217px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 20px;
   border-color: black;
   border-width: 2px;
   border-style: solid;
   border-radius: 1ch;
+}
+
+.gap-button {
+  gap: 12px; /* 원하는 간격으로 조정 */
 }
 </style>
