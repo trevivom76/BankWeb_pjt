@@ -2,8 +2,8 @@
   <div class="financial-advisor">
     <!-- 헤더 섹션 -->
     <div class="mb-8">
-      <h1 class="text-h4 text-center font-weight-bold mb-2">금융 목표 기반 추천</h1>
-      <p class="text-subtitle-1 text-center text-medium-emphasis">
+      <p class="title">금융 목표 기반 추천</p>
+      <p class="text-subtitle-1">
         고객님의 정보를 입력하시면 최적의 금융상품을 추천해드립니다.
       </p>
     </div>
@@ -14,6 +14,7 @@
         <div class="form-grid">
           <div class="input-group full-width">
             <h2 class="section-title">기본 정보 입력</h2>
+            <div class="divider"></div>
           </div>
           
           <div class="input-group">
@@ -43,8 +44,8 @@
           </div>
 
           <div class="input-group full-width">
-            <div class="divider"></div>
             <h2 class="section-title">자산 및 목표 설정</h2>
+            <div class="divider"></div>
           </div>
 
           <div class="input-group">
@@ -143,40 +144,40 @@
               <div class="product-details">
                 <div class="detail-row">
                   <div class="detail-item">
-                    <span class="label">기본 금리</span>
+                    <span class="label">기본 금리  </span>
                     <span class="value">{{ product.intr_rate }}%</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">우대 금리</span>
+                    <span class="label">우대 금리  </span>
                     <span class="value highlight">최대 {{ product.intr_rate2 }}%</span>
                   </div>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예상 만기 금액</span>
+                  <span class="label">예상 만기 금액  </span>
                   <span class="value">{{ formatCurrency(product.totalAmount) }}원</span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">이자 수익</span>
+                  <span class="label">이자 수익  </span>
                   <span class="value profit">
                     + {{ formatCurrency(product.expectedReturn) }}원
                   </span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">월 납입금</span>
+                  <span class="label">월 납입금  </span>
                   <span class="value">{{ formatCurrency(product.monthlyPayment) }}원</span>
                 </div>
               </div>
 
               <div class="product-conditions" v-if="product.spcl_cnd">
-                <h5 class="conditions-title">우대조건</h5>
+                <h5 class="conditions-title">우대조건  </h5>
                 <p class="conditions-content">{{ product.spcl_cnd }}</p>
               </div>
 
               <div class="product-conditions">
-                <h5 class="conditions-title">가입대상</h5>
+                <h5 class="conditions-title">가입대상  </h5>
                 <p class="conditions-content">{{ product.join_member }}</p>
               </div>
             </div>
@@ -208,40 +209,40 @@
               <div class="product-details">
                 <div class="detail-row">
                   <div class="detail-item">
-                    <span class="label">기본 금리</span>
+                    <span class="label">기본 금리  </span>
                     <span class="value">{{ product.intr_rate }}%</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">우대 금리</span>
+                    <span class="label">우대 금리  </span>
                     <span class="value highlight">최대 {{ product.intr_rate2 }}%</span>
                   </div>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예상 만기 금액</span>
+                  <span class="label">예상 만기 금액  </span>
                   <span class="value">{{ formatCurrency(product.totalAmount) }}원</span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">이자 수익</span>
+                  <span class="label">이자 수익  </span>
                   <span class="value profit">
                     + {{ formatCurrency(product.expectedReturn) }}원
                   </span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예치 금액</span>
+                  <span class="label">예치 금액  </span>
                   <span class="value">{{ formatCurrency(product.principal) }}원</span>
                 </div>
               </div>
 
               <div class="product-conditions" v-if="product.spcl_cnd">
-                <h5 class="conditions-title">우대조건</h5>
+                <h5 class="conditions-title">우대조건  </h5>
                 <p class="conditions-content">{{ product.spcl_cnd }}</p>
               </div>
 
               <div class="product-conditions">
-                <h5 class="conditions-title">가입대상</h5>
+                <h5 class="conditions-title">가입대상  </h5>
                 <p class="conditions-content">{{ product.join_member }}</p>
               </div>
             </div>
@@ -475,21 +476,24 @@ onMounted(async () => {
   transition: all 0.5s ease-in-out;
 }
 
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 6px 40px;
+}
+
 .text-subtitle-1 {
-  font-size: 1.1rem;
-  color: #636ACC;
-  text-align: center;
-  margin-bottom: 2.5rem;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 6px 40px;
 }
 
 /* 폼 섹션 */
 .form-section {
-  background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
-  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+  background: rgb(239, 239, 239);
+  border-radius: 10px;
+  padding: 20px 40px;
   max-width: 1000px;
-  margin: 0 auto 3rem;
   transition: transform 0.3s ease;
 }
 
@@ -500,14 +504,15 @@ onMounted(async () => {
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: 24px;
 }
 
 /* 입력 그룹 스타일링 */
 .input-group {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 }
 
 .input-group.full-width {
@@ -515,17 +520,10 @@ onMounted(async () => {
 }
 
 .section-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #636ACC;
-  margin: 1.5rem 0 1rem;
-}
-
-.divider {
-  height: 2px;
-  background: linear-gradient(to right, #e9ecef, #636ACC, #e9ecef);
-  margin: 2rem 0;
-  border-radius: 2px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #636363;
+  margin: 18px 0px 6px;
 }
 
 /* 입력 필드 스타일링 */
@@ -536,14 +534,15 @@ onMounted(async () => {
 }
 
 label {
-  font-size: 0.95rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #4a5568;
+  color: #2c2c2c;
+  width: 100px;
 }
 
 input, select {
   width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 12px 16px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   font-size: 1rem;
@@ -553,7 +552,7 @@ input, select {
 
 input:focus, select:focus {
   outline: none;
-  border-color: #636ACC;
+  border-color: #5A87F2;
   box-shadow: 0 0 0 3px rgba(99, 106, 204, 0.15);
 }
 
@@ -566,28 +565,27 @@ input:focus, select:focus {
 
 /* 제출 버튼 영역 */
 .submit-section {
-  margin-top: 2.5rem;
+  margin-top: 36px;
   text-align: center;
 }
 
 .submit-button {
-  background: #636ACC;
+  background: #5A87F2;
   color: white;
   border: none;
-  padding: 1rem 2.5rem;
+  padding: 12px 18px;
   border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: inline-flex;
+  display: inline-block;
   align-items: center;
-  gap: 1rem;
   min-width: 220px;
 }
 
 .submit-button:hover {
-  background: #5058cc;
+  background: #5A87F2;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(99, 106, 204, 0.2);
 }
@@ -608,6 +606,13 @@ input:focus, select:focus {
   animation: spin 0.8s linear infinite;
 }
 
+.product-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+}
 /* 결과 섹션 */
 .results-section {
   max-width: 1200px;
@@ -623,52 +628,59 @@ input:focus, select:focus {
 /* 상품 카테고리 */
 .product-category {
   background: white;
-  border-radius: 20px;
+  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
 }
 
-.category-header {
-  padding: 1.5rem;
+.product-name {
+  font-size: 18px;
 }
 
+.company-name {
+  font-size: 14px;
+  font-weight: 400;
+}
 .saving-header {
   background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  padding: 28px 28px;
 }
 
 .deposit-header {
   background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  padding: 28px 28px;
 }
 
 .category-title {
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: 700;
   color: #2c3e50;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 
 /* 상품 카드 */
 .product-card {
   background: white;
   border-radius: 16px;
-  padding: 1.5rem;
-  margin: 1rem;
+  border: #f4f4f4 1px solid;
+  padding: 40px;
+  margin: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }
 
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .top-product {
-  border: 2px solid #636ACC;
+  border: px solid #8b8b8b;
   background: linear-gradient(to right bottom, #ffffff, #f8f9ff);
 }
 
 .rank-badge {
-  background: #636ACC;
+  background: #5A87F2;
   color: white;
   width: 36px;
   height: 36px;
@@ -680,7 +692,7 @@ input:focus, select:focus {
 }
 
 .top-rank {
-  background: linear-gradient(135deg, #636ACC, #5058cc);
+  background: linear-gradient(135deg, #5A87F2, #2e5cc8);
 }
 
 /* 상품 상세 정보 */
@@ -688,12 +700,11 @@ input:focus, select:focus {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  margin: 1rem 0;
 }
 
 .detail-item {
   background: #f8f9fa;
-  padding: 1rem;
+  padding: 12px;
   border-radius: 12px;
   transition: background-color 0.2s ease;
 }
@@ -705,7 +716,6 @@ input:focus, select:focus {
 .label {
   font-size: 0.9rem;
   color: #718096;
-  margin-bottom: 0.4rem;
 }
 
 .value {
@@ -715,7 +725,7 @@ input:focus, select:focus {
 }
 
 .highlight {
-  color: #636ACC;
+  color: #5A87F2;
 }
 
 .profit {

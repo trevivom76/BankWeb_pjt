@@ -13,14 +13,14 @@
             alt="드롭다운 아이콘"
             class="dropdown-icon"
             :class="{ rotated: isDropdownOpen }"
-            >
-          </button>
-          <ul class="list-member" v-show="isDropdownOpen">
-            <li v-for="option in options" :key="option">
-              <button type="button" @click=" selectOption(option)">{{option}}</button>
-            </li>
-          </ul>
-        </article>
+          >
+        </button>
+        <ul class="list-member" v-show="isDropdownOpen">
+          <li v-for="option in options" :key="option">
+            <button type="button" @click=" selectOption(option)">{{option}}</button>
+          </li>
+        </ul>
+      </article>
         <div class="btn-box">
           <div class="input-container">
           <template v-if="selectedOption === '열심히 모은 목돈을 예치할 때'">  
