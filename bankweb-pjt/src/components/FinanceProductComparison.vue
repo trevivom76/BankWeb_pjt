@@ -5,8 +5,8 @@
     <!-- 상품 리스트 -->
     <div>
       <h3 class="subtitle">상품 리스트</h3>
-      <ul class="product-list">
-        <li class="product-item" v-for="product in products" :key="product.id">
+      <div class="static-product-list">
+        <div class="product-item" v-for="product in displayProducts" :key="product.id">
           <label class="checkbox-label">
             <input
               type="checkbox"
@@ -18,24 +18,20 @@
             <span class="custom-checkbox"></span>
             {{ product.fin_prdt_nm }} - {{ product.kor_co_nm }}
           </label>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
 
     <!-- 개월 수 선택 -->
     <div v-if="selectedProducts.length > 0" class="term-select-container">
       <label for="term-select" class="term-label">개월 수 선택:</label>
       <select id="term-select" v-model="selectedTerm" class="term-select">
-        <option v-for="term in availableTerms" :key="term" :value="term">
-          {{ term }}개월
-        </option>
+        <option v-for="term in availableTerms" :key="term" :value="term">{{ term }}개월</option>
       </select>
     </div>
 
     <!-- 경고 메시지 -->
-    <div v-if="selectedProducts.length >= 4" class="error">
-      최대 4개의 상품만 비교할 수 있습니다.
-    </div>
+    <div v-if="selectedProducts.length >= 4" class="error">최대 4개의 상품만 비교할 수 있습니다.</div>
 
     <!-- 그래프 -->
     <div>
@@ -53,10 +49,20 @@ const props = defineProps({
   products: Array,
 });
 
+const displayProducts = ref([]);
 const selectedProducts = ref([]); // 선택된 상품 리스트
 const selectedTerm = ref("12"); // 기본 개월 수
 const availableTerms = ref(["6", "12", "24", "36"]); // 선택 가능한 개월 수
 let chart = null; // 그래프 객체
+
+// props의 변경을 감지하고 내부 상태를 업데이트
+watch(
+  () => props.products,
+  (newProducts) => {
+    displayProducts.value = [...newProducts];
+  },
+  { immediate: true }
+);
 
 // 상품 선택/해제 핸들러
 const toggleProductSelection = (product) => {
@@ -68,7 +74,10 @@ const toggleProductSelection = (product) => {
   } else if (!exists && selectedProducts.value.length < 4) {
     // 새 상품 추가 및 이율 데이터 저장
     const rates = (product.savingoption_set || product.depositoption_set || []).reduce((acc, option) => {
-      acc[option.save_trm] = { intr_rate: option.intr_rate, intr_rate2: option.intr_rate2 };
+      acc[option.save_trm] = {
+        intr_rate: option.intr_rate,
+        intr_rate2: option.intr_rate2,
+      };
       return acc;
     }, {});
 
@@ -137,7 +146,7 @@ watch(selectedTerm, () => {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   color: #333;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -161,31 +170,51 @@ watch(selectedTerm, () => {
   color: #0b5bcb;
 }
 
-/* 상품 리스트 스타일 */
-.product-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* 정적 상품 리스트 스타일 */
+.static-product-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* 스크롤바 스타일링 */
+.static-product-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.static-product-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.static-product-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.static-product-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* 상품 아이템 스타일 */
 .product-item {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.product-item:last-child {
+  border-bottom: none;
 }
 
 .product-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f5f5f5;
 }
 
-/* 커스텀 체크박스 스타일 */
+/* 체크박스 스타일 */
 .checkbox-label {
   display: flex;
   align-items: center;
@@ -251,5 +280,28 @@ watch(selectedTerm, () => {
   border-color: #0b5bcb;
   box-shadow: 0 0 0 2px rgba(11, 91, 203, 0.3);
   outline: none;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .term-select-container {
+    flex-direction: column;
+  }
+
+  .term-label {
+    margin-bottom: 10px;
+  }
 }
 </style>
