@@ -1,5 +1,6 @@
 # 💵 금융 서비스 웹 | BB뱅크
 
+![화면 기록 2024-11-27 오전 5 06 09](https://github.com/user-attachments/assets/9ec3c95c-773c-4652-983b-2504f3a68a3d)
 
 ---
 
@@ -83,13 +84,12 @@
 
 ## 설계 및 데이터베이스 구조 📊
 ### 설계 아키텍처
-(설계 아키텍처 사진넣기)
+![title](https://github.com/user-attachments/assets/436d7ede-bf03-4ca3-9e7f-fe280dd84270)   
 
 <br/>
 
 ### ☁데이터베이스 모델링(ERD)
-
-![title](https://github.com/user-attachments/assets/436d7ede-bf03-4ca3-9e7f-fe280dd84270)   
+![title](https://github.com/user-attachments/assets/39d87e54-9385-4483-b856-c0570b80b877)   
 
 <br/>
 
@@ -98,14 +98,13 @@
 
 [**Figma**](https://www.figma.com/design/dDetrQDZK7zapQfm4PAs4r/bank-web-project?node-id=0-1&t=b9xu6cysizeSGOdb-1)
 
-![title](https://github.com/user-attachments/assets/39d87e54-9385-4483-b856-c0570b80b877)   
+<img width="1117" alt="스크린샷 2024-11-27 오전 5 58 26" src="https://github.com/user-attachments/assets/2b003607-a50d-41ad-bca0-e7dbc90936cc">
 
 
 <br/>
 
 ### 🖼 디자인 목업
-
-<img src="/uploads/1848994ad25765da30fa8ef3684c67bc/캡처.PNG"  width="700" height="370">
+<img width="816" alt="스크린샷 2024-11-27 오전 6 14 10" src="https://github.com/user-attachments/assets/01cd94c2-85ad-4876-affa-cdc5dfbf1696">
 
 <br/>
 <br/>
