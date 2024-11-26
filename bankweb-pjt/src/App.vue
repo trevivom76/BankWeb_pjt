@@ -15,12 +15,11 @@
         <Chatbot />
       </v-card>
     </Transition>
-    
+
     <p class="chatbot-info">AI챗봇에게 물어보세요!</p>
     <v-avatar @click="expand = !expand" class="chatbot-btn" size="90" color="transparent">
-      <img src="@/assets/icon/botIcon.png" height="90px" alt="">
+      <img src="@/assets/icon/botIcon.png" height="90px" alt="" />
     </v-avatar>
-
   </div>
 </template>
 
@@ -28,12 +27,10 @@
 import { RouterView } from "vue-router";
 import CommonHeader from "@/components/CommonHeader.vue";
 import CommonFooter from "@/components/CommonFooter.vue";
-import CommonHeader from "./components/CommonHeader.vue";
 import Chatbot from "@/components/Chatbot.vue";
 import { ref } from "vue";
 
 const expand = ref(false);
-
 </script>
 
 <style scoped>
