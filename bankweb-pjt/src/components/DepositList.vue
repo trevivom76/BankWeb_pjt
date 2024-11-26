@@ -3,37 +3,21 @@
     <h1>정기예금 <span class="color">검색하기</span></h1>
     <div class="select-box">
 
-        <!-- 은행 지점 선택 셀 -->
-        <v-select
-        label="은행지점"
-        :items="banks"
-        v-model="selectedBank"
-        variant="outlined"
-        class="flex-item-bank"
-        ></v-select>
+      <!-- 은행 지점 선택 셀 -->
+      <v-select label="은행지점" :items="banks" v-model="selectedBank" variant="outlined" class="flex-item-bank"></v-select>
 
-        <!-- 예치 기간 선택 셀 -->
-        <v-select
-        label="예치기간"
-        :items="['전체기간', 6, 12, 24, 36]"
-        v-model="selectedDepositPeriod"
-        variant="outlined"
-        class="flex-item-period"
-        ></v-select>
+      <!-- 예치 기간 선택 셀 -->
+      <v-select label="예치기간" :items="['전체기간', 6, 12, 24, 36]" v-model="selectedDepositPeriod" variant="outlined"
+        class="flex-item-period"></v-select>
 
-        <!-- 검색버튼 -->
-        <button
-        @click="clickedSearchButton"
-        class="search-button">
-            검색
-        </button>
+      <!-- 검색버튼 -->
+      <button @click="clickedSearchButton" class="search-button">
+        검색
+      </button>
     </div>
 
     <!-- 정기 예금 테이블 -->
-    <v-data-table-virtual
-    :items="depositItems"
-    :headers="headers"
-    >
+    <v-data-table-virtual :items="depositItems" :headers="headers">
       <template #item="{ item }">
         <tr @click="openModal(item)">
           <td align="center">{{ item["공시 제출월"] }}</td>
@@ -55,21 +39,16 @@
           <p class="product-label">{{ selectedRowItem['금융 상품명'] }}</p>
         </div>
         <template v-if="isLoggedin">
-          <button
-            :class="['btn_like', { on: isLiked }]"
-            @click="toggleLike(selectedRowItem['금융 상품 ID'])"
-          ></button>
+          <button :class="['btn_like', { on: isLiked }]" @click="toggleLike(selectedRowItem['금융 상품 ID'])"></button>
         </template>
       </v-card-title>
       <div>
         <div class="line"></div>
         <v-table>
           <tbody>
-            <tr
-            v-for="(value, key) in selectedRowItem"
-            :key="key"
-            >
-              <template v-if="['금융 회사명', '금융 상품명', '6개월', '12개월', '24개월', '36개월', 'depositRateData', 'depositRateData2', '금융 상품 ID'].includes(key)"></template>
+            <tr v-for="(value, key) in selectedRowItem" :key="key">
+              <template
+                v-if="['금융 회사명', '금융 상품명', '6개월', '12개월', '24개월', '36개월', 'depositRateData', 'depositRateData2', '금융 상품 ID'].includes(key)"></template>
               <template v-else>
                 <td width="20%" class="table-title">{{ key }}</td>
                 <td v-if="key === '최고 한도'">{{ value?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
@@ -78,9 +57,8 @@
             </tr>
           </tbody>
         </v-table>
-        <DepositChart 
-        :intr-rate-data="selectedRowItem['depositRateData']" 
-        :intr-rate2-data="selectedRowItem['depositRateData2']"/>
+        <DepositChart :intr-rate-data="selectedRowItem['depositRateData']"
+          :intr-rate2-data="selectedRowItem['depositRateData2']" />
       </div>
       <v-card-actions>
         <button class="close-button" @click="closeModal">닫기</button>
@@ -111,23 +89,48 @@ const isLiked = ref(false)        // 예금상품 관심항목으로 등록 여�
 const isLoggedin = ref(false)     // 로그인 여부
 
 
-onMounted(() => {
-  financialStore.getDepositDatas();
-  financialStore.getBankDatas();
+// onMounted 수정
+onMounted(async () => {
+  await financialStore.getDepositDatas();
+  await financialStore.getBankDatas();
 
   banks.value.push(...financialStore.banks);
-  
-  // 로그인 여부 확인
-  isLoggedin.value = accountStore.isLogin
+  isLoggedin.value = accountStore.isLogin;
 
-  watch(
-    () => financialStore.deposits,
-    (newDeposits) => {
-      depositItems.value = newDeposits.map(mapDepositData);
-    },
-    { immediate: true }
-  );
+  // 초기 데이터 로드
+  updateDepositItems();
 });
+
+// 필터링 로직을 별도 함수로 분리
+const updateDepositItems = () => {
+  if (!financialStore.deposits) return;
+
+  depositItems.value = financialStore.deposits
+    .filter((deposit) => {
+      const matchesBank =
+        selectedBank.value === "전체은행" ||
+        deposit.kor_co_nm === selectedBank.value;
+
+      const matchesDepositPeriod =
+        selectedDepositPeriod.value === "전체기간" ||
+        deposit.depositoption_set.some(
+          (option) => Number(option.save_trm) === selectedDepositPeriod.value
+        );
+
+      return matchesBank && matchesDepositPeriod;
+    })
+    .map(mapDepositData);
+};
+
+// 검색 버튼 클릭 핸들러 수정
+const clickedSearchButton = async () => {
+  try {
+    await financialStore.getDepositDatas();
+    updateDepositItems();
+  } catch (error) {
+    console.error('데이터 조회 중 오류 발생:', error);
+  }
+};
 
 
 // 테이블 헤더 설정
@@ -189,24 +192,6 @@ const mapDepositData = (deposit) => {
 };
 
 
-// 검색 데이터에 따른 데이터 필터링
-const clickedSearchButton = async () => {
-  await financialStore.getDepositDatas(); 
-  depositItems.value = financialStore.deposits
-    .filter((deposit) => {
-      const matchesBank =
-        selectedBank.value === "전체은행" || deposit.kor_co_nm === selectedBank.value;
-
-      const matchesDepositPeriod =
-        selectedDepositPeriod.value === "전체기간" ||
-        deposit.depositoption_set.some((option) => option.save_trm === String(selectedDepositPeriod.value));
-
-      return matchesBank && matchesDepositPeriod;
-    })
-    .map(mapDepositData);
-};
-
-
 // 모달창 띄우기
 const openModal = async function (item) {
   selectedRowItem.value = item
@@ -228,7 +213,7 @@ const openModal = async function (item) {
 
 
 // 모달창 닫기
-const closeModal = function (){
+const closeModal = function () {
   isModalVisible.value = false
 }
 
@@ -246,7 +231,7 @@ const toggleLike = (depositID) => {
 h1 {
   font-size: 24px;
   font-weight: bold;
-  
+
   padding: 0px 0px 24px 40px;
 }
 
@@ -267,11 +252,11 @@ h1 {
   border-radius: 0px 0px 20px 20px;
 }
 
-.flex-item-bank{
+.flex-item-bank {
   flex: 0 0 40%;
 }
 
-.flex-item-period{
+.flex-item-period {
   flex: 0 0 20%;
 }
 
@@ -306,8 +291,8 @@ h1 {
   flex-wrap: wrap;
   padding: 4px 16px;
 
-  background: #0B5BCB;  
-  border-radius: 20px;  
+  background: #0B5BCB;
+  border-radius: 20px;
 
   font-weight: 600;
   font-size: 12px;
@@ -340,11 +325,11 @@ h1 {
   color: black;
 }
 
-.v-table > .v-table__wrapper > table > tbody > tr > td {
+.v-table>.v-table__wrapper>table>tbody>tr>td {
   padding: 12px 0px;
 }
 
-.v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td {
+.v-table .v-table__wrapper>table>tbody>tr:not(:last-child)>td {
   border-bottom: thin solid #ECEFF5;
 }
 
@@ -353,30 +338,41 @@ td {
 }
 
 .btn_like {
-  width: 40px; 
+  width: 40px;
   height: 40px;
-  background: url("../assets/icon/unlikes_heart.png") no-repeat center / 40px; 
+  background: url("../assets/icon/unlikes_heart.png") no-repeat center / 40px;
   cursor: pointer;
   margin: 5px;
 }
 
 .btn_like.on {
-  background: url("../assets/icon/likes_heart.png") no-repeat center / 40px; 
+  background: url("../assets/icon/likes_heart.png") no-repeat center / 40px;
   animation: beating .5s 1 alternate;
 }
 
 @keyframes beating {
-  0% {transform: scale(1);}
-  40% {transform: scale(1.25);}
-  70% {transform: scale(0.9);}
-  100% {transform: scale(1);}
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.25);
+  }
+
+  70% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .close-button {
   display: block;
-  padding: 10px 20px; 
+  padding: 10px 20px;
   font-size: 16px;
-  font-weight: bold; 
+  font-weight: bold;
   color: #ffffff;
   background-color: #0b5bcb;
   border: none;

@@ -115,6 +115,57 @@
       </form>
     </section>
 
+    <!-- 목표 달성 분석 섹션 -->
+    <section v-if="recommendedProducts.savings.length > 0 || recommendedProducts.deposits.length > 0" 
+             class="goal-analysis-section">
+      <div class="analysis-card">
+        <h3 class="analysis-title">목표 달성 분석</h3>
+        
+        <div class="analysis-content">
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" 
+                   :style="{ width: `${achievementRate}%` }"
+                   :class="{ 'high': achievementRate >= 80, 'medium': achievementRate >= 50 && achievementRate < 80 }">
+              </div>
+            </div>
+            <div class="progress-label">{{ achievementRate }}% 달성 예상</div>
+          </div>
+
+          <div class="analysis-details">
+            <div class="detail-box">
+              <span class="label">목표 금액</span>
+              <span class="value">{{ formatCurrency(userProfile.targetAmount) }}원</span>
+            </div>
+            
+            <div class="detail-box">
+              <span class="label">예상 도달 금액</span>
+              <span class="value">{{ formatCurrency(expectedAmount) }}원</span>
+            </div>
+
+            <div class="detail-box">
+              <span class="label">설정 기간 후 달성률</span>
+              <span class="value">{{ achievementRate }}%</span>
+            </div>
+
+            <div class="detail-box">
+              <span class="label">목표 달성 예상 기간</span>
+              <span class="value">{{ formatTimeToGoal }}</span>
+            </div>
+          </div>
+
+          <div class="analysis-summary">
+            <p v-if="monthsToGoal <= userProfile.targetPeriod" class="success-message">
+              목표 기간 내 달성이 가능합니다!
+            </p>
+            <p v-else class="info-message">
+              목표 달성을 위해 월 {{ getAdditionalSavingsNeeded }}원의 추가 저축이 필요합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 결과 섹션 -->
     <section v-if="recommendedProducts.savings.length > 0 || recommendedProducts.deposits.length > 0" 
              class="results-section">
@@ -144,40 +195,40 @@
               <div class="product-details">
                 <div class="detail-row">
                   <div class="detail-item">
-                    <span class="label">기본 금리  </span>
+                    <span class="label">기본 금리</span>
                     <span class="value">{{ product.intr_rate }}%</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">우대 금리  </span>
+                    <span class="label">우대 금리</span>
                     <span class="value highlight">최대 {{ product.intr_rate2 }}%</span>
                   </div>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예상 만기 금액  </span>
+                  <span class="label">예상 만기 금액</span>
                   <span class="value">{{ formatCurrency(product.totalAmount) }}원</span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">이자 수익  </span>
+                  <span class="label">이자 수익</span>
                   <span class="value profit">
                     + {{ formatCurrency(product.expectedReturn) }}원
                   </span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">월 납입금  </span>
+                  <span class="label">월 납입금</span>
                   <span class="value">{{ formatCurrency(product.monthlyPayment) }}원</span>
                 </div>
               </div>
 
               <div class="product-conditions" v-if="product.spcl_cnd">
-                <h5 class="conditions-title">우대조건  </h5>
+                <h5 class="conditions-title">우대조건</h5>
                 <p class="conditions-content">{{ product.spcl_cnd }}</p>
               </div>
 
               <div class="product-conditions">
-                <h5 class="conditions-title">가입대상  </h5>
+                <h5 class="conditions-title">가입대상</h5>
                 <p class="conditions-content">{{ product.join_member }}</p>
               </div>
             </div>
@@ -209,40 +260,40 @@
               <div class="product-details">
                 <div class="detail-row">
                   <div class="detail-item">
-                    <span class="label">기본 금리  </span>
+                    <span class="label">기본 금리</span>
                     <span class="value">{{ product.intr_rate }}%</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">우대 금리  </span>
+                    <span class="label">우대 금리</span>
                     <span class="value highlight">최대 {{ product.intr_rate2 }}%</span>
                   </div>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예상 만기 금액  </span>
+                  <span class="label">예상 만기 금액</span>
                   <span class="value">{{ formatCurrency(product.totalAmount) }}원</span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">이자 수익  </span>
+                  <span class="label">이자 수익</span>
                   <span class="value profit">
                     + {{ formatCurrency(product.expectedReturn) }}원
                   </span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예치 금액  </span>
+                  <span class="label">예치 금액</span>
                   <span class="value">{{ formatCurrency(product.principal) }}원</span>
                 </div>
               </div>
 
               <div class="product-conditions" v-if="product.spcl_cnd">
-                <h5 class="conditions-title">우대조건  </h5>
+                <h5 class="conditions-title">우대조건</h5>
                 <p class="conditions-content">{{ product.spcl_cnd }}</p>
               </div>
 
               <div class="product-conditions">
-                <h5 class="conditions-title">가입대상  </h5>
+                <h5 class="conditions-title">가입대상</h5>
                 <p class="conditions-content">{{ product.join_member }}</p>
               </div>
             </div>
@@ -254,10 +305,9 @@
 </template>
 
 <script setup>
-// Script content remains mostly the same as the original, just remove Vuetify-specific code
+import { ref, computed, onMounted } from 'vue';
 import { useAccountStore } from '@/stores/account';
 import { useFinancialStore } from '@/stores/financial';
-import { ref, computed, onMounted } from 'vue';
 
 const financialStore = useFinancialStore();
 const accountStore = useAccountStore();
@@ -294,7 +344,7 @@ const isFormValid = computed(() => {
          targetPeriod;
 });
 
-// Formatting functions
+// 통화 포맷팅 함수
 const formatCurrency = (value) => {
   if (!value) return '0';
   return new Intl.NumberFormat('ko-KR').format(Math.round(value));
@@ -310,7 +360,7 @@ const unformatNumber = (value) => {
   return value.toString().replace(/,/g, '');
 };
 
-// Computed properties for formatting
+// 입력값 포맷팅을 위한 computed 속성들
 const formattedMonthlySalary = computed({
   get: () => formatNumber(userProfile.value.monthlySalary),
   set: (value) => {
@@ -339,7 +389,7 @@ const formattedTargetAmount = computed({
   }
 });
 
-// Calculation functions remain the same
+// 이자 계산 함수들
 const calculateSavingInterest = (monthlyPayment, rate, period) => {
   const principal = monthlyPayment * period;
   const interest = (principal * (rate/100) * period/12);
@@ -350,6 +400,7 @@ const calculateDepositInterest = (principal, rate, period) => {
   return principal * (rate/100) * (period/12);
 };
 
+// 나이 제한 확인 함수
 const checkAgeLimit = (product) => {
   if (product.join_deny === 3) {
     const ageMatch = product.join_member.match(/만\s*(\d+).*?(\d+)세/);
@@ -362,6 +413,7 @@ const checkAgeLimit = (product) => {
   return true;
 };
 
+// 최적의 옵션 찾기
 const findBestOption = (product, targetPeriod, isDeposit = false) => {
   const options = isDeposit ? product.depositoption_set : product.savingoption_set;
   
@@ -379,6 +431,76 @@ const findBestOption = (product, targetPeriod, isDeposit = false) => {
   });
 };
 
+// 목표 달성 관련 계산 함수들
+const calculateMonthsToGoal = () => {
+  const bestSavingRate = recommendedProducts.value.savings[0]?.intr_rate2 || 0;
+  const bestDepositRate = recommendedProducts.value.deposits[0]?.intr_rate2 || 0;
+  const averageMonthlyRate = ((bestSavingRate + bestDepositRate) / 2) / 12 / 100;
+
+  let accumulated = userProfile.value.currentAssets;
+  let months = 0;
+  
+  while (accumulated < userProfile.value.targetAmount && months < 600) { // 50년 상한
+    accumulated += userProfile.value.monthlySavings;
+    accumulated *= (1 + averageMonthlyRate);
+    months++;
+  }
+  
+  return months;
+};
+
+const calculateExpectedAmount = () => {
+  const bestSavingRate = recommendedProducts.value.savings[0]?.intr_rate2 || 0;
+  const bestDepositRate = recommendedProducts.value.deposits[0]?.intr_rate2 || 0;
+  const averageMonthlyRate = ((bestSavingRate + bestDepositRate) / 2) / 12 / 100;
+
+  let accumulated = userProfile.value.currentAssets;
+  for (let i = 0; i < userProfile.value.targetPeriod; i++) {
+    accumulated += userProfile.value.monthlySavings;
+    accumulated *= (1 + averageMonthlyRate);
+  }
+  return accumulated;
+};
+
+// 목표 달성 관련 computed 속성들
+const monthsToGoal = computed(() => calculateMonthsToGoal());
+
+const expectedAmount = computed(() => calculateExpectedAmount());
+
+const achievementRate = computed(() => {
+  return Math.min(
+    Math.round((expectedAmount.value / userProfile.value.targetAmount) * 100),
+    100
+  );
+});
+
+const formatTimeToGoal = computed(() => {
+  const months = monthsToGoal.value;
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+  
+  if (years === 0) {
+    return `약 ${remainingMonths}개월`;
+  } else if (remainingMonths === 0) {
+    return `약 ${years}년`;
+  } else {
+    return `약 ${years}년 ${remainingMonths}개월`;
+  }
+});
+
+const getAdditionalSavingsNeeded = computed(() => {
+  if (monthsToGoal.value <= userProfile.value.targetPeriod) {
+    return 0;
+  }
+  
+  const additionalRequired = Math.ceil(
+    (userProfile.value.targetAmount - expectedAmount.value) / userProfile.value.targetPeriod
+  );
+  
+  return formatCurrency(additionalRequired);
+});
+
+// 상품 추천 계산 함수
 const calculateRecommendations = async () => {
   try {
     loading.value = true;
@@ -387,7 +509,7 @@ const calculateRecommendations = async () => {
       .filter(checkAgeLimit)
       .map(product => {
         const option = findBestOption(product, userProfile.value.targetPeriod);
-        if (!option) return
+        if (!option) return null;
         const monthlyPayment = Math.min(
           userProfile.value.monthlySavings,
           product.max_limit || Infinity
@@ -451,6 +573,7 @@ const calculateRecommendations = async () => {
   }
 };
 
+// 초기 데이터 로드
 onMounted(async () => {
   try {
     loading.value = true;
@@ -469,7 +592,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* 메인 컨테이너 */
+/* 기존 스타일 유지 */
 .financial-advisor {
   background-color: #f8f9fa;
   padding: 40px;
@@ -531,6 +654,7 @@ onMounted(async () => {
   position: relative;
   display: flex;
   align-items: center;
+  flex: 1;
 }
 
 label {
@@ -579,13 +703,15 @@ input:focus, select:focus {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: inline-block;
+  display: inline-flex;
   align-items: center;
   min-width: 220px;
+  justify-content: center;
+  gap: 8px;
 }
 
 .submit-button:hover {
-  background: #5A87F2;
+  background: #4A77E2;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(99, 106, 204, 0.2);
 }
@@ -596,24 +722,105 @@ input:focus, select:focus {
   transform: none;
 }
 
-/* 로딩 스피너 */
-.loading-spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 0.8s linear infinite;
+/* 목표 달성 분석 섹션 */
+.goal-analysis-section {
+  margin: 2rem auto;
+  max-width: 1000px;
 }
 
-.product-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 12px;
+.analysis-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
-/* 결과 섹션 */
+
+.analysis-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.progress-container {
+  margin-bottom: 2rem;
+}
+
+.progress-bar {
+  height: 12px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #5A87F2;
+  border-radius: 6px;
+  transition: width 0.5s ease-in-out;
+}
+
+.progress-fill.high {
+  background: #48bb78;
+}
+
+.progress-fill.medium {
+  background: #ecc94b;
+}
+
+.progress-label {
+  text-align: right;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.analysis-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.detail-box {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-box .label {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.detail-box .value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.analysis-summary {
+  background: #f1f5f9;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.success-message {
+  color: #2f855a;
+  font-weight: 600;
+}
+
+.info-message {
+  color: #2b6cb0;
+  font-weight: 600;
+}
+
+/* 결과 섹션 스타일 */
 .results-section {
   max-width: 1200px;
   margin: 3rem auto;
@@ -625,7 +832,6 @@ input:focus, select:focus {
   gap: 2rem;
 }
 
-/* 상품 카테고리 */
 .product-category {
   background: white;
   border-radius: 10px;
@@ -633,135 +839,235 @@ input:focus, select:focus {
   box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
 }
 
-.product-name {
-  font-size: 18px;
-}
-
-.company-name {
-  font-size: 14px;
-  font-weight: 400;
-}
 .saving-header {
   background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-  padding: 28px 28px;
+  padding: 28px;
 }
 
 .deposit-header {
   background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  padding: 28px 28px;
+  padding: 28px;
 }
 
 .category-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 8px;
-}
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 8px;
+  }
 
-/* 상품 카드 */
-.product-card {
-  background: white;
-  border-radius: 16px;
-  border: #f4f4f4 1px solid;
-  padding: 40px;
-  margin: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-}
+  .category-subtitle {
+    font-size: 14px;
+    color: #4a5568;
+  }
 
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-.rank-badge {
-  background: #5A87F2;
-  color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-}
-
-.top-rank {
-  background: linear-gradient(135deg, #5A87F2, #2e5cc8);
-}
-
-/* 상품 상세 정보 */
-.detail-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.detail-item {
-  padding: 12px;
-  border-radius: 12px;
-  transition: background-color 0.2s ease;
-  display: flex;
-  justify-content: space-between;
-}
-
-.detail-item:hover {
-  background: #f1f3f5;
-}
-
-.label {
-  font-size: 0.9rem;
-  color: #718096;
-}
-
-.value {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-
-.highlight {
-  color: #1f4ebc;
-}
-
-.profit {
-  color: #2F855A;
-}
-
-/* 조건 섹션 */
-.product-conditions {
-  background: #f8f9fa;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-top: 1rem;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .financial-advisor {
+  .products-list {
     padding: 1rem;
   }
 
-  .form-section {
-    padding: 1.5rem;
+  .product-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #f4f4f4;
+    padding: 24px;
+    margin: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
   }
 
-  .form-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   }
 
-  .products-container {
-    grid-template-columns: 1fr;
+  .product-card.top-product {
+    border: 2px solid #5A87F2;
+  }
+
+  .product-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .rank-badge {
+    background: #5A87F2;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .rank-badge.top-rank {
+    background: linear-gradient(135deg, #5A87F2, #2e5cc8);
+  }
+
+  .product-info {
+    flex: 1;
+  }
+
+  .product-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+  }
+
+  .company-name {
+    font-size: 14px;
+    color: #718096;
+    margin: 4px 0 0 0;
+  }
+
+  .product-details {
+    margin: 20px 0;
   }
 
   .detail-row {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
   }
-}
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+  .detail-item {
+    padding: 12px;
+    border-radius: 12px;
+    background: #f8fafc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .detail-item.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .detail-item .label {
+    font-size: 14px;
+    color: #64748b;
+  }
+
+  .detail-item .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+  }
+
+  .detail-item .value.highlight {
+    color: #5A87F2;
+  }
+
+  .detail-item .value.profit {
+    color: #2f855a;
+  }
+
+  .product-conditions {
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 12px;
+    margin-top: 16px;
+  }
+
+  .conditions-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a5568;
+    margin: 0 0 8px 0;
+  }
+
+  .conditions-content {
+    font-size: 14px;
+    color: #718096;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* 로딩 스피너 */
+  .loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* 구분선 */
+  .divider {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 8px 0;
+  }
+
+  /* 반응형 디자인 */
+  @media (max-width: 768px) {
+    .financial-advisor {
+      padding: 16px;
+    }
+
+    .form-section {
+      padding: 20px;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .input-group {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .input-group label {
+      width: auto;
+      margin-bottom: 4px;
+    }
+
+    .products-container {
+      grid-template-columns: 1fr;
+    }
+
+    .product-card {
+      margin: 12px 8px;
+      padding: 16px;
+    }
+
+    .detail-row {
+      grid-template-columns: 1fr;
+    }
+
+    .analysis-details {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .category-header {
+      padding: 20px;
+    }
+
+    .product-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .product-info {
+      width: 100%;
+    }
+  }
 </style>

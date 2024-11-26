@@ -288,13 +288,12 @@ def chatbot_response(request):
         
         client = OpenAI(api_key=settings.OPENAI_API_KEY)
         completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": user_message}
             ],
-            temperature=0.7,
-            max_tokens=300
+            temperature=0.7
         )
 
         chatbot_message = completion.choices[0].message.content

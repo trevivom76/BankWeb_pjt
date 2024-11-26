@@ -4,20 +4,24 @@ import { defineStore } from "pinia";
 
 export const useCurrencyStore = defineStore("calculator", () => {
   const API_URL = "http://127.0.0.1:8000";
-  const currency = ref([]);
+  const currencies = ref([]);
+  const error = ref(null);
+  const loading = ref(false);
 
-  const usecurrency = function () {
-    axios({
-      method: "GET",
-      url: `${API_URL}/api/v1/exchanges/`,
-    })
-      .then((res) => {
-        console.log(res.data);
-        currency.value = res.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const fetchCurrencies = async function () {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await axios.get(`${API_URL}/api/v1/exchanges/`);
+      console.log(response.data);
+      currencies.value = response.data.data || [];
+    } catch (err) {
+      console.error(err);
+      error.value = err.response?.data?.message || "데이터를 불러오는 데 실패했습니다.";
+    } finally {
+      loading.value = false;
+    }
   };
-  return { currency, usecurrency };
+
+  return { currencies, error, loading, fetchCurrencies };
 });

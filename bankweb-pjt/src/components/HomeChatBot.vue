@@ -4,13 +4,19 @@
       <img class="chatbot" src="@/assets/icon/MessageIcon.png" alt="챗봇 아이콘" />
       <img src="@/assets/icon/chatbotText.png" alt="챗봇 메세지" />
       <div class="btn-layer">
-        <button class="btn">챗봇 바로가기</button>
+        <button class="btn" @click="clickLink">챗봇 바로가기</button>
       </div>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { emitter } from '@/utils/eventBus';
+
+const clickLink = () => {
+  emitter.emit('open-chatbot');
+}
+</script>
 
 <style scoped>
 .box {
@@ -36,6 +42,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -43,12 +50,16 @@
 }
 
 @keyframes shake {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotate(0deg);
   }
+
   25% {
     transform: rotate(5deg);
   }
+
   75% {
     transform: rotate(-5deg);
   }
@@ -76,25 +87,25 @@ img {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  padding: 6px 16px; 
+  padding: 6px 16px;
   background: #636ACC;
   border-radius: 32px;
   color: white;
   font-size: 13px;
-  font-weight: 700; 
-  cursor: pointer; 
-  width: auto; 
+  font-weight: 700;
+  cursor: pointer;
+  width: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .btn:active {
-  transform: scale(0.95); 
-  background-color: #5058cc; 
+  transform: scale(0.95);
+  background-color: #5058cc;
 }
 
 .btn:hover {
-  transform: scale(1.05); 
+  transform: scale(1.05);
   background-color: #5058cc;
 }
 
@@ -103,7 +114,7 @@ img {
     flex-direction: row;
     gap: 40px;
     justify-content: space-evenly;
-    align-items: flex-end; 
+    align-items: flex-end;
   }
 
   img {
@@ -111,7 +122,7 @@ img {
   }
 
   .btn {
-    font-size: 14px; 
+    font-size: 14px;
     padding: 6px 12px;
   }
 }

@@ -1,123 +1,166 @@
-<!-- <template>
-  <div>
-    <div class="buttons">
-      <v-btn @click="showDaily">일간 추이</v-btn>
-      <v-btn @click="showWeekly">주간 추이</v-btn>
+<template>
+    <div class="exchange-rate-container">
+        <!-- 기간 선택 버튼 그룹 -->
+        <div class="period-selector">
+            <button v-for="period in periods" :key="period.value"
+                :class="['period-btn', { active: selectedPeriod === period.value }]"
+                @click="changePeriod(period.value)">
+                {{ period.label }}
+            </button>
+        </div>
+
+        <!-- 환율 카드 그리드 -->
+        <div class="exchange-grid">
+            <div v-for="(currency, index) in currencies" 
+                :key="currency.code" 
+                class="exchange-card"
+                :style="{ animationDelay: `${index * 100}ms` }"
+            >
+                <div class="card-header">
+                    <h3>{{ currency.name }}</h3>
+                </div>
+
+                <div class="chart-container">
+                    <img :src="`https://ssl.pstatic.net/imgfinance/chart/marketindex/area/${selectedPeriod}/FX_${currency.code}KRW.png`"
+                        :alt="currency.name + ' chart'" 
+                        class="chart-image" />
+                </div>
+            </div>
+        </div>
     </div>
-    <canvas ref="chartCanvas"></canvas>
-  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { Chart } from "chart.js/auto";
+import { ref } from 'vue';
 
-// 그래프 캔버스 참조
-const chartCanvas = ref(null);
+const selectedPeriod = ref('month');
 
-// 일간 추이 데이터
-const dailyRates = ref([
-  { date: "2024-11-16", rate: 1315 },
-  { date: "2024-11-17", rate: 1320 },
-  { date: "2024-11-18", rate: 1318 },
-  { date: "2024-11-19", rate: 1325 },
-  { date: "2024-11-20", rate: 1328 },
-  { date: "2024-11-21", rate: 1330 },
-  { date: "2024-11-22", rate: 1332 },
+const periods = [
+    { label: '1개월', value: 'month' },
+    { label: '3개월', value: 'month3' },
+    { label: '1년', value: 'year' },
+];
+
+const currencies = ref([
+    {
+        name: '미국 달러',
+        code: 'USD',
+    },
+    {
+        name: '일본 엔',
+        code: 'JPY',
+    },
+    {
+        name: '유로',
+        code: 'EUR',
+    },
+    {
+        name: '중국 위안',
+        code: 'CNY',
+    }
 ]);
 
-// 주간 추이 데이터
-const weeklyRates = ref([
-  { week: "Week 1", rate: 1300 },
-  { week: "Week 2", rate: 1310 },
-  { week: "Week 3", rate: 1325 },
-  { week: "Week 4", rate: 1332 },
-]);
-
-// Chart.js 인스턴스
-let chartInstance = null;
-
-// 일간 추이 그래프 표시
-const showDaily = () => {
-  updateChart(
-    dailyRates.value.map((item) => item.date),
-    dailyRates.value.map((item) => item.rate),
-    "일간 환율 추이"
-  );
+const changePeriod = (period) => {
+    selectedPeriod.value = period;
 };
-
-// 주간 추이 그래프 표시
-const showWeekly = () => {
-  updateChart(
-    weeklyRates.value.map((item) => item.week),
-    weeklyRates.value.map((item) => item.rate),
-    "주간 환율 추이"
-  );
-};
-
-// 그래프 업데이트 함수
-const updateChart = (labels, data, label) => {
-  if (chartInstance) {
-    chartInstance.destroy(); // 기존 그래프 삭제
-  }
-  chartInstance = new Chart(chartCanvas.value, {
-    type: "line", // 선형 그래프
-    data: {
-      labels: labels, // X축 데이터
-      datasets: [
-        {
-          label: label, // 데이터 이름
-          data: data, // Y축 데이터
-          borderColor: "#42A5F5", // 선 색상
-          backgroundColor: "rgba(66, 165, 245, 0.2)", // 배경 색상
-          fill: true, // 배경 채우기
-          tension: 0.4, // 곡선 정도
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: true,
-          position: "top", // 범례 위치
-        },
-      },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: label.includes("일간") ? "날짜" : "주", // X축 이름
-          },
-        },
-        y: {
-          title: {
-            display: true,
-            text: "환율 (KRW)", // Y축 이름
-          },
-          beginAtZero: false,
-        },
-      },
-    },
-  });
-};
-
-// 컴포넌트 마운트 시 기본값 설정
-onMounted(() => {
-  showDaily(); // 기본: 일간 추이 표시
-});
 </script>
 
 <style scoped>
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 20px;
+.exchange-rate-container {
+    padding: 24px 0px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-canvas {
-  max-width: 100%;
-  height: 400px;
+.period-selector {
+    display: flex;
+    justify-content: left;
+    gap: 12px;
+    margin-bottom: 24px;
+
+    .period-btn {
+        padding: 8px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+
+        &:hover {
+            background: #f5f5f5;
+        }
+
+        &.active {
+            background: #4c4c4c;
+            color: white;
+            border-color: #212121;
+        }
+    }
 }
-</style> -->
+
+.exchange-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.exchange-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    transition: transform 0.3s ease;
+    animation: slideUp 0.6s ease-out both;
+
+    &:hover {
+        transform: translateY(-4px);
+    }
+
+    .card-header {
+        margin-bottom: 16px;
+
+        h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+    }
+
+    .chart-container {
+        width: 100%;
+        height: 200px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+
+        .chart-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .exchange-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exchange-card {
+        padding: 16px;
+    }
+}
+</style>

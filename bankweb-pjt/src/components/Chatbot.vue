@@ -4,23 +4,14 @@
       <p class="chatbot-title"> <img src="@/assets/icon/bot_profile.png" height="25px">핀과의 메세지 :-)</p>
     </div>
     <div class="chatbot-messages" ref="messagesContainer">
-      <div
-        v-for="(message, index) in messages"
-        :key="index"
-        :class="['chat-message', message.role]"
-      >
+      <div v-for="(message, index) in messages" :key="index" :class="['chat-message', message.role]">
         <div class="message-content" v-html="formatMessage(message.content)">
         </div>
       </div>
     </div>
     <div class="chatbot-input">
-    <input
-      v-model="userMessage"
-      @keyup.enter="sendMessage"
-      type="text"
-      placeholder="메시지를 입력하세요..."
-    />
-    <button @click="sendMessage">전송</button>
+      <input v-model="userMessage" @keyup.enter="sendMessage" type="text" placeholder="메시지를 입력하세요..." />
+      <button @click="sendMessage">전송</button>
     </div>
   </div>
 </template>
@@ -69,10 +60,10 @@ function extractLocation(message) {
   // 위치 관련 키워드 뒤에 오는 지역명 추출
   const locationKeywords = ['근처', '주변', '가까운', '위치', '찾아줘'];
   const message_lower = message.toLowerCase();
-  
+
   // 기본 위치
   let location = "서울 강남구";
-  
+
   // 메시지에서 위치 키워드가 있는지 확인
   for (const keyword of locationKeywords) {
     if (message_lower.includes(keyword)) {
@@ -84,7 +75,7 @@ function extractLocation(message) {
       }
     }
   }
-  
+
   return location;
 }
 
@@ -96,7 +87,7 @@ function sendMessage() {
 
   // 사용자 메시지 추가 후 스크롤
   scrollToBottom();
-  
+
   isTyping.value = true;
 
   const queryLocation = extractLocation(formattedUserMessage);
@@ -112,34 +103,34 @@ function sendMessage() {
     .then((response) => {
       setTimeout(() => {
         const botResponse = response.data.response
-            .replace(/\\n/g, '\n')
-            .trim();
-        
-        messages.value.push({ 
-            role: "assistant", 
-            content: botResponse,
-            data: response.data.data
+          .replace(/\\n/g, '\n')
+          .trim();
+
+        messages.value.push({
+          role: "assistant",
+          content: botResponse,
+          data: response.data.data
         });
 
         scrollToBottom();
-        
+
         // 특별한 데이터 처리
         if (response.data.data.type === 'location') {
-            // 지도 표시 로직
-            showMap(response.data.data.banks);
+          // 지도 표시 로직
+          showMap(response.data.data.banks);
         } else if (response.data.data.type === 'exchange') {
-            // 환율 차트 표시 로직
-            showExchangeChart(response.data.data.exchange_rates);
+          // 환율 차트 표시 로직
+          showExchangeChart(response.data.data.exchange_rates);
         }
-        
+
         isTyping.value = false;
       }, 500);
     })
     .catch(() => {
       isTyping.value = false;
       messages.value.push({
-          role: "assistant",
-          content: "오류가 발생했습니다. 다시 시도해 주세요.",
+        role: "assistant",
+        content: "오류가 발생했습니다. 다시 시도해 주세요.",
       });
     })
     .finally(() => {
@@ -172,9 +163,7 @@ function scrollToBottom() {
   max-width: 400px;
   height: 600px;
   margin: 0 auto;
-  border: 1px solid #ccc;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background: #3F75F2;
   overflow: hidden;
 }
@@ -261,171 +250,196 @@ function scrollToBottom() {
 }
 
 .message-content {
-    max-width: 70%;
-    padding: 10px 15px;
-    border-radius: 20px;
-    background: #e1e1e1;
-    word-wrap: break-word;
-    white-space: pre-line;  /* 줄바꿈 유지 */
-    line-height: 1.4;       /* 줄간격 조정 */
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  background: #e1e1e1;
+  word-wrap: break-word;
+  white-space: pre-line;
+  /* 줄바꿈 유지 */
+  line-height: 1.4;
+  /* 줄간격 조정 */
 }
 
 /* 불릿 포인트가 있는 줄의 들여쓰기 */
-.message-content ::v-deep(br) + • {
-    margin-left: 1em;
+.message-content ::v-deep(br)+• {
+  margin-left: 1em;
 }
 
 /* 목록 스타일 개선 */
 .message-content ::v-deep(ul) {
-    margin: 0.5em 0;
-    padding-left: 1.5em;
+  margin: 0.5em 0;
+  padding-left: 1.5em;
 }
 
 .message-content ::v-deep(li) {
-    margin: 0.3em 0;
+  margin: 0.3em 0;
 }
 
 
 /* 헤더 타이틀 바운스 애니메이션 */
 .animate-bounce {
-    animation: bounce 1s infinite;
+  animation: bounce 1s infinite;
 }
 
 @keyframes bounce {
-    0%, 100% { transform: translateY(-1px); }
-    50% { transform: translateY(1px); }
+
+  0%,
+  100% {
+    transform: translateY(-1px);
+  }
+
+  50% {
+    transform: translateY(1px);
+  }
 }
 
 /* 메시지 페이드 인 애니메이션 */
 .message-fade-enter-active,
 .message-fade-leave-active {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .message-fade-enter-from,
 .message-fade-leave-to {
-    opacity: 0;
-    transform: translateY(20px);
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 /* 타이핑 인디케이터 */
 .typing-indicator {
-    display: flex;
-    gap: 4px;
-    padding: 10px 15px;
-    background: #e1e1e1;
-    border-radius: 20px;
-    width: fit-content;
-    margin: 10px 0;
+  display: flex;
+  gap: 4px;
+  padding: 10px 15px;
+  background: #e1e1e1;
+  border-radius: 20px;
+  width: fit-content;
+  margin: 10px 0;
 }
 
 .typing-indicator span {
-    width: 8px;
-    height: 8px;
-    background: #666;
-    border-radius: 50%;
-    animation: typing 1s infinite ease-in-out;
+  width: 8px;
+  height: 8px;
+  background: #666;
+  border-radius: 50%;
+  animation: typing 1s infinite ease-in-out;
 }
 
-.typing-indicator span:nth-child(1) { animation-delay: 0.1s; }
-.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-.typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+.typing-indicator span:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.3s;
+}
 
 @keyframes typing {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* 입력창 활성화 애니메이션 */
 .chatbot-input input {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .input-active {
-    box-shadow: 0 0 5px rgba(63, 117, 242, 0.5);
-    border-color: #3F75F2 !important;
+  box-shadow: 0 0 5px rgba(63, 117, 242, 0.5);
+  border-color: #3F75F2 !important;
 }
 
 /* 버튼 호버 및 활성화 애니메이션 */
 .chatbot-input button {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .button-active {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .chatbot-input button:hover {
-    background: #205ff1;
-    transform: scale(1.05);
+  background: #205ff1;
+  transform: scale(1.05);
 }
 
 /* 스크롤바 스타일링 */
 .chatbot-messages::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 .chatbot-messages::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
+  background: #f1f1f1;
+  border-radius: 3px;
 }
 
 .chatbot-messages::-webkit-scrollbar-thumb {
-    background: #3F75F2;
-    border-radius: 3px;
+  background: #3F75F2;
+  border-radius: 3px;
 }
 
 .chatbot-messages::-webkit-scrollbar-thumb:hover {
-    background: #205ff1;
+  background: #205ff1;
 }
 
 /* 메시지 호버 효과 */
 .message-content {
-    transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .message-content:hover {
-    transform: scale(1.02);
+  transform: scale(1.02);
 }
 
 /* 챗봇 컨테이너 시작 애니메이션 */
 .chatbot-container {
-    animation: slideIn 0.5s ease-out;
+  animation: slideIn 0.5s ease-out;
 }
 
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 링크 스타일 */
 .message-content ::v-deep(a) {
-    color: #3F75F2;
-    text-decoration: none;
-    transition: all 0.2s ease;
+  color: #3F75F2;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .message-content ::v-deep(a:hover) {
-    text-decoration: underline;
-    opacity: 0.8;
+  text-decoration: underline;
+  opacity: 0.8;
 }
 
 /* 강조 텍스트 애니메이션 */
 .message-content ::v-deep(strong) {
-    background: linear-gradient(120deg, rgba(63, 117, 242, 0.2) 0%, rgba(63, 117, 242, 0.2) 100%);
-    background-repeat: no-repeat;
-    background-size: 100% 0.2em;
-    background-position: 0 88%;
-    transition: all 0.25s ease;
+  background: linear-gradient(120deg, rgba(63, 117, 242, 0.2) 0%, rgba(63, 117, 242, 0.2) 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 0.2em;
+  background-position: 0 88%;
+  transition: all 0.25s ease;
 }
 
 .message-content ::v-deep(strong:hover) {
-    background-size: 100% 100%;
+  background-size: 100% 100%;
 }
 </style>

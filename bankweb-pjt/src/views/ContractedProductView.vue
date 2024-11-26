@@ -394,11 +394,11 @@ const toggleLike = (id) => {
   justify-content: center;
   align-content: center;
   align-items: center;
-  padding: 4px 12px; 
+  padding: 4px 12px;
   background: #5A87F2;
   border-radius: 32px;
   color: white;
-  width: auto; 
+  width: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-size: 11px;
   font-weight: 400;
@@ -408,6 +408,7 @@ const toggleLike = (id) => {
 .card button {
   font-size: 12px;
 }
+
 /* 펼치기 버튼 */
 .expand-btn {
   width: 100%;
@@ -480,11 +481,11 @@ const toggleLike = (id) => {
   color: black;
 }
 
-.v-table > .v-table__wrapper > table > tbody > tr > td {
+.v-table>.v-table__wrapper>table>tbody>tr>td {
   padding: 12px 0px;
 }
 
-.v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td {
+.v-table .v-table__wrapper>table>tbody>tr:not(:last-child)>td {
   border-bottom: thin solid #eceff5;
 }
 
@@ -509,12 +510,15 @@ td {
   0% {
     transform: scale(1);
   }
+
   40% {
     transform: scale(1.25);
   }
+
   70% {
     transform: scale(0.9);
   }
+
   100% {
     transform: scale(1);
   }
