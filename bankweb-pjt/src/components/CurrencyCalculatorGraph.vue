@@ -11,19 +11,15 @@
 
         <!-- 환율 카드 그리드 -->
         <div class="exchange-grid">
-            <div v-for="(currency, index) in currencies" 
-                :key="currency.code" 
-                class="exchange-card"
-                :style="{ animationDelay: `${index * 100}ms` }"
-            >
+            <div v-for="(currency, index) in currencies" :key="currency.code" class="exchange-card"
+                :style="{ animationDelay: `${index * 100}ms` }">
                 <div class="card-header">
                     <h3>{{ currency.name }}</h3>
                 </div>
 
                 <div class="chart-container">
                     <img :src="`https://ssl.pstatic.net/imgfinance/chart/marketindex/area/${selectedPeriod}/FX_${currency.code}KRW.png`"
-                        :alt="currency.name + ' chart'" 
-                        class="chart-image" />
+                        :alt="currency.name + ' chart'" class="chart-image" />
                 </div>
             </div>
         </div>
@@ -148,6 +144,7 @@ const changePeriod = (period) => {
         opacity: 0;
         transform: translateY(50px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

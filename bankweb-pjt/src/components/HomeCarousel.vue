@@ -2,31 +2,22 @@
   <div class="carousel">
     <!-- 슬라이드 트랙 -->
     <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-      <div
-        v-for="(slide, index) in slides"
-        :key="index"
-        class="slide"
-        :class="{ active: index === currentSlide }"
-      >
+      <div v-for="(slide, index) in slides" :key="index" class="slide" :class="{ active: index === currentSlide }">
         <img :src="slide.image" alt="Slide Image" class="slide-image" />
         <div class="text-container">
           <div class="text t1" :class="{ fadeOut: isFadingOut }">{{ slide.title }}</div>
           <div class="text t2" :class="{ fadeOut: isFadingOut }">{{ slide.subtitle }}</div>
           <div class="text t3" :class="{ fadeOut: isFadingOut }">{{ slide.description }}</div>
-          <button class="text t4" :class="{ fadeOut: isFadingOut }" @click="handleButtonClick(slide.ButtonAction)">{{ slide.buttonText }}</button>
+          <button class="text t4" :class="{ fadeOut: isFadingOut }" @click="handleButtonClick(slide.ButtonAction)">{{
+            slide.buttonText }}</button>
         </div>
       </div>
     </div>
 
     <!-- 네비게이션 점 -->
     <div class="slide-nav">
-      <div
-        v-for="(slide, index) in slides"
-        :key="index"
-        class="dot"
-        :class="{ active: index === currentSlide }"
-        @click="goToSlide(index)"
-      ></div>
+      <div v-for="(slide, index) in slides" :key="index" class="dot" :class="{ active: index === currentSlide }"
+        @click="goToSlide(index)"></div>
     </div>
   </div>
 </template>
@@ -82,7 +73,7 @@ const goToSlide = (nextIndex) => {
   setTimeout(() => {
     currentSlide.value = nextIndex;
     isFadingOut.value = false;
-  },500);
+  }, 500);
 };
 
 
@@ -291,6 +282,7 @@ onUnmounted(() => {
     opacity: 0;
     transform: translateX(-50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -303,6 +295,7 @@ onUnmounted(() => {
     opacity: 1;
     transform: translateX(0);
   }
+
   to {
     opacity: 0;
     transform: translateX(-50px);

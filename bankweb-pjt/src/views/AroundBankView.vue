@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-title">
         <img src="@/assets/icon/location.png" alt="" height="30px" class="location-icon">
-        <h1 :style="{ fontWeight: 600 , fontSize: '24px'}">
+        <h1 :style="{ fontWeight: 600, fontSize: '24px' }">
           주변은행
           <span :style="{ color: '#5058cc' }">검색하기</span>
         </h1>
@@ -33,6 +33,7 @@ const handleRegionChange = (selection) => {
 .fade-leave-active {
   transition: opacity 0.5s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -42,9 +43,11 @@ const handleRegionChange = (selection) => {
 .slide-leave-active {
   transition: transform 0.5s ease;
 }
+
 .slide-enter-from {
   transform: translateX(-20px);
 }
+
 .slide-leave-to {
   transform: translateX(20px);
 }
@@ -69,6 +72,7 @@ const handleRegionChange = (selection) => {
   font-weight: 600;
   font-size: 24px;
 }
+
 .highlight {
   color: #5058cc;
 }
@@ -78,6 +82,7 @@ const handleRegionChange = (selection) => {
     transform: scale(0.95);
     opacity: 0;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -85,6 +90,7 @@ const handleRegionChange = (selection) => {
 }
 
 .location-icon:hover {
-  transform: scale(1.2); /* 마우스 오버 시 확대 및 회전 */
+  transform: scale(1.2);
+  /* 마우스 오버 시 확대 및 회전 */
 }
 </style>

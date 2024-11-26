@@ -1,16 +1,11 @@
 <template>
-  <div class = "box">
+  <div class="box">
     <div class="title-box">
       <img src="@/assets/icon/website.png" alt="환율 그래프 아이콘" class="icon">
       <p class="title">은행 웹 사이트</p>
     </div>
     <div class="grid-container">
-      <div 
-        v-for="bank in banks" 
-        :key="bank.name" 
-        class="grid-item" 
-        @click="navigateToBank(bank.url)"
-      >
+      <div v-for="bank in banks" :key="bank.name" class="grid-item" @click="navigateToBank(bank.url)">
         <div class="icon-container">
           <img :src="bank.image" :alt="bank.name" />
         </div>
@@ -51,8 +46,7 @@ const banks = [
 </script>
 
 <style scoped>
-
-.box{
+.box {
   background: #FFFFFF;
   border-radius: 20px;
   padding: 40px;
@@ -125,7 +119,7 @@ const banks = [
 }
 
 .grid-item:hover .icon-container {
-  transform: translateY(-5px); 
+  transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 

@@ -9,7 +9,7 @@
         <div v-for="(searchResultsInfo, index) in paginatedSearchResultsInfos" :key="index" class="custom-card">
           <p class="card-title">
             <a :href="searchResultsInfo.place_url" class="card-link">
-              {{ searchResultsInfo.place_name }} 
+              {{ searchResultsInfo.place_name }}
             </a>
           </p>
 
@@ -257,7 +257,7 @@ const paginatedSearchResultsInfos = computed(() => {
 }
 
 .custom-card:hover {
-  transform: translateY(-5px); 
+  transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -283,7 +283,7 @@ const paginatedSearchResultsInfos = computed(() => {
   color: #0b5bcb;
 }
 
-.telephone{
+.telephone {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -291,7 +291,7 @@ const paginatedSearchResultsInfos = computed(() => {
   margin-top: 4px;
 }
 
-.telephone-img{
+.telephone-img {
   height: 12px;
 }
 </style>

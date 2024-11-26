@@ -23,12 +23,14 @@
 
           <div class="input-group">
             <label>현재 자산</label>
-            <input v-model.number="userProfile.currentAssets" type="number" :placeholder="formatCurrency(userProfile.monthlySavings) | 0" required min="0" />
+            <input v-model.number="userProfile.currentAssets" type="number"
+              :placeholder="formatCurrency(userProfile.monthlySavings) | 0" required min="0" />
           </div>
 
           <div class="input-group">
             <label>월 저축액</label>
-            <input v-model.number="userProfile.monthlySavings" type="number" :placeholder="formatCurrency(userProfile.monthlySavings) | 0" required min="0" />
+            <input v-model.number="userProfile.monthlySavings" type="number"
+              :placeholder="formatCurrency(userProfile.monthlySavings) | 0" required min="0" />
           </div>
 
           <div class="input-group">
@@ -209,8 +211,8 @@ const calculateCompoundInterest = (principal, monthlyDeposit, rate, months) => {
 // 단리 이자 계산
 const calculateSimpleInterest = (principal, monthlyDeposit, rate, months) => {
   const totalDeposit = principal + (monthlyDeposit * months);
-  const interest = (principal * rate/100 * months/12) + 
-                  (monthlyDeposit * rate/100 * (months + 1)/24);
+  const interest = (principal * rate / 100 * months / 12) +
+    (monthlyDeposit * rate / 100 * (months + 1) / 24);
   return totalDeposit + interest;
 };
 
@@ -228,15 +230,15 @@ const generateGrowthData = (initialAmount, monthlyDeposit, rate, months, isCompo
 
   for (let month = 0; month <= months; month++) {
     data.labels.push(`${month}개월`);
-    
+
     if (isCompound) {
       currentAmount = calculateCompoundInterest(initialAmount, monthlyDeposit, rate, month);
     } else {
       currentAmount = calculateSimpleInterest(initialAmount, monthlyDeposit, rate, month);
     }
-    
+
     currentPrincipal = initialAmount + (monthlyDeposit * month);
-    
+
     data.totalAmount.push(currentAmount);
     data.principal.push(currentPrincipal);
     data.interest.push(currentAmount - currentPrincipal);
@@ -329,8 +331,8 @@ const checkAgeLimit = (product) => {
     const ageMatch = product.join_member.match(/만\s*(\d+).*?(\d+)세/);
     if (ageMatch) {
       const [, minAge, maxAge] = ageMatch;
-      return userProfile.value.age >= parseInt(minAge) && 
-             userProfile.value.age <= parseInt(maxAge);
+      return userProfile.value.age >= parseInt(minAge) &&
+        userProfile.value.age <= parseInt(maxAge);
     }
   }
   return true;
@@ -339,7 +341,7 @@ const checkAgeLimit = (product) => {
 // 최적의 금리 옵션 찾기
 const findBestOption = (product, targetPeriod) => {
   const options = product.savingoption_set;
-  
+
   if (!options || !Array.isArray(options)) {
     return null;
   }
@@ -371,7 +373,7 @@ const runSimulation = async () => {
 
         const monthlyAmount = userProfile.value.monthlySavings;
         const initialAmount = userProfile.value.currentAssets;
-        
+
         const growthData = generateGrowthData(
           initialAmount,
           monthlyAmount,
@@ -394,78 +396,78 @@ const runSimulation = async () => {
       })
       .filter(Boolean);
 
-// 상품 정렬 및 추천
-const sortedProducts = userProfile.value.isCompound
-  ? processedProducts.sort((a, b) => b.intr_rate2 - a.intr_rate2)
-  : processedProducts.sort((a, b) => {
-      const scoreA = a.intr_rate2 * (parseInt(a.save_trm) / 12);
-      const scoreB = b.intr_rate2 * (parseInt(b.save_trm) / 12);
-      return scoreB - scoreA;
+    // 상품 정렬 및 추천
+    const sortedProducts = userProfile.value.isCompound
+      ? processedProducts.sort((a, b) => b.intr_rate2 - a.intr_rate2)
+      : processedProducts.sort((a, b) => {
+        const scoreA = a.intr_rate2 * (parseInt(a.save_trm) / 12);
+        const scoreB = b.intr_rate2 * (parseInt(b.save_trm) / 12);
+        return scoreB - scoreA;
+      });
+
+    // 상위 5개 상품 선택
+    const recommendations = sortedProducts.slice(0, 5);
+
+    if (recommendations.length === 0) {
+      throw new Error('추천 가능한 적금 상품이 없습니다.');
+    }
+
+    // 최적의 상품의 성장 데이터로 차트 생성
+    nextTick(() => {
+      createChart(recommendations[0].growthData);
     });
 
-// 상위 5개 상품 선택
-const recommendations = sortedProducts.slice(0, 5);
+    // 결과 저장
+    simulationResults.value = {
+      recommendations,
+      bestProduct: recommendations[0]
+    };
 
-if (recommendations.length === 0) {
-  throw new Error('추천 가능한 적금 상품이 없습니다.');
-}
-
-// 최적의 상품의 성장 데이터로 차트 생성
-nextTick(() => {
-  createChart(recommendations[0].growthData);
-});
-
-// 결과 저장
-simulationResults.value = {
-  recommendations,
-  bestProduct: recommendations[0]
-};
-
-} catch (error) {
-console.error('시뮬레이션 오류:', error);
-} finally {
-loading.value = false;
-}
+  } catch (error) {
+    console.error('시뮬레이션 오류:', error);
+  } finally {
+    loading.value = false;
+  }
 };
 
 // 결과 계산 함수들
 const getFinalAmount = () => {
-if (!simulationResults.value?.bestProduct) return 0;
-return simulationResults.value.bestProduct.finalAmount;
+  if (!simulationResults.value?.bestProduct) return 0;
+  return simulationResults.value.bestProduct.finalAmount;
 };
 
 const getTotalDeposit = () => {
-const months = userProfile.value.period;
-return userProfile.value.currentAssets + 
-     (userProfile.value.monthlySavings * months);
+  const months = userProfile.value.period;
+  return userProfile.value.currentAssets +
+    (userProfile.value.monthlySavings * months);
 };
 
 const getTotalProfit = () => {
-if (!simulationResults.value?.bestProduct) return 0;
-return simulationResults.value.bestProduct.totalInterest;
+  if (!simulationResults.value?.bestProduct) return 0;
+  return simulationResults.value.bestProduct.totalInterest;
 };
 
 // 컴포넌트 마운트 시 초기화
 onMounted(async () => {
-try {
-loading.value = true;
-await financialStore.getSavingDatas();
+  try {
+    loading.value = true;
+    await financialStore.getSavingDatas();
 
-nextTick(() => {
-  if (chartRef.value) {
-    createChart({
-      labels: [],
-      totalAmount: [],
-      principal: [],
-      interest: []
+    nextTick(() => {
+      if (chartRef.value) {
+        createChart({
+          labels: [],
+          totalAmount: [],
+          principal: [],
+          interest: []
+        });
+      }
     });
+  } catch (error) {
+    console.error('데이터 로드 중 오류 발생:', error);
+  } finally {
+    loading.value = false;
   }
-});
-} catch (error) {
-console.error('데이터 로드 중 오류 발생:', error);
-} finally {
-loading.value = false;
-}
 });
 </script>
 
@@ -551,7 +553,8 @@ loading.value = false;
   border-radius: 20px;
   color: #5A87F2;
   font-weight: 500;
-  margin-left: auto;  /* 오른쪽으로 밀어내기 */
+  margin-left: auto;
+  /* 오른쪽으로 밀어내기 */
 }
 
 /* 입력 필드 스타일링 */
@@ -573,7 +576,7 @@ select {
   background-color: white;
 }
 
-input{
+input {
   text-align: right;
 }
 

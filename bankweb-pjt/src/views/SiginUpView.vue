@@ -13,17 +13,13 @@
         <div class="form-group">
           <label for="username">아이디</label>
           <div class="input-wrapper">
-            <input
-              id="username"
-              v-model="username"
-              type="text"
-              :class="{ 'error': !usernameIsOk }"
-              placeholder="아이디를 입력해주세요"
-            />
+            <input id="username" v-model="username" type="text" :class="{ 'error': !usernameIsOk }"
+              placeholder="아이디를 입력해주세요" />
             <span class="input-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
               </svg>
             </span>
           </div>
@@ -33,16 +29,12 @@
         <div class="form-group">
           <label for="name">이름</label>
           <div class="input-wrapper">
-            <input
-              id="name"
-              v-model="name"
-              type="text"
-              :class="{ 'error': !nameIsOk }"
-              placeholder="홍길동"
-            />
+            <input id="name" v-model="name" type="text" :class="{ 'error': !nameIsOk }" placeholder="홍길동" />
             <span class="input-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" stroke="currentColor" stroke-width="2"/>
+                <path
+                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                  stroke="currentColor" stroke-width="2" />
               </svg>
             </span>
           </div>
@@ -52,16 +44,11 @@
         <div class="form-group">
           <label for="nickname">닉네임</label>
           <div class="input-wrapper">
-            <input
-              id="nickname"
-              v-model="nickname"
-              type="text"
-              :class="{ 'error': !nicknameIsOk }"
-              placeholder="닉네임을 입력해주세요"
-            />
+            <input id="nickname" v-model="nickname" type="text" :class="{ 'error': !nicknameIsOk }"
+              placeholder="닉네임을 입력해주세요" />
             <span class="input-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 16l-3-3 3-3m-6 0l-3 3 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M15 16l-3-3 3-3m-6 0l-3 3 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
               </svg>
             </span>
           </div>
@@ -71,21 +58,20 @@
         <div class="form-group">
           <label for="password1">비밀번호</label>
           <div class="input-wrapper">
-            <input
-              id="password1"
-              v-model="password1"
-              :type="show1 ? 'text' : 'password'"
-              :class="{ 'error': !password1IsOk }"
-              placeholder="비밀번호를 입력해주세요"
-            />
+            <input id="password1" v-model="password1" :type="show1 ? 'text' : 'password'"
+              :class="{ 'error': !password1IsOk }" placeholder="비밀번호를 입력해주세요" />
             <span class="input-icon clickable" @click="show1 = !show1">
-              <svg v-if="!show1" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2L22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <svg v-if="!show1" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2L22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path
+                  d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
               </svg>
               <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 5C18.3636 5 22 12 22 12C22 12 18.3636 19 12 19C5.63636 19 2 12 2 12C2 12 5.63636 5 12 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 5C18.3636 5 22 12 22 12C22 12 18.3636 19 12 19C5.63636 19 2 12 2 12C2 12 5.63636 5 12 5Z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
               </svg>
             </span>
           </div>
@@ -96,21 +82,20 @@
         <div class="form-group">
           <label for="password2">비밀번호 확인</label>
           <div class="input-wrapper">
-            <input
-              id="password2"
-              v-model="password2"
-              :type="show2 ? 'text' : 'password'"
-              :class="{ 'error': !password2IsOk }"
-              placeholder="비밀번호를 다시 입력해주세요"
-            />
+            <input id="password2" v-model="password2" :type="show2 ? 'text' : 'password'"
+              :class="{ 'error': !password2IsOk }" placeholder="비밀번호를 다시 입력해주세요" />
             <span class="input-icon clickable" @click="show2 = !show2">
-              <svg v-if="!show2" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2L22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <svg v-if="!show2" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 2L22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path
+                  d="M6.71277 6.7226C3.66479 8.79527 2 12 2 12C2 12 5.63636 19 12 19C14.0503 19 15.8174 18.2734 17.2711 17.2884M11 5.05822C11.3254 5.02013 11.6588 5 12 5C18.3636 5 22 12 22 12C22 12 21.3082 13.3317 20 14.8335"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
               </svg>
               <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 5C18.3636 5 22 12 22 12C22 12 18.3636 19 12 19C5.63636 19 2 12 2 12C2 12 5.63636 5 12 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 5C18.3636 5 22 12 22 12C22 12 18.3636 19 12 19C5.63636 19 2 12 2 12C2 12 5.63636 5 12 5Z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
               </svg>
             </span>
           </div>
@@ -120,16 +105,13 @@
         <div class="form-group">
           <label for="email">이메일</label>
           <div class="input-wrapper">
-            <input
-              id="email"
-              v-model="email"
-              type="email"
-              :class="{ 'error': !emailIsOk }"
-              placeholder="example@naver.com"
-            />
+            <input id="email" v-model="email" type="email" :class="{ 'error': !emailIsOk }"
+              placeholder="example@naver.com" />
             <span class="input-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" stroke="currentColor" stroke-width="2"/>
+                <path
+                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                  stroke="currentColor" stroke-width="2" />
               </svg>
             </span>
           </div>
@@ -138,19 +120,11 @@
         <!-- 체크박스 그룹 -->
         <div class="checkbox-group">
           <label class="checkbox-wrapper">
-            <input 
-              type="checkbox" 
-              v-model="checkbox1"
-              :class="{ 'error': !checkboxsIsOk }"
-            >
+            <input type="checkbox" v-model="checkbox1" :class="{ 'error': !checkboxsIsOk }">
             <span class="checkbox-label">(필수) 서비스 이용 약관 동의</span>
           </label>
           <label class="checkbox-wrapper">
-            <input 
-              type="checkbox" 
-              v-model="checkbox2"
-              :class="{ 'error': !checkboxsIsOk }"
-            >
+            <input type="checkbox" v-model="checkbox2" :class="{ 'error': !checkboxsIsOk }">
             <span class="checkbox-label">(필수) 개인정보 처리 동의</span>
           </label>
         </div>
@@ -205,10 +179,7 @@
         </div>
 
         <!-- 회원가입 버튼 -->
-        <button 
-          class="login-button" 
-          @click.prevent="signUp()"
-        >
+        <button class="login-button" @click.prevent="signUp()">
           회원가입
         </button>
       </div>
@@ -433,12 +404,29 @@ const signUp = function () {
 }
 
 /* 각 폼 그룹에 순차적 애니메이션 적용 */
-.form-group:nth-child(1) { animation-delay: 1.0s; }
-.form-group:nth-child(2) { animation-delay: 1.1s; }
-.form-group:nth-child(3) { animation-delay: 1.2s; }
-.form-group:nth-child(4) { animation-delay: 1.3s; }
-.form-group:nth-child(5) { animation-delay: 1.4s; }
-.form-group:nth-child(6) { animation-delay: 1.5s; }
+.form-group:nth-child(1) {
+  animation-delay: 1.0s;
+}
+
+.form-group:nth-child(2) {
+  animation-delay: 1.1s;
+}
+
+.form-group:nth-child(3) {
+  animation-delay: 1.2s;
+}
+
+.form-group:nth-child(4) {
+  animation-delay: 1.3s;
+}
+
+.form-group:nth-child(5) {
+  animation-delay: 1.4s;
+}
+
+.form-group:nth-child(6) {
+  animation-delay: 1.5s;
+}
 
 label {
   font-size: 14px;
@@ -564,9 +552,17 @@ input.error {
 
 /* 애니메이션 키프레임 */
 @keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes slideUp {
@@ -574,6 +570,7 @@ input.error {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -585,6 +582,7 @@ input.error {
     opacity: 0;
     transform: scale(0.8);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -595,6 +593,7 @@ input.error {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -605,6 +604,7 @@ input.error {
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -612,9 +612,26 @@ input.error {
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-  20%, 40%, 60%, 80% { transform: translateX(2px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-2px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(2px);
+  }
 }
 
 /* 반응형 디자인 */
