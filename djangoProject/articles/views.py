@@ -9,6 +9,7 @@ from articles.serializers import *
 
 # 전체 게시글 목록 조회
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def article_list(request):
     # if request.method == 'GET':
     #     articles = get_list_or_404(Article)
@@ -42,6 +43,7 @@ def create_article(request):
 
 # 단일 게시글 조회, 수정, 삭제
 @api_view(['GET','PUT','DELETE'])
+@permission_classes([IsAuthenticated])
 def article_detail(request, article_pk):
     article = get_object_or_404(Article, id=article_pk)
     if request.method == 'GET':
@@ -66,6 +68,7 @@ def article_detail(request, article_pk):
 
 # 댓글 조회
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def comment_list(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     if request.method == 'GET':

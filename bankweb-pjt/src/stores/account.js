@@ -24,6 +24,8 @@ export const useAccountStore = defineStore(
 
     const userinfo = ref(null);
 
+    const dialog = ref(false);
+
     // 회원가입 요청
     const signUp = async function (payload) {
       const { username, password1, password2, nickname, name, email } = payload;
@@ -129,7 +131,7 @@ export const useAccountStore = defineStore(
       }
     };
 
-    return { token, isLogin, router, userinfo, signUpErrorMessage, loginErrorMessage, signUp, logIn, logOut, refreshUserInfo };
+    return { token, isLogin, router, userinfo, signUpErrorMessage, loginErrorMessage, dialog, signUp, logIn, logOut, refreshUserInfo };
   },
   {
     persist: {
@@ -143,6 +145,7 @@ export const useAccountStore = defineStore(
             // 실패하면 로그아웃
             store.token = null;
             store.userinfo = null;
+            store.isLogin = false;
           });
         }
       },
