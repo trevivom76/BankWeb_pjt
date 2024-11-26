@@ -1,11 +1,8 @@
+# 💵 금융 서비스 웹 | BB뱅크
 
-# 📌 프로젝트 이름 및 소개 🏷️
-- **프로젝트명**: BBank 팀
-- **프로젝트 개요**: 사용자 맞춤 금융 상품 추천 서비스,
-실시간 위치 기반 은행 검색, 챗봇 서비스, 환율 계산기 기능 지원
-- **프로젝트 기간**: 2024.11.18 ~ 2024.11.26
 
 ---
+
 
 ## 목차 📑
 ### [프로젝트 개요](#-프로젝트-이름-및-소개-)
@@ -30,91 +27,123 @@
 
 
 ---
+<br/>
+
+## 📌 프로젝트 이름 및 소개 🏷️
+- **프로젝트명**: BB뱅크
+- **프로젝트 개요**:
+  - 사용자 맞춤 금융 상품 추천 서비스
+  - 예적금 상품 리스트 제공
+  - 실시간 위치 기반 은행 검색
+  - 챗봇 서비스
+  - 환율 계산기 기능 지원
+- **프로젝트 기간**: 2024.11.18 ~ 2024.11.26 [ 9일 ]
+
+<br/>
 
 ## 팀원 정보 및 역할 분담 👥
-### 팀원
+### [팀원]
+
 
 - **심근원(팀장)**:
   - Frontend 개발
-  - 회원가입/로그인
-  - 주변 은행 찾기
-  - 커뮤니티
-  - 프로필 페이지
-  - 금융 상품 추천 페이지
+	  - 회원가입/로그인
+	  - 주변 은행 찾기
+	  - 커뮤니티
+	  - 프로필 페이지
+	  - 금융 상품 추천 페이지
+  - 금융 상품 추천 알고리즘
+  - 발표
 
 - **배지해**: 
   - Backend 개발
-  - 메인페이지
-  - 금리비교 예금/적금 비교
-  - ChatBot 구현
-  - CSS 총괄
+  - Frontend 개발
+	  - 메인페이지
+	  - 금리비교 예금/적금 비교
+	  - ChatBot
+	  - 사용자 관심 상품 페이지
+	  - 환율 계산기의 차트
+	  - CSS 작업
+   - 디자인
 
 - **태성원**:
   - Frontend 개발
-  - 환율 계산기 기능
-  - 메인페이지 UI/UX
-  - Figma 
+    - 환율 계산기
+    - 메인페이지의 은행 리스트
   - README 작성
 
 - **공통**
 	- ERD
+	- Figma 작업
 
----
 
+
+<br/>
+<br/>
 
 ## 설계 및 데이터베이스 구조 📊
 ### 설계 아키텍처
 (설계 아키텍처 사진넣기)
 
+<br/>
 
 ### ☁데이터베이스 모델링(ERD)
 
-( ERD 사진넣기)
+![title](https://github.com/user-attachments/assets/436d7ede-bf03-4ca3-9e7f-fe280dd84270)   
+
+<br/>
+
 
 ### 🎨 Figma
-Figma Link :
-https://www.figma.com/design/dDetrQDZK7zapQfm4PAs4r/bank-web-project?node-id=0-1&t=b9xu6cysizeSGOdb-1
 
-( Figma 사진넣기)
+[**Figma**](https://www.figma.com/design/dDetrQDZK7zapQfm4PAs4r/bank-web-project?node-id=0-1&t=b9xu6cysizeSGOdb-1)
 
-
-
-### 🖼디자인 목업
-
-( 디자인 목업 사진 넣기 )
+![title](https://github.com/user-attachments/assets/39d87e54-9385-4483-b856-c0570b80b877)   
 
 
+<br/>
+
+### 🖼 디자인 목업
+
+<img src="/uploads/1848994ad25765da30fa8ef3684c67bc/캡처.PNG"  width="700" height="370">
+
+<br/>
+<br/>
 
 
 ## 기술 스택 💻
-### Language
+#####  **Language**
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-### Frontend
+##### **Frontend**
 ![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
 ![Vuetify](https://img.shields.io/badge/Vuetify-1867C0?style=for-the-badge&logo=vuetify&logoColor=white)
 ![Pinia](https://img.shields.io/badge/Pinia-yellow?style=for-the-badge&logo=vue.js&logoColor=black)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
 
-### Backend
+##### **Backend**
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![Django Rest Framework](https://img.shields.io/badge/Django%20Rest%20Framework-FF1709?style=for-the-badge&logo=django&logoColor=white)
 ![dj-rest-auth](https://img.shields.io/badge/dj--rest--auth-FF1709?style=for-the-badge&logo=django&logoColor=white)
 ![Pillow](https://img.shields.io/badge/Pillow-3C9A43?style=for-the-badge&logo=pillow&logoColor=white)
 
-### Database
+##### **Database**
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![API](https://img.shields.io/badge/API-005571?style=for-the-badge&logo=api&logoColor=white)
 
-### 기타
+
+##### **기타**
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ![MiridCanvas](https://img.shields.io/badge/MiridCanvas-00C4CC?style=for-the-badge&logo=canva&logoColor=white)
 
 
----
+<br/>
+<br/>
+
+
 
 ## 주요 기능 🛠️
 ### 로그인 및 로그아웃 기능  
