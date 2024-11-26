@@ -2,18 +2,12 @@
   <div>
     <div class="container">
       <div class="button-box">
-        <RouterLink 
-        :to="{name:'depositList'}" 
-        class="button" 
-        exact-active-class="active">
-        정기예금
+        <RouterLink :to="{ name: 'depositList' }" class="button" exact-active-class="active">
+          정기예금
         </RouterLink>
-        <RouterLink 
-        :to="{name:'savingList'}" 
-        class="button" 
-        exact-active-class="active">
-        정기적금
-        </RouterLink> 
+        <RouterLink :to="{ name: 'savingList' }" class="button" exact-active-class="active">
+          정기적금
+        </RouterLink>
       </div>
       <RouterView />
     </div>
@@ -29,6 +23,7 @@ const financialStore = useFinancialStore();
 
 onMounted(() => {
   financialStore.fetchAllData();
+  financialStore.getBankDatas()
 });
 
 </script>
@@ -48,20 +43,21 @@ onMounted(() => {
   padding: 12px 30px;
   width: 120px;
   height: 48px;
-  
+
   border-width: 0.5px 0.5px 0px 0.5px;
   border-style: solid;
   border-color: #DCDCDC;
   border-radius: 20px 20px 0px 0px;
-  
+
   background: #F3F6F8;
   color: #ACACAC;
   font-size: 16px;
   font-weight: bold;
   text-align: center;
   text-decoration: none;
-  
-  transition: background-color 0.3s, color 0.3s; /* 부드러운 효과 추가 */
+
+  transition: background-color 0.3s, color 0.3s;
+  /* 부드러운 효과 추가 */
 }
 
 /* 활성화된 버튼 스타일 */
