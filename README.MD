@@ -211,9 +211,26 @@
 
 ### 프로젝트 주요 화면  
 
+<br/>
 #### 메인 페이지  
-서비스의 주요 기능에 대한 개요와 네비게이션을 제공.  
+: 서비스의 주요 기능에 대한 개요와 네비게이션을 제공.  
+
+##### 메인 화면 구성
 ![메인화면](https://github.com/user-attachments/assets/fac5a86c-beb4-4681-8457-4555bb04c516)
+
+##### 메인 화면 - 예금 계산기
+![메인화면 - 예금 계산기](https://github.com/user-attachments/assets/d5581ccc-2557-48b4-be19-f4bc2c72d5d2)
+
+##### 메인 화면 - 환율 차트
+![메인화면 - 환율 차트(https://github.com/user-attachments/assets/a35de7ff-b83c-4d7b-9670-1104f61c2d3e)
+
+##### 메인 화면 - 은행 사이트
+![메인화면 - 은행 사이트](https://github.com/user-attachments/assets/ce58b638-9e17-47a2-8fdb-9fd409e12ea8)
+
+##### 메인 화면 - 카우셀 이동
+![메인화면 - 카우셀 이동](https://github.com/user-attachments/assets/46b70997-c5dd-409f-9976-536b2dc41e01)
+
+<br/>
 
 #### 로그인 페이지  
 기존 사용자들이 계정으로 접근할 수 있는 로그인 화면.  
