@@ -24,7 +24,7 @@
       AI챗봇에게 물어보세요!
     </p>
 
-    <v-avatar @click="expand = !expand" :class="['chatbot-btn', { 'raised': isFooterVisible }]" size="90"
+    <v-avatar @click="toggleChatbot" :class="['chatbot-btn', { 'raised': isFooterVisible }]" size="90"
       color="transparent">
       <img src="@/assets/icon/botIcon.png" height="90px" alt="" />
     </v-avatar>
@@ -37,13 +37,20 @@ import CommonHeader from "@/components/CommonHeader.vue";
 import CommonFooter from "@/components/CommonFooter.vue";
 import Chatbot from "@/components/Chatbot.vue";
 import { ref, onMounted, onUnmounted } from "vue";
+import { emitter } from '@/utils/eventBus';
 
 const expand = ref(false);
 const footerRef = ref(null);
 const isFooterVisible = ref(false);
 
+let observer;
+
 onMounted(() => {
-  const observer = new IntersectionObserver(
+  emitter.on('open-chatbot', () => {
+    expand.value = true;
+  });
+
+  observer = new IntersectionObserver(
     ([entry]) => {
       isFooterVisible.value = entry.isIntersecting;
     },
@@ -56,10 +63,24 @@ onMounted(() => {
     observer.observe(footerRef.value);
   }
 
-  onUnmounted(() => {
-    observer.disconnect();
-  });
+  window.addEventListener('keydown', handleKeydown);
 });
+
+onUnmounted(() => {
+  observer?.disconnect();
+  emitter.off('open-chatbot');
+  window.removeEventListener('keydown', handleKeydown);
+});
+
+const toggleChatbot = () => {
+  expand.value = !expand.value;
+}
+
+const handleKeydown = (event) => {
+  if (event.key === 'Escape' && expand.value) {
+    expand.value = false;
+  }
+};
 </script>
 
 <style scoped>
