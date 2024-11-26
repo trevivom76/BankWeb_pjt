@@ -40,25 +40,30 @@
           <div class="nav-bar">
             <!-- 금리비교 태그 -->
             <RouterLink :to="{ name: 'depositList' }">
-              <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true" @mouseleave="isHovered1 = false">금리비교</span>
+              <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true"
+                @mouseleave="isHovered1 = false">금리비교</span>
             </RouterLink>
             <!-- 환율계산 태그 -->
             <RouterLink :to="{ name: 'currencycalculator' }">
-              <span class="text" :class="{ hovered: isHovered2 }" @mouseover="isHovered2 = true" @mouseleave="isHovered2 = false">환율계산기</span>
+              <span class="text" :class="{ hovered: isHovered2 }" @mouseover="isHovered2 = true"
+                @mouseleave="isHovered2 = false">환율계산기</span>
             </RouterLink>
             <!-- 주변은행 태그 -->
             <RouterLink :to="{ name: 'aroundbank' }">
-              <span class="text" :class="{ hovered: isHovered3 }" @mouseover="isHovered3 = true" @mouseleave="isHovered3 = false">주변은행</span>
+              <span class="text" :class="{ hovered: isHovered3 }" @mouseover="isHovered3 = true"
+                @mouseleave="isHovered3 = false">주변은행</span>
             </RouterLink>
             <template v-if="isLogin">
               <!-- 커뮤니티 태그 -->
               <RouterLink :to="{ name: 'community' }">
-                <span class="text" :class="{ hovered: isHovered4 }" @mouseover="isHovered4 = true" @mouseleave="isHovered4 = false">커뮤니티</span>
+                <span class="text" :class="{ hovered: isHovered4 }" @mouseover="isHovered4 = true"
+                  @mouseleave="isHovered4 = false">커뮤니티</span>
               </RouterLink>
             </template>
             <template v-else>
               <a href="#" @click="dialog = true">
-                <span class="text" :class="{ hovered: isHovered4 }" @mouseover="isHovered4 = true" @mouseleave="isHovered4 = false">커뮤니티</span>
+                <span class="text" :class="{ hovered: isHovered4 }" @mouseover="isHovered4 = true"
+                  @mouseleave="isHovered4 = false">커뮤니티</span>
               </a>
             </template>
           </div>
@@ -78,12 +83,15 @@
         <v-card>
           <div class="d-flex flex-column justify-center align-center" style="height: 100%; padding: 24px">
             <!-- 아이콘 크기 조정 -->
-            <svg-icon type="mdi" :path="mdiInformationSlabCircleOutline" style="font-size: 150px; margin-bottom: 24px"></svg-icon>
+            <svg-icon type="mdi" :path="mdiInformationSlabCircleOutline"
+              style="font-size: 150px; margin-bottom: 24px"></svg-icon>
 
             <!-- 안내 텍스트 -->
-            <p class="text-center" style="font-size: 22px; margin-bottom: 24px; line-height: 1.5">안전한 금융서비스를 위해 로그인 화면으로 이동합니다</p>
+            <p class="text-center" style="font-size: 22px; margin-bottom: 24px; line-height: 1.5">안전한 금융서비스를 위해 로그인 화면으로
+              이동합니다</p>
             <v-card-text class="d-flex justify-center align-center pt-0" style="flex-grow: 1; margin-top: 16px">
-              <v-progress-circular color="primary" indeterminate disable-shrink size="60" width="8"></v-progress-circular>
+              <v-progress-circular color="primary" indeterminate disable-shrink size="60"
+                width="8"></v-progress-circular>
             </v-card-text>
           </div>
         </v-card>
@@ -286,5 +294,9 @@ a {
   object-fit: cover;
   border-radius: 50%;
   transition: opacity 0.3s ease;
+}
+
+.authenticationTag {
+  cursor: pointer;
 }
 </style>
