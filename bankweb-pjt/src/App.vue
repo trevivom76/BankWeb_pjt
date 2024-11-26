@@ -9,12 +9,14 @@
     </div>
     <!-- 챗봇 -->
     <Transition name="bounce">
-      <v-card v-show="expand" style="position: fixed; bottom: 130px; right: 50px; z-index: 1000" class="expand-component" height="600" width="400">
+      <v-card v-show="expand" style="position: fixed; bottom: 80px; right: 180px; z-index: 1000" class="expand-component" height="600" width="400">
         <Chatbot />
       </v-card>
     </Transition>
+    
     <p class="chatbot-info">AI챗봇에게 물어보세요!</p>
     <v-avatar @click="expand = !expand" class="chatbot-btn" size="90" color="transparent">
+      <img src="@/assets/icon/botIcon.png" height="90px" alt="">
     </v-avatar>
 
   </div>
@@ -70,8 +72,8 @@ const expand = ref(false);
 .chatbot-btn {
   /* background-color: rgba(253, 248, 222, 0.658); */
   position: fixed;
-  bottom: 50px;
-  right: 100px;
+  bottom: 70px;
+  right: 75px;
   z-index: 1000;
   padding: 10px;
   cursor: pointer;
