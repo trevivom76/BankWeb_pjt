@@ -3,41 +3,24 @@
 
 /* 기본 스타일 설정 */
 body {
-  font-family: "Pretendard", sans-serif; /* 전체 폰트를 Pretendard로 설정 */
+  font-family: "Pretendard", sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #ffffff; /* 기본 배경색 (선택 사항) */
+  background-color: #ffffff;
 }
 
 /* 레이아웃 설정 */
-.container,
-header {
-  max-width: calc(100% - 970px); /* 양쪽 485px 간격 유지 (970px = 485px x 2) */
+.container, .header, .footer{
+  max-width: 950px;
   margin: 0 auto;
-  padding: 0; /* 좁은 화면에서도 기본 패딩 제공 */
+  padding: 0;
 }
 
 /* 반응형 레이아웃 */
-@media (max-width: 1440px) {
-  .container,
-  header {
-    max-width: calc(100% - 500px); /* 양쪽 250px 간격 */
-  }
-}
-
-@media (max-width: 1024px) {
-  .container,
-  header {
-    max-width: calc(100% - 200px); /* 양쪽 100px 간격 */
-  }
-}
-
-@media (max-width: 768px) {
-  .container,
-  header {
-    max-width: 100%; /* 작은 화면에서는 꽉 채움 */
-    padding: 0 16px; /* 좌우 여백 최소화 */
+@media (max-width: 1200px) {
+  .container, .header, .footer{
+    max-width: 80%;
   }
 }
 
@@ -75,4 +58,30 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 6px 16px; 
+  background: #636ACC;
+  border-radius: 32px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700; 
+  cursor: pointer; 
+  width: auto; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn:active {
+  transform: scale(0.95); 
+  background-color: #5058cc; 
+}
+
+.btn:hover {
+  transform: scale(1.05); 
+  background-color: #5058cc;
 }

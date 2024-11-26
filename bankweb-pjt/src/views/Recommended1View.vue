@@ -2,8 +2,8 @@
   <div class="financial-advisor">
     <!-- 헤더 섹션 -->
     <div class="mb-8">
-      <h1 class="text-h4 text-center font-weight-bold mb-2">금융 목표 기반 추천</h1>
-      <p class="text-subtitle-1 text-center text-medium-emphasis">
+      <p class="title">금융 목표 기반 추천</p>
+      <p class="text-subtitle-1">
         고객님의 정보를 입력하시면 최적의 금융상품을 추천해드립니다.
       </p>
     </div>
@@ -14,6 +14,7 @@
         <div class="form-grid">
           <div class="input-group full-width">
             <h2 class="section-title">기본 정보 입력</h2>
+            <div class="divider"></div>
           </div>
           
           <div class="input-group">
@@ -43,8 +44,8 @@
           </div>
 
           <div class="input-group full-width">
-            <div class="divider"></div>
             <h2 class="section-title">자산 및 목표 설정</h2>
+            <div class="divider"></div>
           </div>
 
           <div class="input-group">
@@ -143,40 +144,40 @@
               <div class="product-details">
                 <div class="detail-row">
                   <div class="detail-item">
-                    <span class="label">기본 금리</span>
+                    <span class="label">기본 금리  </span>
                     <span class="value">{{ product.intr_rate }}%</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">우대 금리</span>
+                    <span class="label">우대 금리  </span>
                     <span class="value highlight">최대 {{ product.intr_rate2 }}%</span>
                   </div>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예상 만기 금액</span>
+                  <span class="label">예상 만기 금액  </span>
                   <span class="value">{{ formatCurrency(product.totalAmount) }}원</span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">이자 수익</span>
+                  <span class="label">이자 수익  </span>
                   <span class="value profit">
                     + {{ formatCurrency(product.expectedReturn) }}원
                   </span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">월 납입금</span>
+                  <span class="label">월 납입금  </span>
                   <span class="value">{{ formatCurrency(product.monthlyPayment) }}원</span>
                 </div>
               </div>
 
               <div class="product-conditions" v-if="product.spcl_cnd">
-                <h5 class="conditions-title">우대조건</h5>
+                <h5 class="conditions-title">우대조건  </h5>
                 <p class="conditions-content">{{ product.spcl_cnd }}</p>
               </div>
 
               <div class="product-conditions">
-                <h5 class="conditions-title">가입대상</h5>
+                <h5 class="conditions-title">가입대상  </h5>
                 <p class="conditions-content">{{ product.join_member }}</p>
               </div>
             </div>
@@ -208,40 +209,40 @@
               <div class="product-details">
                 <div class="detail-row">
                   <div class="detail-item">
-                    <span class="label">기본 금리</span>
+                    <span class="label">기본 금리  </span>
                     <span class="value">{{ product.intr_rate }}%</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">우대 금리</span>
+                    <span class="label">우대 금리  </span>
                     <span class="value highlight">최대 {{ product.intr_rate2 }}%</span>
                   </div>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예상 만기 금액</span>
+                  <span class="label">예상 만기 금액  </span>
                   <span class="value">{{ formatCurrency(product.totalAmount) }}원</span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">이자 수익</span>
+                  <span class="label">이자 수익  </span>
                   <span class="value profit">
                     + {{ formatCurrency(product.expectedReturn) }}원
                   </span>
                 </div>
                 
                 <div class="detail-item full-width">
-                  <span class="label">예치 금액</span>
+                  <span class="label">예치 금액  </span>
                   <span class="value">{{ formatCurrency(product.principal) }}원</span>
                 </div>
               </div>
 
               <div class="product-conditions" v-if="product.spcl_cnd">
-                <h5 class="conditions-title">우대조건</h5>
+                <h5 class="conditions-title">우대조건  </h5>
                 <p class="conditions-content">{{ product.spcl_cnd }}</p>
               </div>
 
               <div class="product-conditions">
-                <h5 class="conditions-title">가입대상</h5>
+                <h5 class="conditions-title">가입대상  </h5>
                 <p class="conditions-content">{{ product.join_member }}</p>
               </div>
             </div>
@@ -468,49 +469,50 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* 메인 컨테이너 */
 .financial-advisor {
-  background-color: #f5f5f5;
-  min-height: 100vh;
-  padding: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-.header-section {
-  text-align: center;
-  margin-bottom: 3rem;
+  background-color: #f8f9fa;
+  padding: 40px;
+  transition: all 0.5s ease-in-out;
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 24px;
   font-weight: 700;
-  color: #1a237e;
-  margin-bottom: 0.5rem;
+  margin: 6px 0px;
 }
 
-.subtitle {
-  font-size: 1.1rem;
-  color: #666;
+.text-subtitle-1 {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 6px 0px;
 }
 
+/* 폼 섹션 */
 .form-section {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px 40px;
   max-width: 1000px;
-  margin: 0 auto 2rem;
+  transition: transform 0.3s ease;
+}
+
+.form-section:hover {
+  transform: translateY(-4px);
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
+/* 입력 그룹 스타일링 */
 .input-group {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 }
 
 .input-group.full-width {
@@ -518,101 +520,100 @@ onMounted(async () => {
 }
 
 .section-title {
-  font-size: 1.25rem;
+  font-size: 18px;
   font-weight: 600;
-
-  margin-bottom: 1rem;
+  color: #636363;
+  margin: 18px 0px 6px;
 }
 
-.divider {
-  height: 1px;
-  background-color: #e0e0e0;
-  margin: 1rem 0;
-}
-
+/* 입력 필드 스타일링 */
 .input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.input-group label {
+label {
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
+  color: #2c2c2c;
+  width: 100px;
 }
 
-.input-group input,
-.input-group select {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.2s;
+input, select {
   width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: white;
 }
 
-.input-group input:focus,
-.input-group select:focus {
+input:focus, select:focus {
   outline: none;
-  border-color: #1976d2;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  border-color: #5A87F2;
+  box-shadow: 0 0 0 3px rgba(99, 106, 204, 0.15);
 }
 
-.prefix,
 .suffix {
   position: absolute;
-  color: #666;
-  font-size: 0.9rem;
+  right: 1rem;
+  color: #718096;
+  font-weight: 500;
 }
 
-.prefix {
-  left: 0.75rem;
-}
-
-.suffix {
-  right: 0.75rem;
-}
-
+/* 제출 버튼 영역 */
 .submit-section {
+  margin-top: 36px;
   text-align: center;
-  margin-top: 2rem;
 }
 
 .submit-button {
-  background-color: #1976d2;
+  background: #5A87F2;
   color: white;
-  padding: 0.75rem 2.5rem;
   border: none;
-  border-radius: 8px;
+  padding: 12px 18px;
+  border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
-  display: inline-flex;
+  transition: all 0.3s ease;
+  display: inline-block;
   align-items: center;
-  gap: 0.75rem;
-  min-width: 200px;
+  min-width: 220px;
 }
 
 .submit-button:hover {
-  background-color: #1565c0;
+  background: #5A87F2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 106, 204, 0.2);
 }
 
 .submit-button:disabled {
-  background-color: #ccc;
+  background: #e2e8f0;
   cursor: not-allowed;
+  transform: none;
 }
 
+/* 로딩 스피너 */
 .loading-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid #fff;
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
 }
 
+.product-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+/* 결과 섹션 */
 .results-section {
   max-width: 1200px;
   margin: 3rem auto;
@@ -620,185 +621,147 @@ onMounted(async () => {
 
 .products-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 2rem;
 }
 
+/* 상품 카테고리 */
 .product-category {
   background: white;
-  border-radius: 16px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
 }
 
-.category-header {
-  padding: 1.5rem;
+.product-name {
+  font-size: 18px;
 }
 
+.company-name {
+  font-size: 14px;
+  font-weight: 400;
+}
 .saving-header {
-  background-color: #e8f5e9;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  padding: 28px 28px;
 }
 
 .deposit-header {
-  background-color: #e3f2fd;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  padding: 28px 28px;
 }
 
 .category-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1a237e;
-  margin-bottom: 0.5rem;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 8px;
 }
 
-.category-subtitle {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.products-list {
-  padding: 1.5rem;
-}
-
+/* 상품 카드 */
 .product-card {
   background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  margin-bottom: 1.5rem;
+  border-radius: 16px;
+  border: #f4f4f4 1px solid;
+  padding: 40px;
+  margin: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.top-product {
-  border: 2px solid #1976d2;
-}
-
-.product-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .rank-badge {
-  background: #1976d2;
+  background: #5A87F2;
   color: white;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-.product-info {
-  flex: 1;
+.top-rank {
+  background: linear-gradient(135deg, #5A87F2, #2e5cc8);
 }
 
-.product-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-  color: #1a237e;
-}
-
-.company-name {
-  font-size: 0.875rem;
-  color: #666;
-  margin: 0.25rem 0 0 0;
-}
-
-.product-details {
-  margin-bottom: 1.5rem;
-}
-
+/* 상품 상세 정보 */
 .detail-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 12px;
 }
 
 .detail-item {
+  padding: 12px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
 }
 
-.detail-item.full-width {
-  grid-column: 1 / -1;
+.detail-item:hover {
+  background: #f1f3f5;
 }
 
 .label {
-  font-size: 0.875rem;
-  color: #666;
-  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  color: #718096;
 }
 
 .value {
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: #2d3748;
 }
 
 .highlight {
-  color: #1976d2;
-  font-weight: 600;
+  color: #1f4ebc;
 }
 
 .profit {
-  color: #2e7d32;
-  font-weight: 600;
+  color: #2F855A;
 }
 
+/* 조건 섹션 */
 .product-conditions {
-  border-top: 1px solid #eee;
-  padding-top: 1rem;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 12px;
   margin-top: 1rem;
 }
 
-.conditions-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-.conditions-content {
-  font-size: 0.875rem;
-  color: #666;
-  line-height: 1.5;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* 반응형 디자인 */
 @media (max-width: 768px) {
   .financial-advisor {
     padding: 1rem;
   }
 
-  .title {
-    font-size: 2rem;
+  .form-section {
+    padding: 1.5rem;
   }
 
-  .form-section,
-  .product-category {
-    border-radius: 12px;
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .products-container {
     grid-template-columns: 1fr;
   }
 
-  .product-card {
-    margin: 1rem;
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>

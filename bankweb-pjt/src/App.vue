@@ -3,33 +3,34 @@
     <header>
       <CommonHeader />
     </header>
-
     <div class="RouterView-div">
       <RouterView />
     </div>
+    <footer>
+      <CommonFooter />
+    </footer>
     <!-- 챗봇 -->
     <Transition name="bounce">
       <v-card v-show="expand" style="position: fixed; bottom: 80px; right: 180px; z-index: 1000" class="expand-component" height="600" width="400">
         <Chatbot />
       </v-card>
     </Transition>
-    
+
     <p class="chatbot-info">AI챗봇에게 물어보세요!</p>
     <v-avatar @click="expand = !expand" class="chatbot-btn" size="90" color="transparent">
-      <img src="@/assets/icon/botIcon.png" height="90px" alt="">
+      <img src="@/assets/icon/botIcon.png" height="90px" alt="" />
     </v-avatar>
-
   </div>
 </template>
 
 <script setup>
 import { RouterView } from "vue-router";
-import CommonHeader from "./components/CommonHeader.vue";
+import CommonHeader from "@/components/CommonHeader.vue";
+import CommonFooter from "@/components/CommonFooter.vue";
 import Chatbot from "@/components/Chatbot.vue";
 import { ref } from "vue";
 
 const expand = ref(false);
-
 </script>
 
 <style scoped>

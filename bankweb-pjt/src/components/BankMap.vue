@@ -1,31 +1,31 @@
 <template>
-  <div class="d-flex">
+  <div class="map-container">
     <!-- 지도를 표시할 div -->
-
     <div class="redbox red" :class="{ shrink: isClicked }" id="map" style="height: 480px"></div>
 
     <!-- 검색결과 정보리스트 -->
-    <div class="blue" :class="{ expand: isClicked }">
-      <div class="d-flex flex-column justify-center align-center ga-3">
-        <div v-for="(searchResultsInfo, index) in paginatedSearchResultsInfos" :key="index">
-          <v-card width="250" height="111" class="pa-3" color="#F6F6F6">
-            <p :style="{ fontSize: '15px', fontWeight: '600' }">
-              <a :href="searchResultsInfo.place_url" :style="{ textDecoration: 'none', color: 'inherit' }">
-                {{ searchResultsInfo.place_name }}
-              </a>
-            </p>
+    <div class="result-box blue" :class="{ expand: isClicked }">
+      <div class="cards-container">
+        <div v-for="(searchResultsInfo, index) in paginatedSearchResultsInfos" :key="index" class="custom-card">
+          <p class="card-title">
+            <a :href="searchResultsInfo.place_url" class="card-link">
+              {{ searchResultsInfo.place_name }} 
+            </a>
+          </p>
 
-            <p :style="{ fontSize: '11px' }">{{ searchResultsInfo.road_address_name }}</p>
-            <p :style="{ fontSize: '11px' }">(지번) {{ searchResultsInfo.address_name }}</p>
-            <p :style="{ fontSize: '15px', color: '#0B5BCB' }">{{ searchResultsInfo.phone }}</p>
-          </v-card>
+          <p class="card-text">{{ searchResultsInfo.road_address_name }}</p>
+          <p class="card-text">(지번) {{ searchResultsInfo.address_name }}</p>
+          <div v-if="searchResultsInfo.phone" class="telephone">
+            <img class="telephone-img" src="@/assets/icon/Telephone.png" alt="">
+            <p class="card-phone">{{ searchResultsInfo.phone }}</p>
+          </div>
         </div>
 
         <div>
           <!-- 페이지네이션 -->
-          <v-row justify="center">
+          <div class="pagination-container">
             <v-pagination v-model="currentPage" :length="pageCount" :total-visible="5"></v-pagination>
-          </v-row>
+          </div>
         </div>
       </div>
     </div>
@@ -180,14 +180,9 @@ onMounted(() => {
   document.head.appendChild(script);
 });
 
-////////////////////////////////////////////
-// 검색 결과 페이지네이션 으로 출력 관련
-
-// searchResultsInfos
-
 // 반응형 변수와 계산된 속성
 const currentPage = ref(1); // 현재 페이지
-const searchResultsInfosPerPage = 4; // 페이지당 항목 수
+const searchResultsInfosPerPage = 3; // 페이지당 항목 수
 
 // 총 페이지 수 계산
 const pageCount = computed(() => Math.ceil(searchResultsInfos.value.length / searchResultsInfosPerPage));
@@ -198,14 +193,19 @@ const paginatedSearchResultsInfos = computed(() => {
   const end = start + searchResultsInfosPerPage;
   return searchResultsInfos.value.slice(start, end);
 });
+
 </script>
 
 <style scoped>
-/* 스타일이 필요하면 추가 가능합니다 */
+.map-container {
+  display: flex;
+  flex-direction: row;
+}
 
 .redbox {
   height: 500px;
-  border-radius: 5%;
+  border-radius: 3%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .red {
@@ -215,17 +215,83 @@ const paginatedSearchResultsInfos = computed(() => {
 
 .blue {
   transition: 1.55s ease-in-out;
-  position: absolute; /* 절대 위치로 설정 */
-  right: 0; /* 오른쪽에 고정 */
-  width: 0; /* 초기 너비 */
-  overflow: hidden; /* 확장 중 내용이 튀어나오지 않도록 설정 */
+  position: relative;
+  right: 0;
+  width: 0;
+  overflow: hidden;
+  height: 500px;
 }
 
 .shrink {
-  width: 570px; /* 빨간 박스가 줄어드는 너비 */
+  width: 570px;
 }
 
 .expand {
-  width: 360px; /* 파란 박스가 확장되는 너비 */
+  width: 300px;
+}
+
+.result-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.cards-container {
+  overflow-y: auto;
+  height: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  flex-grow: 1;
+}
+
+.custom-card {
+  background-color: #f6f6f6;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  word-wrap: break-word;
+  min-width: 200px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-card:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-text {
+  font-size: 12px;
+  margin: 0px;
+  font-weight: 300;
+}
+
+.card-phone {
+  font-size: 15px;
+  color: #0b5bcb;
+}
+
+.telephone{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.telephone-img{
+  height: 12px;
 }
 </style>

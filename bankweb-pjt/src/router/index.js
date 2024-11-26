@@ -1,5 +1,6 @@
 import DepositList from "@/components/DepositList.vue";
 import SavingList from "@/components/SavingList.vue";
+import { useAccountStore } from "@/stores/account";
 import AroundBankView from "@/views/AroundBankView.vue";
 import CommunityView from "@/views/CommunityView.vue";
 import ContractedProductView from "@/views/ContractedProductView.vue";
@@ -132,6 +133,22 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const accountStore = useAccountStore();
+
+  const isAuthenticated = accountStore.token !== null && accountStore.token !== undefined;
+
+  // 로그인이 필요한 페이지 목록
+  const authRequired = ["community"];
+
+  // 현재 페이지가 인증이 필요한 페이지이고 로그인되지 않은 경우
+  if (authRequired.includes(to.name) && !isAuthenticated) {
+    next({ name: "login" });
+  } else {
+    next();
+  }
 });
 
 export default router;

@@ -3,21 +3,13 @@
     <!-- 로그인 화면 로고 -->
     <h1 class="my-6 text-center">
       Log In to
-      <span class="text-blue-lighten-2">MYBank</span>
+      <span class="text-blue-lighten-2">BB뱅크</span>
     </h1>
 
     <!-- 로그인 card -->
     <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       <!-- 아이디 입력 text-field -->
-      <v-text-field 
-        class="my-2" 
-        :rules="[username_rules.required]" 
-        v-model="username" 
-        color="primary" 
-        label="아이디" 
-        variant="outlined"
-        @keyup.enter="logIn()"
-      ></v-text-field>
+      <v-text-field class="my-2" :rules="[username_rules.required]" v-model="username" color="primary" label="아이디" variant="outlined" @keyup.enter="logIn()"></v-text-field>
 
       <!-- "비밀번호" 입력 text-field -->
       <v-text-field
@@ -37,46 +29,15 @@
       ></v-text-field>
 
       <!-- 서버에서 받은 에러 메시지 -->
-      <v-alert
-        v-if="accountStore.loginErrorMessage?.non_field_errors"
-        class="my-2"
-        type="error"
-        variant="tonal"
-        
-      >
-        아이디 또는 비밀번호가 올바르지 않습니다.
-      </v-alert>
+      <v-alert v-if="accountStore.loginErrorMessage?.non_field_errors" class="my-2" type="error" variant="tonal">아이디 또는 비밀번호가 올바르지 않습니다.</v-alert>
 
       <!-- 입력값 검증 에러 메시지 -->
-      <v-alert 
-        v-if="!usernameIsOk" 
-        class="my-2" 
-        text="아이디를 입력해주세요" 
-        type="error"
-        variant="tonal"
-        
-      ></v-alert>
+      <v-alert v-if="!usernameIsOk" class="my-2" text="아이디를 입력해주세요" type="error" variant="tonal"></v-alert>
 
-      <v-alert 
-        v-if="!passwordIsOk" 
-        class="my-2" 
-        text="비밀번호를 확인해주세요 (8-16자)" 
-        type="error"
-        variant="tonal"
-        
-      ></v-alert>
+      <v-alert v-if="!passwordIsOk" class="my-2" text="비밀번호를 확인해주세요 (8-16자)" type="error" variant="tonal"></v-alert>
 
       <v-hover v-slot="{ isHovering, props }">
-        <v-btn 
-          :class="{ 'on-hover': isHovering }" 
-          :elevation="isHovering ? 10 : 2" 
-          v-bind="props" 
-          class="mb-8" 
-          color="blue-darken-1" 
-          size="large" 
-          block 
-          @click.prevent="logIn()"
-        >
+        <v-btn :class="{ 'on-hover': isHovering }" :elevation="isHovering ? 10 : 2" v-bind="props" class="mb-8" color="blue-darken-1" size="large" block @click.prevent="logIn()">
           <p class="font-weight-bold text-white">Log In</p>
         </v-btn>
       </v-hover>
@@ -146,7 +107,7 @@ const logIn = async function () {
       username: username.value,
       password: password.value,
     };
-    
+
     await accountStore.logIn(payload);
   }
 };

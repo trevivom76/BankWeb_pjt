@@ -29,9 +29,11 @@
         <option v-for="term in availableTerms" :key="term" :value="term">{{ term }}개월</option>
       </select>
     </div>
-
+    
     <!-- 경고 메시지 -->
     <div v-if="selectedProducts.length >= 4" class="error">최대 4개의 상품만 비교할 수 있습니다.</div>
+    
+    <div class="line"></div>
 
     <!-- 그래프 -->
     <div>
@@ -141,12 +143,11 @@ watch(selectedTerm, () => {
 </script>
 
 <style scoped>
-/* 전체 컨테이너 */
+/* 전체 컨테이너 수정 */
 .container {
-  max-width: 800px;
+  height: fit-content; /* 내용물에 맞게 너비 조정 */
   margin: 0 auto;
   padding: 20px;
-  font-family: "Arial", sans-serif;
   color: #333;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -156,33 +157,31 @@ watch(selectedTerm, () => {
 /* 제목 스타일 */
 .title {
   text-align: center;
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 700;
   margin-bottom: 20px;
-  color: #0b5bcb;
+  color: #424242;
 }
 
 /* 부제목 스타일 */
 .subtitle {
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
-  color: #0b5bcb;
+  margin: 16px 0px 12px;
+  color: #424242;
 }
 
 /* 정적 상품 리스트 스타일 */
 .static-product-list {
   max-height: 300px;
   overflow-y: auto;
-  padding-right: 10px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
 /* 스크롤바 스타일링 */
 .static-product-list::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
 
 .static-product-list::-webkit-scrollbar-track {
@@ -214,6 +213,11 @@ watch(selectedTerm, () => {
   background-color: #f5f5f5;
 }
 
+.line {
+  height: 1px;
+  color: #333;
+}
+
 /* 체크박스 스타일 */
 .checkbox-label {
   display: flex;
@@ -227,81 +231,264 @@ watch(selectedTerm, () => {
 }
 
 .custom-checkbox {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #0b5bcb;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #c0c0c0;
   border-radius: 4px;
   margin-right: 10px;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  position: relative;
+  transition: all 0.2s ease;
+  background-color: white;
 }
 
+/* 체크 아이콘 스타일 */
+.custom-checkbox::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+}
+
+/* 체크됐을 때 스타일 */
 .checkbox-input:checked + .custom-checkbox {
-  background-color: #0b5bcb;
-  transform: scale(1.1);
+  background-color: #636ACC;
+  border-color: #636ACC;
+}
+
+.checkbox-input:checked + .custom-checkbox::after {
+  transform: rotate(45deg) scale(1);
+  opacity: 1;
+}
+
+/* 호버 효과 */
+.checkbox-label:hover .custom-checkbox {
+  border-color: #636ACC;
+}
+
+/* 포커스 효과 */
+.checkbox-input:focus + .custom-checkbox {
+  box-shadow: 0 0 0 2px rgba(99, 106, 204, 0.2);
 }
 
 /* 경고 메시지 스타일 */
 .error {
-  color: #d32f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ef4444;
   font-size: 14px;
-  font-weight: bold;
-  margin-top: 10px;
-  text-align: center;
+  font-weight: 500;
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
+  position: relative;
+  animation: errorAppear 0.3s ease-out;
 }
 
-/* 개월 수 선택 */
+/* 경고 아이콘 추가 */
+.error::before {
+  content: '!';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* 호버 효과 */
+.error:hover {
+  background-color: #fee2e2cb;
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* 등장 애니메이션 */
+@keyframes errorAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 쉐이크 애니메이션 - 필요시 추가 */
+.error.shake {
+  animation: errorShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-4px);
+  }
+  40%, 80% {
+    transform: translateX(4px);
+  }
+}
+/* 개월 수 선택 컨테이너 */
 .term-select-container {
-  margin: 20px 0;
-  text-align: center;
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 }
 
+/* 라벨 스타일 */
 .term-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 라벨 아이콘 (옵션) */
+.term-label::before {
+  content: '📅';
   font-size: 16px;
-  font-weight: bold;
-  margin-right: 10px;
 }
 
+/* 셀렉트 박스 컨테이너 */
+.term-select-wrapper {
+  position: relative;
+  width: 120px; /* 너비 증가 */
+}
+
+/* 커스텀 화살표 */
+.term-select-wrapper::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #636ACC;
+  border-bottom: 2px solid #636ACC;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+/* 셀렉트 박스 스타일 */
 .term-select {
-  padding: 10px;
+  width: 100%;
+  padding: 8px 30px 8px 12px; /* 패딩 조정 */
   font-size: 14px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  font-weight: 500;
+  color: #2c3e50;
   background-color: #fff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  appearance: none;
+  transition: all 0.3s ease;
 }
 
+/* 셀렉트 박스 호버 효과 */
 .term-select:hover {
-  border-color: #0b5bcb;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: #636ACC;
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 106, 204, 0.1);
 }
 
+/* 셀렉트 박스 포커스 효과 */
 .term-select:focus {
-  border-color: #0b5bcb;
-  box-shadow: 0 0 0 2px rgba(11, 91, 203, 0.3);
+  border-color: #636ACC;
+  box-shadow: 0 0 0 3px rgba(99, 106, 204, 0.2);
   outline: none;
+  background-color: #fff;
+}
+
+/* 셀렉트 박스 활성화 시 화살표 회전 */
+.term-select:focus + .term-select-wrapper::after {
+  transform: translateY(-30%) rotate(-135deg);
+}
+
+/* 옵션 스타일링 */
+.term-select option {
+  padding: 8px;
+  font-size: 14px;
+  color: #2c3e50;
+  background-color: #fff;
+}
+
+/* 선택된 옵션 스타일 */
+.term-select option:checked {
+  background-color: #636ACC;
+  color: white;
+}
+
+/* 비활성화된 옵션 스타일 */
+.term-select option:disabled {
+  color: #adb5bd;
+  background-color: #f8f9fa;
+}
+
+/* 셀렉트 박스 그룹 스타일 */
+.term-select optgroup {
+  font-weight: 600;
+  color: #495057;
+  padding: 8px 0;
 }
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
-  .container {
-    padding: 10px;
-  }
-
-  .title {
-    font-size: 20px;
-  }
-
-  .subtitle {
-    font-size: 16px;
-  }
-
   .term-select-container {
-    flex-direction: column;
+    flex-direction: row; /* 가로 배열 유지 */
+    align-items: center;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    gap: 12px;
+  }
+
+  .term-select-wrapper {
+    width: 100px; /* 모바일에서의 너비 */
+  }
+
+  .term-select {
+    padding: 8px 25px 8px 10px; /* 모바일에서의 패딩 */
+    font-size: 13px;
   }
 
   .term-label {
-    margin-bottom: 10px;
+    font-size: 14px;
+    margin-bottom: 0; /* 마진 제거 */
   }
+}
+/* 그래프 컨테이너 스타일 */
+.graph-container {
+  width: 100%;
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

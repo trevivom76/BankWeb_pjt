@@ -1,43 +1,19 @@
 <template>
   <div>
     <!-- 버튼 -->
-    <div class="d-flex justify-space-between align-center">
-      <div class="d-flex ga-5">
-        <v-btn 
-          variant="flat" 
-          rounded="lg" 
-          :color="selectedCategory === '전체' ? '#D6EFFF' : undefined"
-          width="100px" 
-          height="31px" 
-          @click="selectedCategory = '전체'"
-        >전체</v-btn>
-        <v-btn 
-          variant="flat" 
-          rounded="lg" 
-          :color="selectedCategory === '질문/답변' ? '#D6EFFF' : undefined"
-          width="100px" 
-          height="31px" 
-          @click="selectedCategory = '질문/답변'"
-        >질문/답변</v-btn>
-        <v-btn 
-          variant="flat" 
-          rounded="lg" 
-          :color="selectedCategory === '팁/정보 공유' ? '#D6EFFF' : undefined"
-          width="100px" 
-          height="31px" 
-          @click="selectedCategory = '팁/정보 공유'"
-        >팁/정보 공유</v-btn>
-        <v-btn 
-          variant="flat" 
-          rounded="lg" 
-          :color="selectedCategory === '자유' ? '#D6EFFF' : undefined"
-          width="100px" 
-          height="31px" 
-          @click="selectedCategory = '자유'"
-        >자유</v-btn>
+    <div class="category-header">
+      <div class="category-tabs">
+        <button
+          v-for="category in categories"
+          :key="category"
+          :class="['category-tab', { active: selectedCategory === category }]"
+          @click="selectedCategory = category"
+        >
+          {{ category }}
+        </button>
       </div>
       <div>
-        <RouterLink :to="{ name: 'create' }" class="delete-a-underline-color">글쓰기</RouterLink>
+        <RouterLink :to="{ name: 'create' }" class="btn delete-a-underline-color">글쓰기</RouterLink>
       </div>
     </div>
 
@@ -48,15 +24,10 @@
 
     <!-- (전체)게시판글 -->
     <div v-else>
-      <v-data-table 
-        :items="filteredArticles" 
-        :headers="headers" 
-        :sort-by="[{ key: 'id', order: 'desc' }]"
-        :no-data-text="'등록된 게시글이 없습니다.'"
-      >
+      <v-data-table-virtual :items="filteredArticles" :headers="headers" item-class="hover-class">
         <!-- 글 제목을 클릭 시 다른 페이지로 이동 -->
         <template v-slot:item.title="{ item }">
-          <RouterLink :to="{ name: 'detail', params: { id: item.id } }" class="delete-a-underline-color">
+          <RouterLink :to="{ name: 'detail', params: { id: item.id } }" class="table-text">
             {{ item.title }}
           </RouterLink>
         </template>
@@ -78,12 +49,12 @@
           <!-- 프로필이미지, 작성자 출력 -->
           <div class="d-flex justify-center align-center">
             <img :src="item.user.profile_img" alt="프로필 이미지" class="profile-img" />
-            <RouterLink to="#" class="delete-a-underline-color ms-2">
+            <RouterLink to="#" class="table-text ms-2">
               {{ item.user.nickname }}
             </RouterLink>
           </div>
         </template>
-      </v-data-table>
+      </v-data-table-virtual>
     </div>
   </div>
 </template>
@@ -93,23 +64,10 @@ import { useArticleStore } from "@/stores/article";
 import { computed, onMounted, ref } from "vue";
 
 const articleStore = useArticleStore();
-const isLoading = ref(true);
 
-// 어떤 버튼이 선택되어있는지 default는 "전체"
+const isLoading = ref(true);
 const selectedCategory = ref("전체");
 
-// 모든 게시물 가져오기
-onMounted(async () => {
-  try {
-    await articleStore.getArticles();
-  } catch (error) {
-    console.error('게시글 로딩 중 에러:', error);
-  } finally {
-    isLoading.value = false;
-  }
-});
-
-// Data Table의 헤더 위치와 이름 설정
 const headers = ref([
   { title: "글 제목", align: "start", key: "title", width: "50%" },
   { title: "카테고리", align: "center", key: "category", width: "35%" },
@@ -117,7 +75,8 @@ const headers = ref([
   { title: "", key: "id", align: "center", sortable: false, width: "0%"},
 ]);
 
-// 선택된 카테고리에 맞춰 필터링된 게시물 리스트
+const categories = ["전체", "질문/답변", "팁/정보 공유", "자유"];
+
 const filteredArticles = computed(() => {
   const articles = articleStore.articles || [];  // 없으면 빈 배열 사용
   
@@ -128,22 +87,26 @@ const filteredArticles = computed(() => {
   }
 });
 
-// 카테고리 변경 시에도 로딩 상태 처리
-const changeCategory = async (category) => {
-  isLoading.value = true;
+
+onMounted(async () => {
   try {
-    selectedCategory.value = category;
-    // 필요한 경우 여기에 카테고리 변경과 관련된 비동기 작업 추가
+    await articleStore.getArticles();
   } finally {
     isLoading.value = false;
   }
-};
+});
 </script>
 
 <style scoped>
 .delete-a-underline-color {
   text-decoration: none;
-  color: inherit;
+}
+
+.table-text {
+  text-decoration: none;
+  color: #424242;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .profile-img {
@@ -195,10 +158,40 @@ const changeCategory = async (category) => {
   align-items: center;
 }
 
-/* id 컬럼 숨기기 */
-:deep(.v-data-table__th:last-child),
-:deep(.v-data-table__td:last-child) {
-  display: none !important;
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.category-tab {
+  background-color: #f5f5f5; /* 기본 회색 */
+  border: 1px solid #dcdcdc;
+  color: #424242;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, color 0.3s;
+  white-space: nowrap;
+}
+
+.category-tab:hover {
+  background-color: #e0e0e0; /* 호버 시 밝은 회색 */
+  transform: scale(1.05);
+}
+
+.category-tab.active {
+  background-color: #424242; /* 활성화 시 진한 파란색 */
+  color: #ffffff;
+  border-color: #303030;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 </style>

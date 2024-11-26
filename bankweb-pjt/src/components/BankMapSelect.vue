@@ -1,20 +1,71 @@
 <template>
   <div>
-    <div class="d-flex justify-start align-start ga-7">
+    <div class="select-container">
       <!-- 시/도 선택 -->
-      <v-select class="custom-select" v-model="selectedCity" clearable label="시/도" :items="Object.keys(cities)" variant="outlined" width="200px" @update:model-value="handleCityChange"></v-select>
-
+      <div class="select-box">
+        <p class="select-text">광역시/도</p>
+        <article class="cont-select">
+          <button class="btn-select" @click="toggleDropDown1">
+            {{ selectedCity }}
+            <img
+            src="@/assets/icon/dropdownIcon.png"
+            alt="드롭다운 아이콘"
+            class="dropdown-icon"
+            :class="{ rotated: isDropdownOpen1 }"
+            >
+        </button>
+        <ul class="list-member" v-show="isDropdownOpen1">
+          <li v-for="city in Object.keys(cities)" :key="city">
+            <button type="button" @click=" selectCity(city)">{{city}}</button>
+          </li>
+        </ul>
+      </article>
+    </div>
       <!-- 시/군/구 선택 -->
-      <v-select v-model="selectedDistrict" clearable label="시/군/구" :items="districts" variant="outlined" width="200px" :disabled="!selectedCity"></v-select>
-
+      <div class="select-box">
+        <p class="select-text">시/군/구</p>
+        <article class="cont-select">
+          <button class="btn-select" @click="toggleDropDown2" :disabled="selectedCity === '광역시/도를 선택해주세요.'">
+            {{ selectedDistrict }}
+            <img
+              src="@/assets/icon/dropdownIcon.png"
+              alt="드롭다운 아이콘"
+              class="dropdown-icon"
+              :class="{ rotated: isDropdownOpen2 }"
+            >
+          </button>
+          <ul class="list-member" v-show="isDropdownOpen2">
+            <li v-for="districts in cities[selectedCity]" :key="districts">
+              <button type="button" @click=" selectDistrict(districts)">{{districts}}</button>
+            </li>
+          </ul>
+        </article>
+      </div>
       <!-- 은행 선택 -->
-      <v-select v-model="selectedBank" clearable label="은행" :items="banks" variant="outlined" width="310px"></v-select>
-
+      <div class="select-box">
+        <p class="select-text">은행명</p>
+      <article class="cont-select">
+        <button class="btn-select" @click="toggleDropDown3">
+          {{ selectedBank }}
+          <img
+            src="@/assets/icon/dropdownIcon.png"
+            alt="드롭다운 아이콘"
+            class="dropdown-icon"
+            :class="{ rotated: isDropdownOpen3 }"
+          >
+        </button>
+        <ul class="list-member" v-show="isDropdownOpen3">
+          <li v-for="bank in banks" :key="bank">
+            <button type="button" @click=" selectBank(bank)">{{bank}}</button>
+          </li>
+        </ul>
+      </article>
+      </div>
       <v-hover v-slot="{ isHovering, props }">
-        <v-btn :class="{ 'on-hover': isHovering }" :elevation="isHovering ? 10 : 2" v-bind="props" color="blue" width="92px" height="56px" @click.prevent="emitChange()">
-          <svg-icon type="mdi" :path="mdiMagnify"></svg-icon>
-          <p>검색</p>
-        </v-btn>
+        <button :class="{ 'on-hover': isHovering }" :elevation="isHovering ? 10 : 2" v-bind="props" class="btn flex" @click.prevent="emitChange()">
+          <svg-icon type="mdi" :path="mdiMagnify" class="img"</svg-icon>
+          <p>검 색</p>
+        </button>
       </v-hover>
     </div>
   </div>
@@ -157,29 +208,192 @@ const cities = {
 const banks = ["KB국민은행", "신한은행", "우리은행", "하나은행", "NH농협은행", "IBK기업은행", "SC제일은행", "씨티은행", "KDB산업은행", "케이뱅크", "카카오뱅크", "토스뱅크"];
 
 // 반응형 상태 정의
-const selectedCity = ref("서울특별시");
-const selectedDistrict = ref("강남구");
-const selectedBank = ref("국민은행");
-
-// 선택된 도시에 따른 구/군 목록 계산
-const districts = computed(() => {
-  return selectedCity.value ? cities[selectedCity.value] : [];
-});
-
-// 이벤트 핸들러
-const handleCityChange = () => {
-  selectedDistrict.value = ""; // 도시가 변경되면 구/군 선택 초기화
-};
+const selectedCity = ref("광역시/도를 선택해주세요.");
+const selectedDistrict = ref("시/군/구를 선택해주세요.");
+const selectedBank = ref("은행을 선택해주세요.");
+const isDropdownOpen1 = ref(false)
+const isDropdownOpen2 = ref(false)
+const isDropdownOpen3 = ref(false)
 
 // 선택 변경사항을 부모 컴포넌트에 전달
 const emit = defineEmits(["change"]);
+
 const emitChange = () => {
-  emit("change", {
-    city: selectedCity.value,
-    district: selectedDistrict.value,
-    bank: selectedBank.value,
-  });
+  if ( selectedCity.value === "광역시/도를 선택해주세요." || selectedDistrict.value === "시/군/구를 선택해주세요." || selectedBank.value === "은행을 선택해주세요.") {
+    window.alert("검색 옵션을 선택해주세요.")
+  } else {
+    emit("change", {
+      city: selectedCity.value,
+      district: selectedDistrict.value,
+      bank: selectedBank.value,
+    });
+  }
 };
+
+const toggleDropDown1 = () => {
+  isDropdownOpen1.value = !isDropdownOpen1.value
+}
+
+const toggleDropDown2 = () => {
+  isDropdownOpen2.value = !isDropdownOpen2.value
+}
+
+const toggleDropDown3 = () => {
+  isDropdownOpen3.value = !isDropdownOpen3.value
+}
+
+const selectCity = (option) => {
+  selectedCity.value = option
+  isDropdownOpen1.value = false
+}
+
+const selectDistrict = (option) => {
+  selectedDistrict.value = option
+  isDropdownOpen2.value = false
+}
+
+const selectBank = (option) => {
+  selectedBank.value = option
+  isDropdownOpen3.value = false
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.select-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 16px;
+}
+
+.select-box {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  max-width: 250px;
+  margin: 0px 10px;
+}
+
+.select-text {
+  padding-left: 4px;
+  padding-bottom: 4px;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.cont-select {
+  position: relative;
+  width: 100%;
+}
+
+.btn-select {
+  display: flex;
+  width: 100%;
+  padding:8px 12px;
+  font-size: 15px;
+  line-height: 13px;
+  font-weight: 600;
+  border: 1px solid #C4C4C4;
+  color: #424242;
+  box-sizing: border-box;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-select:disabled {
+  color: #4242425c;
+}
+
+/* 드롭다운 리스트 */
+.list-member {
+  list-style-type: none;
+  position: absolute;
+  width: 100%;
+  top: 50px;
+  left: 0;
+  padding: 0;
+  border: 1px solid #C4C4C4;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.search-button-container {
+  margin-top: auto; /* 버튼을 컨테이너의 가장 아래로 밀어냄 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* v-show 상태 활성화 */
+.list-member[v-show="true"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.list-member[v-show="false"] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.list-member li {
+  padding: 8px;
+}
+
+.list-member li button {
+  width: 100%;
+  padding: 8px 4px;
+  border: none;
+  font-size: 13px;
+  line-height: 13px;
+  background-color: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: #676767;
+}
+
+.list-member li button:hover {
+  background-color: #ffffff87;
+  border-radius: 4px;
+  color: #424242;
+  font-weight: 600;
+}
+
+.dropdown-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease; /* 부드러운 회전 애니메이션 */
+}
+
+/* 드롭다운 열림 상태에서 아이콘 회전 */
+.dropdown-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.flex {
+  align-items: center;
+  gap: 2px;
+}
+
+.img {
+  width: 16px;
+}
+</style>
