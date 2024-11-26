@@ -389,6 +389,7 @@ const clickedResult = () => {
 .input-group {
   display: inline-flex;
   align-items: center;
+  padding-bottom: 8px;
   gap: 8px; /* Input과 텍스트 간 간격 */
   flex-wrap: nowrap; /* 화면 크기에 따라 줄바꿈 허용 */
 }
@@ -427,7 +428,6 @@ const clickedResult = () => {
 
 /* 배경 애니메이션 */
 .input:focus{
-  background-color: rgba(81, 110, 224, 0.129); /* 배경색 */
   transition: width 0.3s ease; /* 부드러운 확장 */
 }
 

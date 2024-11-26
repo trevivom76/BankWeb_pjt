@@ -11,27 +11,19 @@
 
         <!-- 환율 카드 그리드 -->
         <div class="exchange-grid">
-            <div v-for="currency in currencies" :key="currency.code" class="exchange-card">
+            <div v-for="(currency, index) in currencies" 
+                :key="currency.code" 
+                class="exchange-card"
+                :style="{ animationDelay: `${index * 100}ms` }"
+            >
                 <div class="card-header">
                     <h3>{{ currency.name }}</h3>
-                    <div class="currency-info">
-                        <span class="currency-code">{{ currency.code }}</span>
-                        <span :class="['rate-change', currency.change >= 0 ? 'positive' : 'negative']">
-                            {{ currency.change >= 0 ? '+' : '' }}{{ currency.change }}%
-                        </span>
-                    </div>
                 </div>
 
                 <div class="chart-container">
                     <img :src="`https://ssl.pstatic.net/imgfinance/chart/marketindex/area/${selectedPeriod}/FX_${currency.code}KRW.png`"
-                        :alt="currency.name + ' chart'" class="chart-image" />
-                </div>
-
-                <div class="card-footer">
-                    <div class="current-rate">
-                        <span class="label">현재 환율:</span>
-                        <span class="value">{{ currency.currentRate }}</span>
-                    </div>
+                        :alt="currency.name + ' chart'" 
+                        class="chart-image" />
                 </div>
             </div>
         </div>
@@ -41,7 +33,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const selectedPeriod = ref('1M');
+const selectedPeriod = ref('month');
 
 const periods = [
     { label: '1개월', value: 'month' },
@@ -53,26 +45,18 @@ const currencies = ref([
     {
         name: '미국 달러',
         code: 'USD',
-        change: 0.25,
-        currentRate: '1,320.50'
     },
     {
         name: '일본 엔',
         code: 'JPY',
-        change: -0.15,
-        currentRate: '8.8123',
     },
     {
         name: '유로',
         code: 'EUR',
-        change: 0.18,
-        currentRate: '1,428.30',
     },
     {
         name: '중국 위안',
         code: 'CNY',
-        change: -0.32,
-        currentRate: '183.25',
     }
 ]);
 
@@ -83,14 +67,14 @@ const changePeriod = (period) => {
 
 <style scoped>
 .exchange-rate-container {
-    padding: 24px;
+    padding: 24px 0px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .period-selector {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     gap: 12px;
     margin-bottom: 24px;
 
@@ -108,9 +92,9 @@ const changePeriod = (period) => {
         }
 
         &.active {
-            background: #2196f3;
+            background: #4c4c4c;
             color: white;
-            border-color: #2196f3;
+            border-color: #212121;
         }
     }
 }
@@ -125,8 +109,9 @@ const changePeriod = (period) => {
     background: white;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 24px;
     transition: transform 0.3s ease;
+    animation: slideUp 0.6s ease-out both;
 
     &:hover {
         transform: translateY(-4px);
@@ -138,31 +123,7 @@ const changePeriod = (period) => {
         h3 {
             margin: 0 0 8px 0;
             font-size: 18px;
-            font-weight: 600;
-        }
-
-        .currency-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .currency-code {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .rate-change {
-            font-size: 14px;
-            font-weight: 600;
-
-            &.positive {
-                color: #4caf50;
-            }
-
-            &.negative {
-                color: #f44336;
-            }
+            font-weight: 500;
         }
     }
 
@@ -180,22 +141,16 @@ const changePeriod = (period) => {
             object-fit: cover;
         }
     }
+}
 
-    .card-footer {
-        .current-rate {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-
-            .label {
-                color: #666;
-            }
-
-            .value {
-                font-weight: 600;
-            }
-        }
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 

@@ -1,11 +1,10 @@
-<!-- Recommended2View.vue -->
 <template>
-  <div class="simulation-container">
+  <div class="financial-advisor">
     <!-- 헤더 섹션 -->
     <div class="mb-8">
-      <h1 class="text-h4 text-center font-weight-bold mb-2">자산 성장 시뮬레이션 기반 추천</h1>
-      <p class="text-subtitle-1 text-center text-medium-emphasis">
-        고객님의 정보를 입력하시면 최적의 금융상품을 추천해드립니다.
+      <p class="title">자산 성장 시뮬레이션 기반 추천</p>
+      <p class="text-subtitle-1">
+        고객님의 정보를 입력하시면 최적의 적금 상품을 추천해드립니다.
       </p>
     </div>
 
@@ -13,47 +12,29 @@
     <section class="form-section">
       <form @submit.prevent="runSimulation">
         <div class="form-grid">
+          <div class="input-group full-width">
+            <h2 class="section-title-1">기본 정보 입력</h2>
+            <div class="divider"></div>
+          </div>
           <div class="input-group">
             <label>나이</label>
-            <input
-              v-model.number="userProfile.age"
-              type="number"
-              placeholder="만 나이 입력"
-              required
-              min="0"
-            />
+            <input v-model.number="userProfile.age" type="number" placeholder="만 나이 입력" required min="0" />
           </div>
 
           <div class="input-group">
             <label>현재 자산</label>
-            <input
-              v-model.number="userProfile.currentAssets"
-              type="number"
-              placeholder="현재 보유 자산"
-              required
-              min="0"
-            />
-            <span class="hint">{{ formatCurrency(userProfile.currentAssets) }}원</span>
+            <input v-model.number="userProfile.currentAssets" type="number" :placeholder="formatCurrency(userProfile.monthlySavings) | 0" required min="0" />
           </div>
 
           <div class="input-group">
-            <label>월 저축 가능액</label>
-            <input
-              v-model.number="userProfile.monthlySavings"
-              type="number"
-              placeholder="월 저축 가능 금액"
-              required
-              min="0"
-            />
-            <span class="hint">{{ formatCurrency(userProfile.monthlySavings) }}원</span>
+            <label>월 저축액</label>
+            <input v-model.number="userProfile.monthlySavings" type="number" :placeholder="formatCurrency(userProfile.monthlySavings) | 0" required min="0" />
           </div>
 
           <div class="input-group">
-            <label>투자 기간</label>
+            <label>저축 기간</label>
             <select v-model="userProfile.period">
-              <option v-for="option in periodOptions" 
-                      :key="option.value" 
-                      :value="option.value">
+              <option v-for="option in periodOptions" :key="option.value" :value="option.value">
                 {{ option.label }}
               </option>
             </select>
@@ -64,11 +45,11 @@
             <div class="radio-group">
               <label class="radio-label">
                 <input type="radio" v-model="userProfile.isCompound" :value="true">
-                <span>복리</span>
+                <p>복리</p>
               </label>
               <label class="radio-label">
                 <input type="radio" v-model="userProfile.isCompound" :value="false">
-                <span>단리</span>
+                <p>단리</p>
               </label>
             </div>
           </div>
@@ -78,7 +59,7 @@
           <button type="submit" class="submit-button" :disabled="loading">
             <span class="button-content">
               <span v-if="loading" class="loading-spinner"></span>
-              {{ loading ? '계산중...' : '맞춤 상품 찾기' }}
+              {{ loading ? '계산중...' : '맞춤 적금 찾기' }}
             </span>
           </button>
         </div>
@@ -95,7 +76,7 @@
         </div>
         <div class="chart-summary">
           <div class="summary-item">
-            <span class="label">예상 최종 자산</span>
+            <span class="label">예상 만기 금액</span>
             <span class="value">{{ formatCurrency(getFinalAmount()) }}원</span>
           </div>
           <div class="summary-item">
@@ -103,7 +84,7 @@
             <span class="value">{{ formatCurrency(getTotalDeposit()) }}원</span>
           </div>
           <div class="summary-item">
-            <span class="label">예상 총 수익</span>
+            <span class="label">예상 이자 수익</span>
             <span class="value profit">{{ formatCurrency(getTotalProfit()) }}원</span>
           </div>
         </div>
@@ -112,17 +93,15 @@
       <!-- 추천 상품 목록 -->
       <div class="recommendations-container">
         <h2 class="section-title">
-          추천 금융 상품
+          추천 적금 상품
           <span class="preference-tag">
             {{ userProfile.isCompound ? '복리' : '단리' }} 선호
           </span>
         </h2>
 
         <div class="products-grid">
-          <div v-for="(product, index) in simulationResults.recommendations" 
-               :key="index" 
-               class="product-card"
-               :class="{ 'top-product': index === 0 }">
+          <div v-for="(product, index) in simulationResults.recommendations" :key="index" class="product-card"
+            :class="{ 'top-product': index === 0 }">
             <div class="product-header">
               <div class="rank-badge" :class="{ 'top-rank': index === 0 }">
                 {{ index + 1 }}
@@ -144,17 +123,22 @@
                   <span class="value highlight">최대 {{ product.intr_rate2 }}%</span>
                 </div>
               </div>
-              
+
               <div class="detail-item full-width">
                 <span class="label">예상 만기 금액</span>
                 <span class="value">{{ formatCurrency(product.finalAmount) }}원</span>
               </div>
-              
+
               <div class="detail-item full-width">
                 <span class="label">총 이자 수익</span>
                 <span class="value profit">
                   +{{ formatCurrency(product.totalInterest) }}원
                 </span>
+              </div>
+
+              <div class="detail-item full-width">
+                <span class="label">월 납입금</span>
+                <span class="value">{{ formatCurrency(userProfile.monthlySavings) }}원</span>
               </div>
             </div>
 
@@ -162,63 +146,15 @@
               <h4 class="conditions-title">우대조건</h4>
               <p class="conditions-content">{{ product.spcl_cnd }}</p>
             </div>
+
+            <div class="product-conditions">
+              <h4 class="conditions-title">가입대상</h4>
+              <p class="conditions-content">{{ product.join_member }}</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- 상품 상세 모달 -->
-    <div v-if="selectedProduct" class="modal-overlay" @click="closeModal">
-      <div class="modal-content" @click.stop>
-        <div class="modal-header">
-          <h3>{{ selectedProduct.fin_prdt_nm }}</h3>
-          <button class="close-button" @click="closeModal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="detail-section">
-            <h4>상품 정보</h4>
-            <div class="detail-grid">
-              <div class="detail-item">
-                <span class="label">은행명</span>
-                <span class="value">{{ selectedProduct.kor_co_nm }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="label">가입 방법</span>
-                <span class="value">{{ selectedProduct.join_way }}</span>
-              </div>
-              <div class="detail-item">
-                <span class="label">가입 대상</span>
-                <span class="value">{{ selectedProduct.join_member }}</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="detail-section">
-            <h4>금리 정보</h4>
-            <div class="detail-grid">
-              <div class="detail-item">
-                <span class="label">기본 금리</span>
-                <span class="value">{{ selectedProduct.intr_rate }}%</span>
-              </div>
-              <div class="detail-item">
-                <span class="label">우대 금리</span>
-                <span class="value highlight">최대 {{ selectedProduct.intr_rate2 }}%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="detail-section">
-            <h4>우대 조건</h4>
-            <p class="conditions">{{ selectedProduct.spcl_cnd || '우대조건 없음' }}</p>
-          </div>
-
-          <div class="detail-section">
-            <h4>만기 후 이율</h4>
-            <p class="conditions">{{ selectedProduct.mtrt_int }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -230,20 +166,10 @@ import { useAccountStore } from '@/stores/account';
 
 // 상태 관리
 const financialStore = useFinancialStore();
+const accountStore = useAccountStore();
 const loading = ref(false);
 const chartRef = ref(null);
 const chart = ref(null);
-const selectedProduct = ref(null);
-
-const accountStore = useAccountStore()
-
-// 예금/적금 데이터
-const deposits = ref([
-  /* 여기에 예금 상품 데이터 배열이 들어갑니다 */
-]);
-const savings = ref([
-  /* 여기에 적금 상품 데이터 배열이 들어갑니다 */
-]);
 
 // 사용자 프로필 상태
 const userProfile = ref({
@@ -411,8 +337,8 @@ const checkAgeLimit = (product) => {
 };
 
 // 최적의 금리 옵션 찾기
-const findBestOption = (product, targetPeriod, isDeposit = false) => {
-  const options = isDeposit ? product.depositoption_set : product.savingoption_set;
+const findBestOption = (product, targetPeriod) => {
+  const options = product.savingoption_set;
   
   if (!options || !Array.isArray(options)) {
     return null;
@@ -428,40 +354,24 @@ const findBestOption = (product, targetPeriod, isDeposit = false) => {
   });
 };
 
-// 시뮬레이션 실행 함수 수정
+// 시뮬레이션 실행
 const runSimulation = async () => {
   try {
     loading.value = true;
 
-    // store에서 최신 데이터 확인
-    if (financialStore.deposits.length === 0 || financialStore.savings.length === 0) {
-      await Promise.all([
-        financialStore.getDepositDatas(),
-        financialStore.getSavingDatas()
-      ]);
+    if (financialStore.savings.length === 0) {
+      await financialStore.getSavingDatas();
     }
 
-    // 적금과 예금 상품 결합하여 처리
-    const allProducts = [
-      ...financialStore.deposits.map(p => ({ ...p, type: 'deposit' })),
-      ...financialStore.savings.map(p => ({ ...p, type: 'saving' }))
-    ];
-
-    // 나이 제한 필터링 및 상품별 수익 계산
-    const processedProducts = allProducts
+    const processedProducts = financialStore.savings
       .filter(checkAgeLimit)
       .map(product => {
-        const option = findBestOption(
-          product, 
-          userProfile.value.period, 
-          product.type === 'deposit'
-        );
+        const option = findBestOption(product, userProfile.value.period);
         if (!option) return null;
 
         const monthlyAmount = userProfile.value.monthlySavings;
         const initialAmount = userProfile.value.currentAssets;
         
-        // 성장 데이터 계산
         const growthData = generateGrowthData(
           initialAmount,
           monthlyAmount,
@@ -484,105 +394,90 @@ const runSimulation = async () => {
       })
       .filter(Boolean);
 
-    // 상품 정렬 및 추천
-    const sortedProducts = userProfile.value.isCompound
-      ? processedProducts.sort((a, b) => b.intr_rate2 - a.intr_rate2)
-      : processedProducts.sort((a, b) => {
-          const scoreA = a.intr_rate2 * (parseInt(a.save_trm) / 12);
-          const scoreB = b.intr_rate2 * (parseInt(b.save_trm) / 12);
-          return scoreB - scoreA;
-        });
-
-    // 상위 5개 상품 선택
-    const recommendations = sortedProducts.slice(0, 5);
-
-    if (recommendations.length === 0) {
-      throw new Error('추천 가능한 상품이 없습니다.');
-    }
-
-    // 최적의 상품의 성장 데이터로 차트 생성
-    nextTick(() => {
-      createChart(recommendations[0].growthData);
+// 상품 정렬 및 추천
+const sortedProducts = userProfile.value.isCompound
+  ? processedProducts.sort((a, b) => b.intr_rate2 - a.intr_rate2)
+  : processedProducts.sort((a, b) => {
+      const scoreA = a.intr_rate2 * (parseInt(a.save_trm) / 12);
+      const scoreB = b.intr_rate2 * (parseInt(b.save_trm) / 12);
+      return scoreB - scoreA;
     });
 
-    // 결과 저장
-    simulationResults.value = {
-      recommendations,
-      bestProduct: recommendations[0]
-    };
+// 상위 5개 상품 선택
+const recommendations = sortedProducts.slice(0, 5);
 
-  } catch (error) {
-    console.error('시뮬레이션 오류:', error);
-    // TODO: 사용자에게 에러 메시지 표시
-  } finally {
-    loading.value = false;
-  }
+if (recommendations.length === 0) {
+  throw new Error('추천 가능한 적금 상품이 없습니다.');
+}
+
+// 최적의 상품의 성장 데이터로 차트 생성
+nextTick(() => {
+  createChart(recommendations[0].growthData);
+});
+
+// 결과 저장
+simulationResults.value = {
+  recommendations,
+  bestProduct: recommendations[0]
+};
+
+} catch (error) {
+console.error('시뮬레이션 오류:', error);
+} finally {
+loading.value = false;
+}
 };
 
 // 결과 계산 함수들
 const getFinalAmount = () => {
-  if (!simulationResults.value?.bestProduct) return 0;
-  return simulationResults.value.bestProduct.finalAmount;
+if (!simulationResults.value?.bestProduct) return 0;
+return simulationResults.value.bestProduct.finalAmount;
 };
 
 const getTotalDeposit = () => {
-  const months = userProfile.value.period;
-  return userProfile.value.currentAssets + 
-         (userProfile.value.monthlySavings * months);
+const months = userProfile.value.period;
+return userProfile.value.currentAssets + 
+     (userProfile.value.monthlySavings * months);
 };
 
 const getTotalProfit = () => {
-  if (!simulationResults.value?.bestProduct) return 0;
-  return simulationResults.value.bestProduct.totalInterest;
+if (!simulationResults.value?.bestProduct) return 0;
+return simulationResults.value.bestProduct.totalInterest;
 };
 
-// // 모달 관련 함수들
-// const showProductDetails = (product) => {
-//   selectedProduct.value = product;
-// };
-
-const closeModal = () => {
-  selectedProduct.value = null;
-};
-
-// script setup 부분 수정
-// deposits와 savings ref 제거 후 다음과 같이 수정
-
+// 컴포넌트 마운트 시 초기화
 onMounted(async () => {
-  try {
-    loading.value = true;
-    
-    // 예금과 적금 데이터 로드
-    await financialStore.getDepositDatas();
-    await financialStore.getSavingDatas();
-    
-    nextTick(() => {
-      if (chartRef.value) {
-        createChart({
-          labels: [],
-          totalAmount: [],
-          principal: [],
-          interest: []
-        });
-      }
+try {
+loading.value = true;
+await financialStore.getSavingDatas();
+
+nextTick(() => {
+  if (chartRef.value) {
+    createChart({
+      labels: [],
+      totalAmount: [],
+      principal: [],
+      interest: []
     });
-  } catch (error) {
-    console.error('데이터 로드 중 오류 발생:', error);
-  } finally {
-    loading.value = false;
   }
+});
+} catch (error) {
+console.error('데이터 로드 중 오류 발생:', error);
+} finally {
+loading.value = false;
+}
 });
 </script>
 
 <style scoped>
 /* 메인 컨테이너 */
-.simulation-container {
+.financial-advisor {
   background-color: #f8f9fa;
   padding: 40px;
   transition: all 0.5s ease-in-out;
 }
 
-.text-h4 {
+.title {
   font-size: 24px;
   font-weight: 700;
   margin: 6px 0px;
@@ -594,7 +489,6 @@ onMounted(async () => {
   margin: 6px 0px;
 }
 
-/* 폼 섹션 */
 .form-section {
   background-color: white;
   border-radius: 10px;
@@ -625,45 +519,72 @@ onMounted(async () => {
   grid-column: 1 / -1;
 }
 
-.section-title {
+.section-title-1 {
   font-size: 18px;
   font-weight: 600;
   color: #636363;
   margin: 18px 0px 6px;
 }
 
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 24px 8px 16px 8px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 첫 번째 section-title의 상단 여백 제거 */
+.form-grid .section-title:first-child {
+  margin-top: 0;
+}
+
+/* 추가적으로 뱃지(복리/단리 선호)를 위한 스타일 */
+.preference-tag {
+  font-size: 14px;
+  padding: 4px 12px;
+  background: #f1f4f8;
+  border-radius: 20px;
+  color: #5A87F2;
+  font-weight: 500;
+  margin-left: auto;  /* 오른쪽으로 밀어내기 */
+}
+
 /* 입력 필드 스타일링 */
-.input-group label {
+label {
   font-size: 14px;
   font-weight: 600;
   color: #2c2c2c;
-  width: 100px;
+  width: 80px;
 }
 
-.input-group input,
-.input-group select {
+input,
+select {
   width: 100%;
   padding: 12px 16px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.2s ease;
+  background-color: white;
 }
 
-.input-group input:focus,
-.input-group select:focus {
+input{
+  text-align: right;
+}
+
+input:focus,
+select:focus {
   outline: none;
   border-color: #5A87F2;
   box-shadow: 0 0 0 3px rgba(99, 106, 204, 0.15);
 }
 
-.hint {
-  font-size: 14px;
-  color: #718096;
-  margin-left: 8px;
-}
-
-/* 라디오 버튼 그룹 */
+/* 라디오 그룹 스타일링 */
 .radio-group {
   display: flex;
   gap: 24px;
@@ -699,7 +620,7 @@ onMounted(async () => {
 }
 
 .submit-button:hover {
-  background: #4A77E2;
+  background: #5A87F2;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(99, 106, 204, 0.2);
 }
@@ -710,13 +631,7 @@ onMounted(async () => {
   transform: none;
 }
 
-/* 결과 섹션 */
-.results-section {
-  max-width: 1200px;
-  margin: 3rem auto;
-}
-
-/* 차트 컨테이너 */
+/* 차트 섹션 */
 .chart-container {
   background: white;
   border-radius: 16px;
@@ -739,47 +654,32 @@ onMounted(async () => {
   border-radius: 12px;
 }
 
-.summary-item {
-  text-align: center;
+/* 결과 섹션 */
+.results-section {
+  max-width: 1200px;
+  margin: 3rem auto;
 }
 
-.summary-item .label {
-  font-size: 14px;
-  color: #718096;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.summary-item .value {
-  font-size: 20px;
-  font-weight: 600;
-  color: #2d3748;
-}
-
-.summary-item .value.profit {
-  color: #2F855A;
-}
-
-/* 추천 상품 컨테이너 */
 .recommendations-container {
   background: white;
   border-radius: 16px;
-  overflow: hidden;
+  padding: 24px;
   box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
 }
 
 .products-grid {
   display: grid;
   gap: 24px;
-  padding: 24px;
+  margin-top: 24px;
 }
 
 /* 상품 카드 */
 .product-card {
   background: white;
   border-radius: 16px;
-  padding: 24px;
-  border: 1px solid #f4f4f4;
+  border: #f4f4f4 1px solid;
+  padding: 40px;
+  margin: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }
@@ -787,17 +687,6 @@ onMounted(async () => {
 .product-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-.top-product {
-  border: 2px solid #5A87F2;
-}
-
-.product-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
 }
 
 .rank-badge {
@@ -816,7 +705,15 @@ onMounted(async () => {
   background: linear-gradient(135deg, #5A87F2, #2e5cc8);
 }
 
-.product-info h3 {
+/* 상품 상세 정보 */
+.product-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.product-name {
   font-size: 18px;
   font-weight: 600;
   margin: 0;
@@ -828,62 +725,49 @@ onMounted(async () => {
   margin: 4px 0 0;
 }
 
-/* 상품 상세 정보 */
 .detail-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 12px;
 }
 
 .detail-item {
   padding: 12px;
-  border-radius: 8px;
+  border-radius: 12px;
   transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: space-between;
 }
 
 .detail-item:hover {
   background: #f1f3f5;
 }
 
-.detail-item .label {
-  font-size: 14px;
+.label {
+  font-size: 0.9rem;
   color: #718096;
 }
 
-.detail-item .value {
-  font-size: 16px;
+.value {
+  font-size: 1.1rem;
   font-weight: 600;
   color: #2d3748;
 }
 
-.detail-item .value.highlight {
+.highlight {
   color: #1f4ebc;
 }
 
-.detail-item .value.profit {
+.profit {
   color: #2F855A;
 }
 
 /* 조건 섹션 */
 .product-conditions {
-  margin-top: 16px;
-  padding: 16px;
   background: #f8f9fa;
+  padding: 1rem;
   border-radius: 12px;
-}
-
-.conditions-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #4a5568;
-  margin-bottom: 8px;
-}
-
-.conditions-content {
-  font-size: 14px;
-  color: #718096;
-  line-height: 1.5;
+  margin-top: 1rem;
 }
 
 /* 로딩 스피너 */
@@ -898,17 +782,19 @@ onMounted(async () => {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-  .simulation-container {
-    padding: 20px;
+  .financial-advisor {
+    padding: 1rem;
   }
 
   .form-section {
-    padding: 20px;
+    padding: 1.5rem;
   }
 
   .form-grid {
@@ -925,16 +811,55 @@ onMounted(async () => {
     margin-bottom: 8px;
   }
 
-  .chart-summary {
-    grid-template-columns: 1fr;
+  .recommendations-container {
+    padding: 16px;
   }
 
-  .products-grid {
-    grid-template-columns: 1fr;
+  .product-card {
+    padding: 16px;
+    margin: 10px;
   }
 
   .detail-row {
     grid-template-columns: 1fr;
   }
+
+  .chart-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input-group .radio-group {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  width: auto;
+}
+
+.radio-label input[type="radio"] {
+  width: 16px;
+  height: 16px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
