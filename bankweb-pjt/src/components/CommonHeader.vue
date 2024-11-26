@@ -71,15 +71,17 @@
           <!-- 비로그인 상태의 네비게이션 -->
           <div v-else>
             <div class="text-center">
-              <!-- 기본 네비게이션 링크들 -->
+              <!-- 금리비교 태그 -->
               <RouterLink :to="{ name: 'depositList' }">
                 <span class="text" :class="{ hovered: isHovered1 }" @mouseover="isHovered1 = true" @mouseleave="isHovered1 = false">금리 비교</span>
               </RouterLink>
               &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+              <!-- 환율계산 태그 -->
               <RouterLink :to="{ name: 'currencycalculator' }">
                 <span class="text" :class="{ hovered: isHovered2 }" @mouseover="isHovered2 = true" @mouseleave="isHovered2 = false">환율 계산</span>
               </RouterLink>
               &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+              <!-- 주변은행 태그 -->
               <RouterLink :to="{ name: 'aroundbank' }">
                 <span class="text" :class="{ hovered: isHovered3 }" @mouseover="isHovered3 = true" @mouseleave="isHovered3 = false">주변 은행</span>
               </RouterLink>
