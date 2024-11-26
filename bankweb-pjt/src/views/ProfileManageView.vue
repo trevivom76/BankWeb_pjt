@@ -14,41 +14,20 @@
         </div>
         <div class="profile-image-container-wrapper">
           <div class="profile-image-container">
-            <img 
-              :src="profileStore.userprofile?.profile_img" 
-              alt="프로필 이미지" 
-              class="profile-image"
-            />
+            <img :src="profileStore.userprofile?.profile_img" alt="프로필 이미지" class="profile-image" />
           </div>
-          <input
-            type="file"
-            ref="fileInput"
-            @change="handleFileChange"
-            accept="image/*"
-            style="display: none"
-          />
-          <button
-            @click="$refs.fileInput.click()"
-            class="btn-primary mt-4"
-          >
-            프로필 이미지 등록
-          </button>
+          <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" style="display: none" />
+          <button @click="$refs.fileInput.click()" class="btn-primary mt-4">프로필 이미지 등록</button>
         </div>
       </div>
 
       <!-- 오른쪽: 프로필 정보 섹션 -->
       <div class="info-section">
         <template v-if="isEditing">
-          <ProfileEditSection
-            :initialData="userInfo"
-            @save="handleSaveChanges"
-            @cancel="cancelEditing"
-          />
+          <ProfileEditSection :initialData="userInfo" @save="handleSaveChanges" @cancel="cancelEditing" />
         </template>
         <template v-else>
-          <ProfileViewSection
-            @edit="startEditing"
-          />
+          <ProfileViewSection @edit="startEditing" />
         </template>
       </div>
     </div>
@@ -67,19 +46,16 @@ const profileStore = useProfileStore();
 
 const isLoading = ref(true);
 const isEditing = ref(false);
-const userInfo =  ref({ ...accountStore.userinfo });
-
+const userInfo = ref({ ...accountStore.userinfo });
 
 const startEditing = async () => {
   await syncUserInfo();
   isEditing.value = true;
 };
 
-
 const cancelEditing = () => {
   isEditing.value = false;
 };
-
 
 const handleSaveChanges = async (updatedData) => {
   try {
@@ -93,7 +69,6 @@ const handleSaveChanges = async (updatedData) => {
   isEditing.value = false;
 };
 
-
 const syncUserInfo = async () => {
   try {
     await accountStore.refreshUserInfo();
@@ -103,7 +78,6 @@ const syncUserInfo = async () => {
   }
 };
 
-
 const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
@@ -111,37 +85,36 @@ const handleFileChange = async (event) => {
   // 파일 크기 체크 (예: 5MB 제한)
   const maxSize = 5 * 1024 * 1024; // 5MB
   if (file.size > maxSize) {
-    alert('파일 크기는 5MB를 초과할 수 없습니다.');
+    alert("파일 크기는 5MB를 초과할 수 없습니다.");
     return;
   }
 
   // 이미지 파일 타입 체크
-  if (!file.type.startsWith('image/')) {
-    alert('이미지 파일만 업로드 가능합니다.');
+  if (!file.type.startsWith("image/")) {
+    alert("이미지 파일만 업로드 가능합니다.");
     return;
   }
 
   try {
     isLoading.value = true;
     const formData = new FormData();
-    formData.append('profile_img[]', file);
+    formData.append("profile_img[]", file);
 
     await profileStore.updateProfileImg({
-      username: userInfo.username,
-      formData: formData
+      username: userInfo.value.username,
+      formData: formData,
     });
 
     await profileStore.getProfile({
-      username: userInfo.username
+      username: userInfo.value.username,
     });
   } catch (error) {
-    console.error('프로필 이미지 업데이트 실패:', error);
-    alert('이미지 업로드에 실패했습니다.');
+    console.error("프로필 이미지 업데이트 실패:", error);
+    alert("이미지 업로드에 실패했습니다.");
   } finally {
     isLoading.value = false;
   }
 };
-
 
 onMounted(async () => {
   try {
@@ -254,7 +227,7 @@ onMounted(async () => {
 
 /* 버튼 스타일 */
 .btn-primary {
-  background-color: #5A87F2;
+  background-color: #5a87f2;
   color: #fff;
   padding: 10px 20px;
   border: none;
@@ -264,12 +237,12 @@ onMounted(async () => {
 }
 
 .btn-primary:active {
-  transform: scale(0.95); 
-  background-color: #3F75F2; 
+  transform: scale(0.95);
+  background-color: #3f75f2;
 }
 
 .btn-primary:hover {
-  transform: scale(1.05); 
-  background-color: #3F75F2;
+  transform: scale(1.05);
+  background-color: #3f75f2;
 }
 </style>

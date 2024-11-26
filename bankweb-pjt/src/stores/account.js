@@ -17,8 +17,8 @@ export const useAccountStore = defineStore(
       }
     });
 
-    const signUpErrorMessage = ref({})
-    const loginErrorMessage = ref({})
+    const signUpErrorMessage = ref({});
+    const loginErrorMessage = ref({});
 
     const router = useRouter();
 
@@ -28,7 +28,7 @@ export const useAccountStore = defineStore(
     const signUp = async function (payload) {
       const { username, password1, password2, nickname, name, email } = payload;
       console.log(email);
-      
+
       try {
         const response = await axios({
           method: "post",
@@ -39,24 +39,23 @@ export const useAccountStore = defineStore(
             password1,
             password2,
             nickname,
-            name
+            name,
           },
         });
-        
+
         const password = password1;
         console.log("회원가입 성공");
         await logIn({ username, password });
-        
       } catch (error) {
         console.log("signUp error = ", error);
-        signUpErrorMessage.value = error.response.data
-        console.log(signUpErrorMessage.value)
+        signUpErrorMessage.value = error.response.data;
+        console.log(signUpErrorMessage.value);
       }
     };
 
     const logIn = async function (payload) {
       const { username, password } = payload;
-    
+
       try {
         // 로그인 요청
         const loginResponse = await axios({
@@ -67,9 +66,9 @@ export const useAccountStore = defineStore(
             password,
           },
         });
-        
+
         token.value = loginResponse.data.key;
-    
+
         try {
           // 유저 정보 조회 요청
           const profileResponse = await axios({
@@ -79,21 +78,19 @@ export const useAccountStore = defineStore(
               Authorization: `Token ${token.value}`,
             },
           });
-    
+
           userinfo.value = profileResponse.data;
           console.log(`현재 유저(${userinfo.value.nickname})프로필 조회 성공`);
-          
         } catch (error) {
           console.log("getProfile error = ", error);
         }
-    
+
         console.log("로그인 성공");
         router.push({ name: "home" });
-        
       } catch (error) {
         console.log("logIn error = ", error);
-        loginErrorMessage.value = error.response.data
-        console.log(loginErrorMessage.value)
+        loginErrorMessage.value = error.response.data;
+        console.log(loginErrorMessage.value);
       }
     };
 
@@ -105,7 +102,7 @@ export const useAccountStore = defineStore(
       })
         .then((response) => {
           token.value = null;
-          userinfo.value = null
+          userinfo.value = null;
           router.push({ name: "home" });
         })
         .catch((error) => {
@@ -124,15 +121,31 @@ export const useAccountStore = defineStore(
           },
         });
         userinfo.value = response.data;
-        console.log('사용자 정보 새로고침 성공');
+        console.log("사용자 정보 새로고침 성공");
         return response.data;
       } catch (error) {
-        console.error('사용자 정보 새로고침 실패:', error);
+        console.error("사용자 정보 새로고침 실패:", error);
         throw error;
       }
     };
 
-    return { token, isLogin, router, userinfo, signUpErrorMessage, loginErrorMessage, signUp, logIn, logOut, refreshUserInfo   };
+    return { token, isLogin, router, userinfo, signUpErrorMessage, loginErrorMessage, signUp, logIn, logOut, refreshUserInfo };
   },
-  { persist: true }
+  {
+    persist: {
+      paths: ["token"], // token만 저장하고 userinfo는 저장하지 않음
+      beforeRestore: (context) => {
+        // 새로운 환경에서 실행될 때 자동으로 토큰 검증
+        const store = context.store;
+        if (store.token) {
+          // 토큰이 있으면 유저 정보를 다시 가져오기 시도
+          store.refreshUserInfo().catch(() => {
+            // 실패하면 로그아웃
+            store.token = null;
+            store.userinfo = null;
+          });
+        }
+      },
+    },
+  }
 );

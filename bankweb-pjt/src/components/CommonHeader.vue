@@ -21,7 +21,7 @@
             <RouterLink :to="{ name: 'login' }" class="first-header-text">
               <p class="authenticationTag">로그인</p>
             </RouterLink>
-            <img src="@/assets/icon/header_bar.png" height="14px">
+            <img src="@/assets/icon/header_bar.png" height="14px" />
             <!-- 회원가입 버튼 -->
             <RouterLink :to="{ name: 'signup' }" class="first-header-text">
               <p class="authenticationTag">회원가입</p>
@@ -34,7 +34,7 @@
         <div class="nav-container">
           <div class="logo-container">
             <a href="#" @click.prevent="goToHome">
-              <img src="@/assets/icon/BBK_Logo.png" alt="Example Image" class="logo"/>
+              <img src="@/assets/icon/BBK_Logo.png" alt="Example Image" class="logo" />
             </a>
           </div>
           <div class="nav-bar">
@@ -63,7 +63,7 @@
             </template>
           </div>
         </div>
-        <RouterLink :to="{ name: 'profilemanage' }">
+        <RouterLink v-if="accountStore.userinfo" :to="{ name: 'profilemanage' }">
           <div class="profile-container">
             <p class="nickname-text">{{ accountStore.userinfo.nickname }}</p>
             <div>
@@ -77,7 +77,7 @@
       <v-dialog v-model="dialog" max-width="380" height="300" persistent>
         <v-card>
           <div class="d-flex flex-column justify-center align-center" style="height: 100%; padding: 24px">
-            <!-- 아이콘 크기 조정 --> 
+            <!-- 아이콘 크기 조정 -->
             <svg-icon type="mdi" :path="mdiInformationSlabCircleOutline" style="font-size: 150px; margin-bottom: 24px"></svg-icon>
 
             <!-- 안내 텍스트 -->
@@ -93,8 +93,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
-import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref, watch } from "vue";
+import { storeToRefs } from "pinia";
 import { useAccountStore } from "@/stores/account";
 import { useProfileStore } from "@/stores/profile";
 import { RouterLink, useRouter } from "vue-router";
@@ -118,6 +118,9 @@ const isLoading = ref(true);
 const imageLoading = ref(true);
 const imageError = ref(false);
 
+// script setup 내부에 추가
+const nickname = computed(() => accountStore.userinfo?.nickname || "");
+
 // 이미지 로드 완료 핸들러
 const handleImageLoad = () => {
   imageLoading.value = false;
@@ -127,24 +130,28 @@ const handleImageLoad = () => {
 const handleImageError = () => {
   imageError.value = true;
   imageLoading.value = false;
-  console.log('프로필 이미지 로드 실패');
+  console.log("프로필 이미지 로드 실패");
 };
 
 // userinfo 변경 시 항상 프로필 새로 가져오기
-watch(userinfo, async (newUserInfo) => {
-  if (newUserInfo) {
-    try {
-      imageLoading.value = true;
-      imageError.value = false;
-      await profileStore.getProfile({
-        username: newUserInfo.username
-      });
-    } catch (error) {
-      console.error('프로필 동기화 실패:', error);
-      imageError.value = true;
+watch(
+  userinfo,
+  async (newUserInfo) => {
+    if (newUserInfo) {
+      try {
+        imageLoading.value = true;
+        imageError.value = false;
+        await profileStore.getProfile({
+          username: newUserInfo.username,
+        });
+      } catch (error) {
+        console.error("프로필 동기화 실패:", error);
+        imageError.value = true;
+      }
     }
-  }
-}, { immediate: true });
+  },
+  { immediate: true }
+);
 
 // userprofileInfo가 변경될 때마다 이미지 상태 초기화
 watch(userprofileInfo, () => {
@@ -168,7 +175,7 @@ const isLogin = () => {
 
 const logOut = () => {
   // 프로필 정보 초기화 추가
-  profileStore.resetProfile();  // 프로필 스토어 초기화
+  profileStore.resetProfile(); // 프로필 스토어 초기화
   imageError.value = false;
   imageLoading.value = true;
   accountStore.logOut();
@@ -177,7 +184,7 @@ const logOut = () => {
 // dialog 관련 watch
 watch(dialog, (val) => {
   if (!val) return;
-  
+
   setTimeout(() => {
     dialog.value = false;
     router.push({ name: "login" });
@@ -211,7 +218,6 @@ watch(dialog, (val) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
 }
 
 .nav-container {
@@ -251,7 +257,7 @@ watch(dialog, (val) => {
 }
 
 .text.hovered {
-  color: #2F2A78;
+  color: #2f2a78;
   transform: scale(1.05);
 }
 
@@ -266,7 +272,8 @@ watch(dialog, (val) => {
   gap: 12px;
 }
 
-.nickname-text, a{
+.nickname-text,
+a {
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
