@@ -29,7 +29,6 @@ def create_financial_data(request):
     deposit_res = requests.get(depositURL, params=params).json()
     saving_res = requests.get(savingURL, params=params).json()
 
-    print(deposit_res['result']['max_page_no'])
     deposit_base_lst = deposit_res.get('result', {}).get('baseList', [])
     deposit_option_list = deposit_res.get('result', {}).get('optionList', [])
 

@@ -20,7 +20,7 @@ body {
 /* 반응형 레이아웃 */
 @media (max-width: 1200px) {
   .container, .header, .footer{
-    max-width: 80%;
+    max-width: 95%;
   }
 }
 
