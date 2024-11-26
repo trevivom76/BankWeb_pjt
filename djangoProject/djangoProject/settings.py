@@ -40,6 +40,8 @@ def get_secret(setting, secrets=secrets):
 SECRET_KEY = get_secret("SECRET_KEY")
 EXCHANGE_API_KEY = get_secret("EXCHANGE_API_KEY")
 FINLIFE_API_KEY = get_secret("FINLIFE_API_KEY")
+OPENAI_API_KEY = get_secret("OPENAI_API_KEY")
+KAKAO_API_KEY = get_secret("KAKAO_API_KEY")
 
 #
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -61,6 +63,7 @@ INSTALLED_APPS = [
     'accounts',
     'deposits',
     'exchanges',
+    'chat',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
