@@ -213,15 +213,14 @@
 
 #### 메인 페이지  
 서비스의 주요 기능에 대한 개요와 네비게이션을 제공.  
-![메인 페이지](./src/images/main.png)
+![메인화면](https://github.com/user-attachments/assets/fac5a86c-beb4-4681-8457-4555bb04c516)
 
 #### 로그인 페이지  
 기존 사용자들이 계정으로 접근할 수 있는 로그인 화면.  
-![로그인 페이지](./src/images/login.png)
 
 #### 회원가입 페이지  
 새로운 사용자가 회원으로 가입할 수 있는 화면.  
-![회원가입 페이지](./src/images/signup.png)
+![회원가입](https://github.com/user-attachments/assets/57ec0d6c-6c4f-4ae1-b476-7dd76a11d461)
 
 #### 정기 예금 검색하기 페이지  
 다양한 정기 예금 상품을 검색하고 정보를 제공하는 화면.  
