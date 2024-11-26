@@ -23,33 +23,63 @@
       <!-- 글 제목 -->
       <p class="article-title">{{ articleStore.articledetail.title }}</p>
 
-      <!-- 글 작성 날짜 + 수정, 삭제 버튼 -->
-      <div class="d-flex justify-space-between align-center mb-5">
-        <div>
-          <p class="article-createdat">{{ formattedCreatedAt }}</p>
+        <!-- 글 작성 날짜 + 수정, 삭제 버튼 -->
+        <div class="d-flex justify-space-between align-center mb-5">
+          <div>
+            <p class="article-createdat">{{ formattedCreatedAt }}</p>
+          </div>
+          <div v-if="accountStore.userinfo.nickname == articledetaildata.user.nickname" class="d-flex ga-6 article-update-delete mr-8">
+            <a href="#" class="article-update" @click.prevent="showUpdateDialog = true">수정</a>
+            <a href="#" class="article-delete" @click.prevent="showDeleteDialog = true">삭제</a>
+          </div>
         </div>
-        <div v-if="accountStore.userinfo.nickname == articleStore.articledetail.user.nickname" class="d-flex ga-6 article-update-delete mr-8">
-          <a href="#" class="article-update">수정</a>
-          <a href="#" class="article-delete" @click="deleteArticle(articleStore.articledetail.id)">삭제</a>
-        </div>
-      </div>
 
-      <!-- 글 내용 -->
-      <textarea class="article-content" readonly>
-        {{ articleStore.articledetail.content }}
-      </textarea>
+        <!-- 글 내용 -->
+        <textarea class="article-content" readonly>{{ articledetaildata.content }}</textarea>
+      </div>
     </v-card>
 
     <!-- 댓글 창 -->
     <Comment />
+
+    <!-- 삭제 확인 다이얼로그 -->
+    <v-dialog v-model="showDeleteDialog" max-width="400">
+      <v-card>
+        <v-card-text class="pa-6">
+          <div class="text-center mb-4">
+            <v-icon color="error" size="32" class="mb-3">mdi-alert-circle</v-icon>
+            <p style="font-size: 22px">정말로 게시글을 삭제하시겠습니까?</p>
+          </div>
+          <div class="d-flex justify-center gap-button">
+            <v-btn color="error" variant="flat" @click="confirmDelete">삭제</v-btn>
+            <v-btn color="grey" variant="flat" @click="showDeleteDialog = false">취소</v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <!-- 수정 확인 다이얼로그 -->
+    <v-dialog v-model="showUpdateDialog" max-width="400">
+      <v-card>
+        <v-card-text class="pa-6">
+          <div class="text-center mb-4">
+            <v-icon color="primary" size="32" class="mb-3">mdi-pencil</v-icon>
+            <p style="font-size: 22px">게시글을 수정하시겠습니까?</p>
+          </div>
+          <div class="d-flex justify-center gap-button">
+            <v-btn color="primary" variant="flat" @click="confirmUpdate">수정</v-btn>
+            <v-btn color="grey" variant="flat" @click="showUpdateDialog = false">취소</v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script setup>
 import { useArticleStore } from "@/stores/article";
-import { computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-// pictogrammers mdi icon
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiArrowLeft } from "@mdi/js";
 
@@ -62,6 +92,10 @@ const profileStore = useProfileStore();
 const accountStore = useAccountStore();
 
 const route = useRoute();
+const articledetaildata = ref(null);
+const isLoading = ref(true);
+const showDeleteDialog = ref(false);
+const showUpdateDialog = ref(false);
 
 onMounted(() => {
   const payload = {
@@ -72,12 +106,17 @@ onMounted(() => {
 });
 
 // 게시글 삭제 함수
-const deleteArticle = function (articleid) {
+const deleteArticle = async function (articleid) {
   if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
-    const payload = {
-      articleid: articleid,
-    };
-    articleStore.deleteArticle(payload);
+    isLoading.value = true;
+    try {
+      const payload = {
+        articleid: articleid,
+      };
+      await articleStore.deleteArticle(payload);
+    } finally {
+      isLoading.value = false;
+    }
   }
 };
 
@@ -156,11 +195,14 @@ const formattedCreatedAt = computed(() => {
   font-size: 18px;
   width: 100%;
   min-height: 217px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 20px;
   border-color: black;
   border-width: 2px;
   border-style: solid;
   border-radius: 1ch;
+}
+
+.gap-button {
+  gap: 12px; /* 원하는 간격으로 조정 */
 }
 </style>

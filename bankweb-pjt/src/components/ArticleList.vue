@@ -3,10 +3,38 @@
     <!-- 버튼 -->
     <div class="d-flex justify-space-between align-center">
       <div class="d-flex ga-5">
-        <v-btn variant="flat" rounded="lg" color="#D6EFFF" width="100px" height="31px" @click="selectedCategory = '전체'">전체</v-btn>
-        <v-btn variant="tonal" rounded="lg" width="100px" height="31px" @click="selectedCategory = '질문/답변'">질문/답변</v-btn>
-        <v-btn variant="tonal" rounded="lg" width="100px" height="31px" @click="selectedCategory = '팁/정보 공유'">팁/정보 공유</v-btn>
-        <v-btn variant="tonal" rounded="lg" width="100px" height="31px" @click="selectedCategory = '자유'">자유</v-btn>
+        <v-btn 
+          variant="flat" 
+          rounded="lg" 
+          :color="selectedCategory === '전체' ? '#D6EFFF' : undefined"
+          width="100px" 
+          height="31px" 
+          @click="selectedCategory = '전체'"
+        >전체</v-btn>
+        <v-btn 
+          variant="flat" 
+          rounded="lg" 
+          :color="selectedCategory === '질문/답변' ? '#D6EFFF' : undefined"
+          width="100px" 
+          height="31px" 
+          @click="selectedCategory = '질문/답변'"
+        >질문/답변</v-btn>
+        <v-btn 
+          variant="flat" 
+          rounded="lg" 
+          :color="selectedCategory === '팁/정보 공유' ? '#D6EFFF' : undefined"
+          width="100px" 
+          height="31px" 
+          @click="selectedCategory = '팁/정보 공유'"
+        >팁/정보 공유</v-btn>
+        <v-btn 
+          variant="flat" 
+          rounded="lg" 
+          :color="selectedCategory === '자유' ? '#D6EFFF' : undefined"
+          width="100px" 
+          height="31px" 
+          @click="selectedCategory = '자유'"
+        >자유</v-btn>
       </div>
       <div>
         <RouterLink :to="{ name: 'create' }" class="delete-a-underline-color">글쓰기</RouterLink>
@@ -20,7 +48,12 @@
 
     <!-- (전체)게시판글 -->
     <div v-else>
-      <v-data-table :items="filteredArticles" :headers="headers">
+      <v-data-table 
+        :items="filteredArticles" 
+        :headers="headers" 
+        :sort-by="[{ key: 'id', order: 'desc' }]"
+        :no-data-text="'등록된 게시글이 없습니다.'"
+      >
         <!-- 글 제목을 클릭 시 다른 페이지로 이동 -->
         <template v-slot:item.title="{ item }">
           <RouterLink :to="{ name: 'detail', params: { id: item.id } }" class="delete-a-underline-color">
@@ -60,7 +93,7 @@ import { useArticleStore } from "@/stores/article";
 import { computed, onMounted, ref } from "vue";
 
 const articleStore = useArticleStore();
-const isLoading = ref(true); // 로딩 상태를 관리하는 ref 추가
+const isLoading = ref(true);
 
 // 어떤 버튼이 선택되어있는지 default는 "전체"
 const selectedCategory = ref("전체");
@@ -69,8 +102,10 @@ const selectedCategory = ref("전체");
 onMounted(async () => {
   try {
     await articleStore.getArticles();
+  } catch (error) {
+    console.error('게시글 로딩 중 에러:', error);
   } finally {
-    isLoading.value = false; // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
+    isLoading.value = false;
   }
 });
 
@@ -79,14 +114,17 @@ const headers = ref([
   { title: "글 제목", align: "start", key: "title", width: "50%" },
   { title: "카테고리", align: "center", key: "category", width: "35%" },
   { title: "작성자", align: "center", key: "user.nickname", width: "50%" },
+  { title: "", key: "id", align: "center", sortable: false, width: "0%"},
 ]);
 
 // 선택된 카테고리에 맞춰 필터링된 게시물 리스트
 const filteredArticles = computed(() => {
+  const articles = articleStore.articles || [];  // 없으면 빈 배열 사용
+  
   if (selectedCategory.value === "전체") {
-    return articleStore.articles.filter((article) => ["질문/답변", "팁/정보 공유", "자유"].includes(article.category));
+    return articles.filter((article) => ["질문/답변", "팁/정보 공유", "자유"].includes(article.category));
   } else {
-    return articleStore.articles.filter((article) => article.category === selectedCategory.value);
+    return articles.filter((article) => article.category === selectedCategory.value);
   }
 });
 
@@ -156,4 +194,11 @@ const changeCategory = async (category) => {
   justify-content: center;
   align-items: center;
 }
+
+/* id 컬럼 숨기기 */
+:deep(.v-data-table__th:last-child),
+:deep(.v-data-table__td:last-child) {
+  display: none !important;
+}
+
 </style>

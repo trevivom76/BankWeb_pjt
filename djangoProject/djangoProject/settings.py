@@ -43,6 +43,9 @@ FINLIFE_API_KEY = get_secret("FINLIFE_API_KEY")
 OPENAI_API_KEY = get_secret("OPENAI_API_KEY")
 KAKAO_API_KEY = get_secret("KAKAO_API_KEY")
 
+#
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
