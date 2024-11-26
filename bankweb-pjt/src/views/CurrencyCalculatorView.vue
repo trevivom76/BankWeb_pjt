@@ -13,11 +13,13 @@
           <CurrencyCalculatorSelect />
         </div>
       </div>
+      <CurrencyCalculatorGraph />
     </div>
   </div>
 </template>
 
 <script setup>
+import CurrencyCalculatorGraph from "@/components/CurrencyCalculatorGraph.vue";
 import CurrencyCalculatorSelect from "@/components/CurrencyCalculatorSelect.vue";
 </script>
 
