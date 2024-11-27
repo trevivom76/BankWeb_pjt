@@ -81,13 +81,13 @@ const goToSlide = (nextIndex) => {
 const handleButtonClick = (action) => {
   if (action === "recommendproduct") {
     if (accountStore.isLogin) {
-      router.push({ name: action });
+      router.push({ name: "profilemanage" });
     } else {
       alert("로그인이 필요합니다.");
       router.push({ name: "login" });
     }
   } else {
-    router.push({ name: action });
+    router.push({ name: "home" });
   }
 };
 
