@@ -2,38 +2,31 @@
   <div class="carousel">
     <!-- 슬라이드 트랙 -->
     <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-      <div
-        v-for="(slide, index) in slides"
-        :key="index"
-        class="slide"
-        :class="{ active: index === currentSlide }"
-      >
+      <div v-for="(slide, index) in slides" :key="index" class="slide" :class="{ active: index === currentSlide }">
         <img :src="slide.image" alt="Slide Image" class="slide-image" />
         <div class="text-container">
           <div class="text t1" :class="{ fadeOut: isFadingOut }">{{ slide.title }}</div>
           <div class="text t2" :class="{ fadeOut: isFadingOut }">{{ slide.subtitle }}</div>
           <div class="text t3" :class="{ fadeOut: isFadingOut }">{{ slide.description }}</div>
-          <button class="text t4" :class="{ fadeOut: isFadingOut }" @click="handleButtonClick(slide.ButtonAction)">{{ slide.buttonText }}</button>
+          <button class="text t4" :class="{ fadeOut: isFadingOut }" @click="handleButtonClick(slide.ButtonAction)">{{
+            slide.buttonText }}</button>
         </div>
       </div>
     </div>
 
     <!-- 네비게이션 점 -->
     <div class="slide-nav">
-      <div
-        v-for="(slide, index) in slides"
-        :key="index"
-        class="dot"
-        :class="{ active: index === currentSlide }"
-        @click="goToSlide(index)"
-      ></div>
+      <div v-for="(slide, index) in slides" :key="index" class="dot" :class="{ active: index === currentSlide }"
+        @click="goToSlide(index)"></div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import deposit_bg from "@/assets/icon/main_causel_deposit.png";
+import deposit_bg1 from "@/assets/icon/carousel.png";
+import deposit_bg2 from "@/assets/icon/carousel2.png";
+import deposit_bg3 from "@/assets/icon/carousel3.png";
 import { useAccountStore } from "@/stores/account";
 import { useRouter } from "vue-router";
 
@@ -48,7 +41,7 @@ let slideInterval;
 // 슬라이드 데이터
 const slides = [
   {
-    image: deposit_bg,
+    image: deposit_bg1,
     title: "나에게 맞는",
     subtitle: "금융 상품 추천받기",
     description: "내 목표에 꼭 맞는 금융 상품, 지금 바로 찾아보세요!",
@@ -56,7 +49,7 @@ const slides = [
     ButtonAction: "recommendproduct"
   },
   {
-    image: deposit_bg,
+    image: deposit_bg2,
     title: "빠르고 스마트한",
     subtitle: "환율 계산하기",
     description: "여행 준비? 투자 계획? 환율 계산기로 빠르게 해결하세요!",
@@ -64,7 +57,7 @@ const slides = [
     ButtonAction: "currencycalculator",
   },
   {
-    image: deposit_bg,
+    image: deposit_bg3,
     title: "은행 방문을 간편하게,",
     subtitle: "주변 지점 확인하기",
     description: "편리하게 내 위치에서 가까운 은행을 찾아보세요!",
@@ -80,7 +73,7 @@ const goToSlide = (nextIndex) => {
   setTimeout(() => {
     currentSlide.value = nextIndex;
     isFadingOut.value = false;
-  },500);
+  }, 500);
 };
 
 
@@ -289,6 +282,7 @@ onUnmounted(() => {
     opacity: 0;
     transform: translateX(-50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -301,6 +295,7 @@ onUnmounted(() => {
     opacity: 1;
     transform: translateX(0);
   }
+
   to {
     opacity: 0;
     transform: translateX(-50px);

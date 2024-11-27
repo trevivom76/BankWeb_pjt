@@ -1,44 +1,44 @@
 <template>
-    <div>
-        <div class="profile-field">
-            <span class="field-label">아이디</span>
-            <span class="separator">|</span>
-            <span class="field-value">{{ userInfo.username }}</span>
-        </div>
-        <div class="profile-field">
-            <span class="field-label">이름</span>
-            <span class="separator">|</span>
-            <span class="field-value">{{ userInfo.name }}</span>
-        </div>
-        <div class="profile-field">
-            <span class="field-label">닉네임</span>
-            <span class="separator">|</span>
-            <span class="field-value">{{ userInfo.nickname }}</span>
-        </div>
-        <div class="profile-field">
-            <span class="field-label">이메일</span>
-            <span class="separator">|</span>
-            <span class="field-value">{{ userInfo.email }}</span>
-        </div>
-        <div class="profile-field">
-            <span class="field-label">나이</span>
-            <span class="separator">|</span>
-            <span class="field-value">{{ userInfo.age }} 세</span>
-        </div>
-        <div class="profile-field">
-            <span class="field-label">자산</span>
-            <span class="separator">|</span>
-            <span class="field-value">{{ Intl.NumberFormat("ko-KR").format(userInfo.money) || 0 }} 원</span>
-        </div>
-        <div class="profile-field">
-            <span class="field-label">급여</span>
-            <span class="separator">|</span>
-            <span class="field-value">{{ Intl.NumberFormat("ko-KR").format(userInfo.salary) || 0 }} 원</span>
-        </div>
-        <div class="actions">
-            <button class="btn" @click="$emit('edit')">프로필 수정</button>
-        </div>
+  <div>
+    <div class="profile-field">
+      <span class="field-label">아이디</span>
+      <span class="separator">|</span>
+      <span class="field-value">{{ userInfo.username }}</span>
     </div>
+    <div class="profile-field">
+      <span class="field-label">이름</span>
+      <span class="separator">|</span>
+      <span class="field-value">{{ userInfo.name }}</span>
+    </div>
+    <div class="profile-field">
+      <span class="field-label">닉네임</span>
+      <span class="separator">|</span>
+      <span class="field-value">{{ userInfo.nickname }}</span>
+    </div>
+    <div class="profile-field">
+      <span class="field-label">이메일</span>
+      <span class="separator">|</span>
+      <span class="field-value">{{ userInfo.email }}</span>
+    </div>
+    <div class="profile-field">
+      <span class="field-label">나이</span>
+      <span class="separator">|</span>
+      <span class="field-value">{{ userInfo.age }} 세</span>
+    </div>
+    <div class="profile-field">
+      <span class="field-label">자산</span>
+      <span class="separator">|</span>
+      <span class="field-value">{{ Intl.NumberFormat("ko-KR").format(userInfo.money) || 0 }} 원</span>
+    </div>
+    <div class="profile-field">
+      <span class="field-label">급여</span>
+      <span class="separator">|</span>
+      <span class="field-value">{{ Intl.NumberFormat("ko-KR").format(userInfo.salary) || 0 }} 원</span>
+    </div>
+    <div class="actions">
+      <button class="btn" @click="$emit('edit')">프로필 수정</button>
+    </div>
+  </div>
 </template>
 
 <script setup>

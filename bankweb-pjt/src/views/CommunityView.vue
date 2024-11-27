@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-title">
         <img src="@/assets/icon/contract.png" alt="" height="30px" class="location-icon">
-        <h1 :style="{ fontWeight: 600 , fontSize: '24px'}">
+        <h1 :style="{ fontWeight: 600, fontSize: '24px' }">
           <span :style="{ color: '#5058cc' }">자유</span>
           게시판
         </h1>
@@ -20,7 +20,6 @@ import ArticleList from "@/components/ArticleList.vue";
 </script>
 
 <style scoped>
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -64,6 +63,7 @@ import ArticleList from "@/components/ArticleList.vue";
   font-weight: 600;
   font-size: 24px;
 }
+
 .highlight {
   color: #5058cc;
 }
@@ -73,6 +73,7 @@ import ArticleList from "@/components/ArticleList.vue";
     transform: scale(0.95);
     opacity: 0;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;

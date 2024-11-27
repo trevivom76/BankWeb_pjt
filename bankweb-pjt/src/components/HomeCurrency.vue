@@ -1,27 +1,15 @@
 <template>
   <div>
-    <div class = "box">
+    <div class="box">
       <div class="title-box">
         <img src="@/assets/icon/chartIcon.png" alt="환율 그래프 아이콘" class="icon">
         <p class="title">환율 그래프</p>
       </div>
       <div class="exchange-box">
-        <ExchangeCard
-        :currency="'USD'"
-        :name="'미국 달러'"
-        width="47%"
-        style="display: inline-block;"
-        class="mb-5"
-        elevation="5"
-        />
-        <ExchangeCard
-        :currency="'JPY'"
-        :name="'일본 옌'"
-        width="47%"
-        style="display: inline-block;"
-        class="mb-5 ml-3"
-        elevation="5"
-        />
+        <ExchangeCard :currency="'USD'" :name="'미국 달러'" width="47%" style="display: inline-block;" class="mb-5"
+          elevation="5" />
+        <ExchangeCard :currency="'JPY'" :name="'일본 옌'" width="47%" style="display: inline-block;" class="mb-5 ml-3"
+          elevation="5" />
       </div>
     </div>
   </div>
@@ -30,9 +18,9 @@
 <script setup>
 import ExchangeCard from '@/components/ExchangeCard.vue';
 </script>
-  
+
 <style scoped>
-.box{
+.box {
   background: #FFFFFF;
   border-radius: 20px;
   padding: 40px;
@@ -65,6 +53,4 @@ import ExchangeCard from '@/components/ExchangeCard.vue';
   flex-direction: row;
   width: 100%;
 }
-
-  </style>
-  
+</style>

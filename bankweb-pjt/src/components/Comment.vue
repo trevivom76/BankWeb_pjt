@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <v-card class="px-13 py-12" width="950px" min-height="530px" rounded="xl">
+  <div class="container">
+    <div class="card">
       <!-- 댓글 헤더 -->
-      <div class="d-flex justify-start align-center ga-3">
-        <p :style="{ fontSize: '24px', fontWeight: 'bold' }">댓글</p>
+      <div class="card-title">
+        <p :style="{ fontWeight: 600, fontSize: '24px' }">댓글</p>
         <div class="comment-cnt">
           {{ articleStore.comments.length }}
         </div>
@@ -36,29 +36,14 @@
                 </div>
 
                 <div v-if="accountStore.userinfo.nickname == comment.user.nickname" class="d-flex ga-2">
-                  <v-btn
-                    class="px-2"
-                    rounded="lg"
-                    min-width="47px"
-                    height="26px"
-                    variant="flat"
-                    color="#1E9FFB"
-                    @click="(isCommentUpdating = true), (clicked_commentId = comment.id), (clicked_commentContent = comment.content)"
-                  >
+                  <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#1E9FFB"
+                    @click="(isCommentUpdating = true), (clicked_commentId = comment.id), (clicked_commentContent = comment.content)">
                     수정
                   </v-btn>
-                  <v-btn
-                    class="px-2"
-                    rounded="lg"
-                    min-width="47px"
-                    height="26px"
-                    variant="flat"
-                    color="#FF3D3D"
-                    @click="
-                      showDeleteDialog = true;
-                      commentToDelete = comment.id;
-                    "
-                  >
+                  <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#FF3D3D" @click="
+                    showDeleteDialog = true;
+                  commentToDelete = comment.id;
+                  ">
                     삭제
                   </v-btn>
                 </div>
@@ -78,7 +63,8 @@
                   <p class="nickname">{{ comment.user.nickname }}</p>
 
                   <!-- 수정 버튼을 누른 댓글만 텍스트로 변환 -->
-                  <textarea v-if="comment.id == clicked_commentId" class="comment-update-textarea" placeholder="댓글을 작성해주세요." v-model="clicked_commentContent"></textarea>
+                  <textarea v-if="comment.id == clicked_commentId" class="comment-update-textarea"
+                    placeholder="댓글을 작성해주세요." v-model="clicked_commentContent"></textarea>
                   <p v-else class="comment-content">{{ comment.content }}</p>
                 </div>
               </div>
@@ -91,10 +77,13 @@
 
                 <div v-if="accountStore.userinfo.nickname == comment.user.nickname" class="d-flex ga-2">
                   <!-- 수정 버튼을 누른 댓글만 의 버튼만 수정 완료 버튼으로 변환 -->
-                  <v-btn v-if="comment.id == clicked_commentId" class="px-2 update-complete" rounded="lg" min-width="47px" height="26px" variant="flat" @click="updateComment">수정 완료</v-btn>
-                  <v-btn v-else class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#1E9FFB" @click="startEditing(comment)">수정</v-btn>
+                  <v-btn v-if="comment.id == clicked_commentId" class="px-2 update-complete" rounded="lg"
+                    min-width="47px" height="26px" variant="flat" @click="updateComment">수정 완료</v-btn>
+                  <v-btn v-else class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#1E9FFB"
+                    @click="startEditing(comment)">수정</v-btn>
 
-                  <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#FF3D3D" @click="(showDeleteDialog = true), (commentToDelete = comment.id)">삭제</v-btn>
+                  <v-btn class="px-2" rounded="lg" min-width="47px" height="26px" variant="flat" color="#FF3D3D"
+                    @click="(showDeleteDialog = true), (commentToDelete = comment.id)">삭제</v-btn>
                 </div>
               </div>
             </div>
@@ -109,11 +98,12 @@
             <textarea class="comment-create-textarea" placeholder="댓글을 작성해주세요." v-model="content"></textarea>
           </div>
           <div class="d-flex justify-end align-center">
-            <v-btn class="v-btn-create-comment mt-2" rounded="lg" variant="flat" color="#484848" width="72px" height="27px" @click="createComment">작성하기</v-btn>
+            <v-btn class="v-btn-create-comment mt-2" rounded="lg" variant="flat" color="#484848" width="72px"
+              height="27px" @click="createComment">작성하기</v-btn>
           </div>
         </div>
       </div>
-    </v-card>
+    </div>
   </div>
 
   <!-- 댓글 삭제 확인 다이얼로그 -->
@@ -258,6 +248,66 @@ const formatDate = (dateString) => {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(-20px);
+}
+
+.slide-leave-to {
+  transform: translateX(20px);
+}
+
+.card {
+  background-color: white;
+  padding: 48px 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: card-load 0.8s ease;
+}
+
+.card-title {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+  padding-bottom: 28px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.highlight {
+  color: #5058cc;
+}
+
+@keyframes card-load {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .comment-cnt {
   display: flex;
   justify-content: center;
@@ -274,6 +324,10 @@ const formatDate = (dateString) => {
 
 .profile-img {
   width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .nickname {
@@ -346,11 +400,14 @@ const formatDate = (dateString) => {
     width: 100%;
   }
 }
+
 .update-complete {
   background-color: rgb(51, 196, 11);
   color: white;
 }
+
 .gap-button {
-  gap: 12px; /* 원하는 간격으로 조정 */
+  gap: 12px;
+  /* 원하는 간격으로 조정 */
 }
 </style>

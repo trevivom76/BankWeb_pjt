@@ -2,71 +2,33 @@
   <div>
     <v-form @submit.prevent="submitChanges" ref="form">
       <div class="form-field">
-        <v-text-field
-          v-model="profileData.name"
-          label="이름"
-          :rules="nameRules"
-          variant="outlined"
-          density="comfortable"
-        ></v-text-field>
+        <v-text-field v-model="profileData.name" label="이름" :rules="nameRules" variant="outlined"
+          density="comfortable"></v-text-field>
       </div>
 
       <div class="form-field">
-        <v-text-field
-          v-model="profileData.nickname"
-          label="닉네임"
-          :rules="nicknameRules"
-          variant="outlined"
-          density="comfortable"
-        ></v-text-field>
+        <v-text-field v-model="profileData.nickname" label="닉네임" :rules="nicknameRules" variant="outlined"
+          density="comfortable"></v-text-field>
       </div>
 
       <div class="form-field">
-        <v-text-field
-          v-model="profileData.email"
-          label="이메일"
-          type="email"
-          :rules="emailRules"
-          variant="outlined"
-          density="comfortable"
-        ></v-text-field>
+        <v-text-field v-model="profileData.email" label="이메일" type="email" :rules="emailRules" variant="outlined"
+          density="comfortable"></v-text-field>
       </div>
 
       <div class="form-field">
-        <v-text-field
-          v-model.number="profileData.age"
-          label="나이"
-          type="number"
-          :rules="ageRules"
-          variant="outlined"
-          density="comfortable"
-        ></v-text-field>
+        <v-text-field v-model.number="profileData.age" label="나이" type="number" :rules="ageRules" variant="outlined"
+          density="comfortable"></v-text-field>
       </div>
 
       <div class="form-field">
-        <v-text-field
-          v-model.number="profileData.money"
-          label="자산"
-          type="number"
-          :rules="moneyRules"
-          variant="outlined"
-          density="comfortable"
-          :prefix="'₩'"
-          :suffix="'원'"
-        ></v-text-field>
+        <v-text-field v-model.number="profileData.money" label="자산" type="number" :rules="moneyRules" variant="outlined"
+          density="comfortable" :prefix="'₩'" :suffix="'원'"></v-text-field>
       </div>
 
       <div class="form-field">
-        <v-text-field
-          v-model.number="profileData.salary"
-          label="급여"
-          type="number"
-          :rules="salaryRules"
-          variant="outlined"
-          density="comfortable"
-          :prefix="'₩'"
-          :suffix="'원'"
-        ></v-text-field>
+        <v-text-field v-model.number="profileData.salary" label="급여" type="number" :rules="salaryRules"
+          variant="outlined" density="comfortable" :prefix="'₩'" :suffix="'원'"></v-text-field>
       </div>
       <div class="btn-container">
         <button type="submit" class="btn btn-save">수정 완료</button>
@@ -132,7 +94,6 @@ const submitChanges = async () => {
 </script>
 
 <style scoped>
-
 .btn-container {
   display: flex;
   flex-direction: row;
@@ -144,6 +105,7 @@ const submitChanges = async () => {
   color: white;
   background-color: #76af5f;
 }
+
 .btn-cancel {
   color: white;
   background-color: #d0574e;

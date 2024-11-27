@@ -8,13 +8,8 @@
       <div class="static-product-list">
         <div class="product-item" v-for="product in displayProducts" :key="product.id">
           <label class="checkbox-label">
-            <input
-              type="checkbox"
-              class="checkbox-input"
-              :value="product"
-              @change="toggleProductSelection(product)"
-              :disabled="!selectedProducts.find((p) => p.id === product.id) && selectedProducts.length >= 4"
-            />
+            <input type="checkbox" class="checkbox-input" :value="product" @change="toggleProductSelection(product)"
+              :disabled="!selectedProducts.find((p) => p.id === product.id) && selectedProducts.length >= 4" />
             <span class="custom-checkbox"></span>
             {{ product.fin_prdt_nm }} - {{ product.kor_co_nm }}
           </label>
@@ -29,10 +24,10 @@
         <option v-for="term in availableTerms" :key="term" :value="term">{{ term }}개월</option>
       </select>
     </div>
-    
+
     <!-- 경고 메시지 -->
     <div v-if="selectedProducts.length >= 4" class="error">최대 4개의 상품만 비교할 수 있습니다.</div>
-    
+
     <div class="line"></div>
 
     <!-- 그래프 -->
@@ -145,7 +140,8 @@ watch(selectedTerm, () => {
 <style scoped>
 /* 전체 컨테이너 수정 */
 .container {
-  height: fit-content; /* 내용물에 맞게 너비 조정 */
+  height: fit-content;
+  /* 내용물에 맞게 너비 조정 */
   margin: 0 auto;
   padding: 20px;
   color: #333;
@@ -257,12 +253,12 @@ watch(selectedTerm, () => {
 }
 
 /* 체크됐을 때 스타일 */
-.checkbox-input:checked + .custom-checkbox {
+.checkbox-input:checked+.custom-checkbox {
   background-color: #636ACC;
   border-color: #636ACC;
 }
 
-.checkbox-input:checked + .custom-checkbox::after {
+.checkbox-input:checked+.custom-checkbox::after {
   transform: rotate(45deg) scale(1);
   opacity: 1;
 }
@@ -273,7 +269,7 @@ watch(selectedTerm, () => {
 }
 
 /* 포커스 효과 */
-.checkbox-input:focus + .custom-checkbox {
+.checkbox-input:focus+.custom-checkbox {
   box-shadow: 0 0 0 2px rgba(99, 106, 204, 0.2);
 }
 
@@ -323,6 +319,7 @@ watch(selectedTerm, () => {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -335,16 +332,23 @@ watch(selectedTerm, () => {
 }
 
 @keyframes errorShake {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
   }
-  20%, 60% {
+
+  20%,
+  60% {
     transform: translateX(-4px);
   }
-  40%, 80% {
+
+  40%,
+  80% {
     transform: translateX(4px);
   }
 }
+
 /* 개월 수 선택 컨테이너 */
 .term-select-container {
   margin: 24px 0;
@@ -374,7 +378,8 @@ watch(selectedTerm, () => {
 /* 셀렉트 박스 컨테이너 */
 .term-select-wrapper {
   position: relative;
-  width: 120px; /* 너비 증가 */
+  width: 120px;
+  /* 너비 증가 */
 }
 
 /* 커스텀 화살표 */
@@ -395,7 +400,8 @@ watch(selectedTerm, () => {
 /* 셀렉트 박스 스타일 */
 .term-select {
   width: 100%;
-  padding: 8px 30px 8px 12px; /* 패딩 조정 */
+  padding: 8px 30px 8px 12px;
+  /* 패딩 조정 */
   font-size: 14px;
   font-weight: 500;
   color: #2c3e50;
@@ -424,7 +430,7 @@ watch(selectedTerm, () => {
 }
 
 /* 셀렉트 박스 활성화 시 화살표 회전 */
-.term-select:focus + .term-select-wrapper::after {
+.term-select:focus+.term-select-wrapper::after {
   transform: translateY(-30%) rotate(-135deg);
 }
 
@@ -458,26 +464,32 @@ watch(selectedTerm, () => {
 /* 반응형 스타일 */
 @media (max-width: 768px) {
   .term-select-container {
-    flex-direction: row; /* 가로 배열 유지 */
+    flex-direction: row;
+    /* 가로 배열 유지 */
     align-items: center;
-    justify-content: flex-start; /* 왼쪽 정렬 */
+    justify-content: flex-start;
+    /* 왼쪽 정렬 */
     gap: 12px;
   }
 
   .term-select-wrapper {
-    width: 100px; /* 모바일에서의 너비 */
+    width: 100px;
+    /* 모바일에서의 너비 */
   }
 
   .term-select {
-    padding: 8px 25px 8px 10px; /* 모바일에서의 패딩 */
+    padding: 8px 25px 8px 10px;
+    /* 모바일에서의 패딩 */
     font-size: 13px;
   }
 
   .term-label {
     font-size: 14px;
-    margin-bottom: 0; /* 마진 제거 */
+    margin-bottom: 0;
+    /* 마진 제거 */
   }
 }
+
 /* 그래프 컨테이너 스타일 */
 .graph-container {
   width: 100%;

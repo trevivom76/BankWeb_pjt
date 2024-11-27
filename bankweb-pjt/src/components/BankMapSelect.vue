@@ -7,36 +7,28 @@
         <article class="cont-select">
           <button class="btn-select" @click="toggleDropDown1">
             {{ selectedCity }}
-            <img
-            src="@/assets/icon/dropdownIcon.png"
-            alt="드롭다운 아이콘"
-            class="dropdown-icon"
-            :class="{ rotated: isDropdownOpen1 }"
-            >
-        </button>
-        <ul class="list-member" v-show="isDropdownOpen1">
-          <li v-for="city in Object.keys(cities)" :key="city">
-            <button type="button" @click=" selectCity(city)">{{city}}</button>
-          </li>
-        </ul>
-      </article>
-    </div>
+            <img src="@/assets/icon/dropdownIcon.png" alt="드롭다운 아이콘" class="dropdown-icon"
+              :class="{ rotated: isDropdownOpen1 }">
+          </button>
+          <ul class="list-member" v-show="isDropdownOpen1">
+            <li v-for="city in Object.keys(cities)" :key="city">
+              <button type="button" @click=" selectCity(city)">{{ city }}</button>
+            </li>
+          </ul>
+        </article>
+      </div>
       <!-- 시/군/구 선택 -->
       <div class="select-box">
         <p class="select-text">시/군/구</p>
         <article class="cont-select">
           <button class="btn-select" @click="toggleDropDown2" :disabled="selectedCity === '광역시/도를 선택해주세요.'">
             {{ selectedDistrict }}
-            <img
-              src="@/assets/icon/dropdownIcon.png"
-              alt="드롭다운 아이콘"
-              class="dropdown-icon"
-              :class="{ rotated: isDropdownOpen2 }"
-            >
+            <img src="@/assets/icon/dropdownIcon.png" alt="드롭다운 아이콘" class="dropdown-icon"
+              :class="{ rotated: isDropdownOpen2 }">
           </button>
           <ul class="list-member" v-show="isDropdownOpen2">
             <li v-for="districts in cities[selectedCity]" :key="districts">
-              <button type="button" @click=" selectDistrict(districts)">{{districts}}</button>
+              <button type="button" @click=" selectDistrict(districts)">{{ districts }}</button>
             </li>
           </ul>
         </article>
@@ -44,27 +36,24 @@
       <!-- 은행 선택 -->
       <div class="select-box">
         <p class="select-text">은행명</p>
-      <article class="cont-select">
-        <button class="btn-select" @click="toggleDropDown3">
-          {{ selectedBank }}
-          <img
-            src="@/assets/icon/dropdownIcon.png"
-            alt="드롭다운 아이콘"
-            class="dropdown-icon"
-            :class="{ rotated: isDropdownOpen3 }"
-          >
-        </button>
-        <ul class="list-member" v-show="isDropdownOpen3">
-          <li v-for="bank in banks" :key="bank">
-            <button type="button" @click=" selectBank(bank)">{{bank}}</button>
-          </li>
-        </ul>
-      </article>
+        <article class="cont-select">
+          <button class="btn-select" @click="toggleDropDown3">
+            {{ selectedBank }}
+            <img src="@/assets/icon/dropdownIcon.png" alt="드롭다운 아이콘" class="dropdown-icon"
+              :class="{ rotated: isDropdownOpen3 }">
+          </button>
+          <ul class="list-member" v-show="isDropdownOpen3">
+            <li v-for="bank in banks" :key="bank">
+              <button type="button" @click=" selectBank(bank)">{{ bank }}</button>
+            </li>
+          </ul>
+        </article>
       </div>
       <v-hover v-slot="{ isHovering, props }">
-        <button :class="{ 'on-hover': isHovering }" :elevation="isHovering ? 10 : 2" v-bind="props" class="btn flex" @click.prevent="emitChange()">
-          <svg-icon type="mdi" :path="mdiMagnify" class="img"</svg-icon>
-          <p>검 색</p>
+        <button :class="{ 'on-hover': isHovering }" :elevation="isHovering ? 10 : 2" v-bind="props" class="btn flex"
+          @click.prevent="emitChange()">
+          <svg-icon type="mdi" :path="mdiMagnify" class="img" </svg-icon>
+            <p>검 색</p>
         </button>
       </v-hover>
     </div>
@@ -219,7 +208,7 @@ const isDropdownOpen3 = ref(false)
 const emit = defineEmits(["change"]);
 
 const emitChange = () => {
-  if ( selectedCity.value === "광역시/도를 선택해주세요." || selectedDistrict.value === "시/군/구를 선택해주세요." || selectedBank.value === "은행을 선택해주세요.") {
+  if (selectedCity.value === "광역시/도를 선택해주세요." || selectedDistrict.value === "시/군/구를 선택해주세요." || selectedBank.value === "은행을 선택해주세요.") {
     window.alert("검색 옵션을 선택해주세요.")
   } else {
     emit("change", {
@@ -295,7 +284,7 @@ const selectBank = (option) => {
 .btn-select {
   display: flex;
   width: 100%;
-  padding:8px 12px;
+  padding: 8px 12px;
   font-size: 15px;
   line-height: 13px;
   font-weight: 600;
@@ -336,7 +325,8 @@ const selectBank = (option) => {
 }
 
 .search-button-container {
-  margin-top: auto; /* 버튼을 컨테이너의 가장 아래로 밀어냄 */
+  margin-top: auto;
+  /* 버튼을 컨테이너의 가장 아래로 밀어냄 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -380,7 +370,8 @@ const selectBank = (option) => {
 .dropdown-icon {
   width: 24px;
   height: 24px;
-  transition: transform 0.3s ease; /* 부드러운 회전 애니메이션 */
+  transition: transform 0.3s ease;
+  /* 부드러운 회전 애니메이션 */
 }
 
 /* 드롭다운 열림 상태에서 아이콘 회전 */
