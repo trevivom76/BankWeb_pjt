@@ -93,12 +93,12 @@
 
 ## 설계 및 데이터베이스 구조 📊
 ### 🍀 설계 아키텍처
-![title](https://github.com/user-attachments/assets/436d7ede-bf03-4ca3-9e7f-fe280dd84270)   
+![설계 아키텍처 (수정 후)](https://github.com/user-attachments/assets/7ffbf3e9-4e1d-44a8-a890-d24d8cb17233)
 
 <br/>
 
 ### ☁ 데이터베이스 모델링(ERD)
-![title](https://github.com/user-attachments/assets/39d87e54-9385-4483-b856-c0570b80b877)   
+![image](https://github.com/user-attachments/assets/5ceb7dc2-397f-4ce4-ba03-97f3323eac46)
 
 <br/>
 
@@ -107,13 +107,14 @@
 
 [**Figma**](https://www.figma.com/design/dDetrQDZK7zapQfm4PAs4r/bank-web-project?node-id=0-1&t=b9xu6cysizeSGOdb-1)
 
-<img width="1117" alt="스크린샷 2024-11-27 오전 5 58 26" src="https://github.com/user-attachments/assets/2b003607-a50d-41ad-bca0-e7dbc90936cc">
+![image](https://github.com/user-attachments/assets/3094f9b4-d1ec-47df-a34a-dcb91ed4ed7a)
 
 <br/>
 <br/>
 
 ### 🖼 디자인 목업
-<img width="816" alt="스크린샷 2024-11-27 오전 6 14 10" src="https://github.com/user-attachments/assets/01cd94c2-85ad-4876-affa-cdc5dfbf1696">
+![디자인 목업](https://github.com/user-attachments/assets/069939af-5bbd-46ba-bba9-1d72482c227a)
+
 
 <br/>
 <br/>
@@ -214,22 +215,19 @@
 <br/>
 
 #### 메인 페이지  
-: 서비스의 주요 기능에 대한 개요와 네비게이션을 제공.  
+: 서비스의 주요 기능에 대한 개요와 네비게이션을 제공.
 
 ##### 메인 화면 구성
-![메인화면](https://github.com/user-attachments/assets/fac5a86c-beb4-4681-8457-4555bb04c516)
+https://github.com/user-attachments/assets/0dfc5127-4534-4bca-8404-cce481034573
 
 ##### 메인 화면 - 예금 계산기
-![메인화면 - 예금 계산기](https://github.com/user-attachments/assets/d5581ccc-2557-48b4-be19-f4bc2c72d5d2)
+https://github.com/user-attachments/assets/2dca2aaa-dead-49a2-944d-5bf013bb4e46
 
 ##### 메인 화면 - 환율 차트
-![메인화면 - 환율 차트(https://github.com/user-attachments/assets/a35de7ff-b83c-4d7b-9670-1104f61c2d3e)
+https://github.com/user-attachments/assets/5b1dcec0-a9e4-4f03-a26d-fb6121240bf0
 
 ##### 메인 화면 - 은행 사이트
-![메인화면 - 은행 사이트](https://github.com/user-attachments/assets/ce58b638-9e17-47a2-8fdb-9fd409e12ea8)
-
-##### 메인 화면 - 카우셀 이동
-![메인화면 - 카우셀 이동](https://github.com/user-attachments/assets/46b70997-c5dd-409f-9976-536b2dc41e01)
+https://github.com/user-attachments/assets/24036f43-ba6a-4ac0-8fec-46cdf0378043
 
 <br/>
 
@@ -239,7 +237,7 @@
 #### 회원가입 페이지  
 새로운 사용자가 회원으로 가입할 수 있는 화면.  
 
-![회원가입](https://github.com/user-attachments/assets/57ec0d6c-6c4f-4ae1-b476-7dd76a11d461)
+https://github.com/user-attachments/assets/bd4f122f-9f77-4a0f-b6b0-027f3046239f
 
 <br/>
 
@@ -249,7 +247,6 @@
 #### 정기 예금 상세 페이지  
 선택한 정기 예금 상품의 상세 정보를 제공하는 페이지.  
 
-![예적금 화면](https://github.com/user-attachments/assets/2fa651f1-98ae-42f5-8e54-d3f642b9b3a2)
 
 #### 정기 적금 검색하기 페이지  
 여러 정기 적금 상품을 찾아볼 수 있는 화면.  
@@ -257,40 +254,67 @@
 #### 정기 적금 상세 페이지  
 특정 정기 적금 상품에 대한 자세한 정보를 보여주는 화면.  
 
-[예적금 화면 - 적금](https://github.com/user-attachments/assets/2e95a8b4-5e67-465e-924c-63d9a6abca34)
+https://github.com/user-attachments/assets/86299277-fd78-45ca-bc40-f03e02b850a1
 
 <br/>
 
 #### 환율 계산기 페이지  
 다양한 통화의 환율을 계산하고 환전 금액을 쉽게 확인할 수 있는 페이지.  
-![환율 계산기 - 차트](https://github.com/user-attachments/assets/6c57f11a-c433-4c7b-b286-96b1ebb16aa0)
+
+https://github.com/user-attachments/assets/3a61746b-4509-49e8-ac65-a1ad2ab06bb0
+
+https://github.com/user-attachments/assets/5b0d9052-39b4-4ba8-b9e4-2773e9a50c61
 
 <br/>
 
 #### 주변 은행 페이지  
 카카오 맵 API를 사용해 사용자의 위치를 기반으로 주변 은행 지점을 보여주는 화면.  
-![화면 기록 2024-11-27 오전 5 09 39 (1)](https://github.com/user-attachments/assets/227ec22f-e549-4d47-b22d-3c26b88be67b)
+https://github.com/user-attachments/assets/e10e9f84-58e0-492d-b6a3-3ceb236c1ada
+
+https://github.com/user-attachments/assets/aaf040f4-00f5-49b6-8b4d-5879080dd897
 
 <br/>
 
 #### 커뮤니티 페이지  
-사용자 간 소통을 위한 게시판 및 커뮤니티 기능을 제공하는 페이지.  
-![커뮤니티 페이지](./src/images/community.png)
+사용자 간 소통을 위한 게시판 및 커뮤니티 기능을 제공하는 페이지.
+
+https://github.com/user-attachments/assets/213557e6-e444-4ee3-8680-ead9e97a694b
+
+https://github.com/user-attachments/assets/e97ece93-71ed-4cd3-b95f-0c6241cf8451
+
+https://github.com/user-attachments/assets/20d012f6-258d-4375-8df2-85bd12a4da49
+
+https://github.com/user-attachments/assets/b9da45d0-4541-477a-9554-b48e7a642be4
+
+https://github.com/user-attachments/assets/81d59ee2-64c4-43ae-b15f-0a3aeaa7588e
+
 
 #### 회원정보 관리 페이지  
 사용자 정보 확인 및 수정이 가능한 화면.  
-![회원정보 관리 페이지](./src/images/profile.png)
+
+https://github.com/user-attachments/assets/75abeb77-d92b-4792-bd5d-8672a74bcb63
+
+https://github.com/user-attachments/assets/8ea8624f-8ada-4a24-98ff-8a57720cebad
+
 
 #### 관심상품 관리 페이지  
 사용자가 관심을 가진 금융 상품을 관리하는 화면.  
-![관심상품 관리 페이지](./src/images/profilebank.png)
 
 #### 관심상품 상세 페이지  
 사용자가 관심을 등록한 특정 상품에 대한 상세 정보를 제공하는 화면.  
-![관심상품 상세 페이지](./src/images/profilebankchart.png)
+
+https://github.com/user-attachments/assets/21887c04-bfa5-4159-81b9-62c2da825482
 
 #### 상품 추천받기 페이지  
 사용자의 입력 정보를 바탕으로 맞춤형 금융 상품을 추천해주는 화면.
+
+https://github.com/user-attachments/assets/3abd7dd1-8523-4145-a257-2eaa5182adab
+
+https://github.com/user-attachments/assets/d9f826fc-066a-4de0-a430-671927d86723
+
+#### 챗봇 기능
+사용자의 입력 정보를 바탕으로 금융상품및 주변은행위치, 환율등을 채팅으로 알려주는 서비스.
+
 
 <br/>
 <br/>
